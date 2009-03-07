@@ -17,7 +17,7 @@ def GetLinks(soup):
 	# return ref.get('href') for ref in soupt.find('div',  {'class':'med'}).findAll('a')
 	print('buscando links en la sopa')
 	d = soup.find('div',  {'class':'med'})
-	return [ ref.get('href')  for ref in d.findAll('a')]
+	return [ ref.get('href')  for ref in d.findAll('a',  {'class':'l'})]
 def GetNextQuery(soup):
 	print('buscando el boton siguiente en la sopa')
 	t = soup.findAll('td',  {'class':'b'})
