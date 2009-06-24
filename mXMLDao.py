@@ -2,12 +2,11 @@
 """This module defines everything needed to use an object tree for any project and file handling.
 It should only take care of handling data and xml, not on particular implementation of xml"""
 
-import sys
-from xml.sax import saxutils, make_parser, ContentHandler, ErrorHandler
+from xml.sax import make_parser, ContentHandler, ErrorHandler
 
-HEADER=u"""<?xml version="1.0" encoding="UTF-8"?>
-<!-- Project file for KAFX -->"""
-class cEmpty:
+HEADER=u"""<?xml version="1.0" encoding="UTF-8"?>"""
+
+class Empty:
 	def __init__(self):
 		self._value=''
 		self._parent = None
@@ -21,7 +20,7 @@ def normalize_whitespace(text):
 
 class cHandler(ContentHandler, ErrorHandler):
 	def __init__(self):
-		self.__curobj = self.__object = cEmpty()
+		self.__curobj = self.__object = Empty()
 
 	#Various
 	def GetObject(self):		return self.__object
@@ -33,7 +32,7 @@ class cHandler(ContentHandler, ErrorHandler):
 		if not (name in self.__curobj.__dict__ ):
 			self.__curobj.__dict__[name] = []
 		
-		new = cEmpty()
+		new = Empty()
 		new.__dict__.update(attrs)
 		new._parent = self.__curobj
 		self.__curobj.__dict__[name].append(new)
@@ -104,7 +103,7 @@ class cXml_Writer:
 		self.__file.close()
 		return None
 
-class cDao:
+class Dao:
 	"""A class to manipulate the objects tree in a project.
 	allows a transparent use of python object, and then
 	you can save to or load it from an xml."""
@@ -125,7 +124,7 @@ class cDao:
 		#self.__parser.setFeature(saxutils.feature_namespaces, False)
 		handler = cHandler()
 		#Is better for me to create a handler each time a file is parsed
-		#so i can reuse the instance of cDao, (and handler will return a clean object
+		#so i can reuse the instance of Dao, (and handler will return a clean object
 		# each time.)
 		self.__parser.setContentHandler(handler)
 		self.__parser.setErrorHandler(handler)
@@ -157,7 +156,7 @@ class cDao:
 		"""Creates a new object, and deletes any data of the object before, (if any)"""
 		del self.__object
 		self.__fname = ""
-		self.__object = cEmpty()
+		self.__object = Empty()
 		return self.__object
 
 	def GetFileName(self):
@@ -168,5 +167,5 @@ class cDao:
 
 
 if __name__=='__main__':
-	c =  cDao('proyecto', '/home/nande/dev/svn/kafx/trunks/example_1.xml')
+	c = Dao('proyecto', '/home/nande/Dev/Svn/kafx/trunks/example.xml')
 	c.SaveToFile('/home/nande/test.xml')
