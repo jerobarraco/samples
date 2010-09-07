@@ -33,3 +33,12 @@ def Comp9(num):
 	z=10*len(str(num))-1-num
 def Comp10(num): 
 	return (10**len(str(num)))-num
+
+def Mediana(nums):
+	nums.sort() 
+	l = len(nums)
+	if l % 2:
+		return nums[l/2]
+	else:
+		l= l/2
+		return (nums[l]+nums[l-1])/2.0
