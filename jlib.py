@@ -73,34 +73,69 @@ def a2proc(procarr, num = 0):
 
 def aa2aproc(arr):
 	#por un array de array devuelve un array de procesos
-	return [a2proc(j, i+1) for i, j in enumerate(arr)]
+	#por_duracion indica si se ordenan por duracion o por inicio
+	
+	def getini(p): return p.ini
+	#pasamos un array de array a un array de procs
+	a= [a2proc(j, i+1) for i, j in enumerate(arr)]
+	#los ordenamos
+	a.sort(key=getini )
+	return a
 
 def activos(procs, t):
 	#devuelve los procesos activos,
 	#procs ha de ser un array de procesos (como en aa2aproc)
 	act = []
 	for i in procs:
-	  if i.ini <=t :
-		act.append(i)
+		if i.ini <=t :
+			act.append(i)
 	for i in act:
-	  procs.remove(i)
+		procs.remove(i)
 	return act
-	
-def Fifo(procs, q = 5):
-  #First in first out
+
+def Fifo(procs, q=5,  pmc=False):
+	#First in first out
+	#pmc=Primero el Mas corto
+	def getcpu(p): return p.cpu
+	procs = aa2aproc(procs)
+	time = 0
+	act = []
+	terminados = []
+	while procs or act:
+		if pmc:
+			act.sort(key=getcpu)
+		if act:
+				p = act[0]
+				time += p.cpu
+				p.fin = time
+				terminados.append(p)
+				act.remove(p)
+		act.extend(activos(procs, time))
+		if not act : time +=q
+	return terminados
+  
+def CalcularTiempos(procs, q = 5, RR=False):
+	#RR=roundrobin-> True=RoundRobin, False=FIFO
   procs = aa2aproc(procs)
   time = 0
   act = []
   terminados = []
+  p=None
   while procs or act:
-	act.extend(activos(procs, time))
-	time+=q
 	if act:
 		p = act[0]
 		p.cpu -= q
+		time+=q
 		if p.cpu <=0:
 			p.fin = time
 			terminados.append(p)
 			act.remove(p)
+			p=None #para el if de abajo
+		elif RR:
+			act.remove(p)
+	act.extend(activos(procs, time))
+	if RR and p: act.append(p)
   return terminados
   
+for i in CalcularTiempos(procs,  5,  True):
+    print i.num,  i.fin
