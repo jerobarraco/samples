@@ -50,7 +50,8 @@ def Mediana(nums):
 #Calculo de tiempo de procesos
 #procs ha de ser un array con un array por cada proceso indicando:
 #cuantums consumidos, prioridad, tiempo de inicio
-#ejemplo
+
+#este es un ejemplo
 procs = [
 [20, 1, 0],
 [15, 1, 10],
@@ -113,11 +114,11 @@ class Plan:
 	def BasicLap(self):
 		if self.act:
 			#no lo guardamos en self.p para que activos no lo meta d nuevo
-				p = self.act[0]
-				self.time += p.cpu
-				p.fin = self.time
-				self.terminados.append(p)
-				self.act.remove(p)
+			p = self.act[0]
+			self.time += p.cpu
+			p.fin = self.time
+			self.terminados.append(p)
+			self.act.remove(p)
 		self.activos()
 		if not self.act : self.time += self.q
 		
@@ -134,7 +135,9 @@ class Plan:
 				self.p = None
 		self.activos()		
 		self.time += self.q
-		
+
+#Estas son las funciones a las que se van a llamar
+#q es la duración del cuantum.. la misma unidad debe usarse para el consumo de cpu de los procesos
 def Fifo(procs,  q=5):
 	plan = Plan(procs,  q)
 	while plan.procs or plan.act:
@@ -166,7 +169,9 @@ def Prio(procs,  q=5,  mcolas = False):
 def MColas(procs,  q=5):
 	return Prio(procs,  q,  mcolas=True)
 	
-"""for i in Fifo(procs):	print i.num,  i.fin
+"""
+Ejemplos:
+for i in Fifo(procs):	print i.num,  i.fin
 print ""
 
 for i in RRobbin(procs):	print i.num,  i.fin
