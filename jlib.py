@@ -129,7 +129,7 @@ def a2proc(procarr, num = 0):
 		cpu = prio  = ini = fin = num = 0
 		q = 1
 		def __str__(self):
-			return "P%d\t%d\t-> %d" % (self.num , self.ini,  self.fin)
+			return "P%2d: %2d -> %3d" % (self.num , self.ini,  self.fin)
 			
 	tp = p()
 	tp.cpu, tp.prio, tp.ini = procarr
@@ -151,7 +151,7 @@ def aa2aproc(arr):
 	
 class Plan:
 	p = None
-	def __init__(self,  procs,  q,  dbug=False, changeprio=False):
+	def __init__(self,  procs,  q,  dbug=False,  keysort=None, changeprio=False):
 		self.procs = aa2aproc(procs)
 		self.act = []
 		self.terminados = []
@@ -159,6 +159,11 @@ class Plan:
 		self.q = q
 		self.cp = changeprio
 		self.dbug = dbug
+		self.keysort = keysort
+		self.procs.sort(key=lambda p: p.ini)
+		#esto es importante si hay 2 procesos que entran en tiempos parecidos pero 
+		#diferentes, y en desorden (pej, dos procesos que entran antes de que termine el quantum
+		# el primero con tiempo 13 y el segundo con tiempo 11
 		
 	def activos(self):
 		#devuelve los procesos activos, para RRobbin
@@ -167,26 +172,35 @@ class Plan:
 		for i in self.procs: 
 			if i.ini <self.time :
 				self.act.append(i)
+				
 		if self.p:
 			if self.cp :
 				self.p.prio+=1
 				self.p.q *=2
 			self.act.append(self.p)
+			
 		for i in self.procs :
 			if i.ini == self.time:
 				self.act.append(i)
+				
 		for i in self.act:
 			if i in self.procs:
 				self.procs.remove(i)
-				
+		if self.keysort:
+			self.act.sort(key=self.keysort)#siempre hay un keysort default
+			
 	def __dbg(self):
 		if self.dbug:
-			print "T: %d\t-> P%d" % (self.time,  self.p.num)
-			
+			p = self.p
+			print "T: %3d -> P%2d (%2d:%d/%d)" % (self.time,  p.num,  p.cpu,  p.prio,  p.q)
+	def Quedan(self):
+		return bool(self.procs or self.act or self.p)
+		
 	def BasicLap(self):
 		"""Realiza una vuelta rapida, 
 		en donde el primer proceso se 
 		ejecuta hasta q termina ej: Fifo/Primero+Corto"""
+		self.activos()
 		if self.act:
 			#no lo guardamos en self.p para que activos no lo meta d nuevo
 			self.p = self.act[0]
@@ -196,63 +210,58 @@ class Plan:
 			self.terminados.append(self.p)
 			self.act.remove(self.p)
 			self.p = None #solo para las RRLap
-		self.activos()
-		if not self.act : self.time += self.q
+		else:
+			self.time += self.q
 		
-	def RRLap(self,  sort=False):
+	def RRLap(self):
 		"""Realiza una vuelta RoundRobin"""
+		self.activos()
 		if self.act:
 			self.p = self.act[0]
 			self.__dbg()
 			q = self.q*self.p.q
 			self.p.cpu -= q
-			self.time += (q-self.q)
+			self.time += q
 			self.act.remove(self.p)
 			if self.p.cpu <= 0:
 				self.p.fin = self.time
 				self.terminados.append(self.p)
 				self.p = None
-		self.activos()
-		self.time += self.q
+		else: 
+			self.time += self.q
+		
+		
 
 """Estas son las funciones a llamar, los parametros son:
 @procs : array de procesos como explica mas arriba
 @q : int (o float a tu riesgo) : tamaño del quantum (infiere en Fifo y MasCorto si ningun proceso entra en el tiempo 0)
 @debug: True o False, indica si imprime los pasos
 @mcolas: True o False, solo para Prio, es lo mismo que llamar a MColas"""
-def Fifo(procs,  q=5,  debug=False):
+def Fifo(procs,  q=5,  debug=False,  sorter=None):
 	"""
 	Fifo (First In First Out (primero el primero))
 	"""
-	plan = Plan(procs,  q,  dbug=debug)
+	plan = Plan(procs,  q,  dbug=debug,  keysort=sorter)
 	while plan.procs or plan.act:
 		plan.BasicLap()
 	return plan.terminados
 
 def MasCorto(procs,  q=5,  debug=False):
 	"""Primero el mas corto"""
-	def getcpu(p): return p.cpu
-	plan = Plan(procs,  q,  dbug=debug)
-	while plan.procs or plan.act:
-		plan.BasicLap()
-		plan.act.sort(key=getcpu)
-	return plan.terminados
-		
-def RRobin(procs,  q=5,  debug=False):
+	sorter = lambda p: p.cpu
+	return Fifo(procs,  q,  debug,  sorter)
+	
+def RRobin(procs,  q=5,  debug=False,  sorter=None,  mcolas=False):
 	"""Round Robin"""
-	plan = Plan(procs,  q,  dbug=debug)
-	while plan.procs or plan.act:
+	plan = Plan(procs,  q,  debug,  sorter,  mcolas)
+	while plan.Quedan():
 		plan.RRLap()
 	return plan.terminados
 	
 def Prio(procs,  q=5,  debug=False,  mcolas=False):
 	"""Por prioridad"""
-	plan = Plan(procs,  q,  dbug=debug,  changeprio=mcolas)
-	def getprio(p): return p.prio
-	while plan.procs or plan.act:
-		plan.RRLap()
-		plan.act.sort(key=getprio)
-	return plan.terminados
+	sort = lambda p: p.prio
+	return RRobin(procs,  q,  debug,  sort,  mcolas)
 
 def MColas(procs,  q=5,  debug=False):
 	"""Colas multiples"""
