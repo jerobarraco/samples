@@ -236,8 +236,12 @@ class Plan:
 @procs : array de procesos como explica mas arriba
 @q : int (o float a tu riesgo) : tamaño del quantum (infiere en Fifo y MasCorto si ningun proceso entra en el tiempo 0)
 @debug: True o False, indica si imprime los pasos
-@mcolas: True o False, solo para Prio, es lo mismo que llamar a MColas"""
-def Fifo(procs,  q=5,  debug=False,  sorter=None):
+@mcolas: True o False, solo para Prio, es lo mismo que llamar a MColas
+
+tanto en fifo como en mcolas hay un detalle que no lo hablamos hasta ahora, 
+si especificamos el quantum y ningun proceso entra en 0 o hay tiempos muertos, afecta el calculo
+dejando el q=1 puede llegar a dar los resultados esperados"""
+def Fifo(procs,  q=1,  debug=False,  sorter=None):
 	"""
 	Fifo (First In First Out (primero el primero))
 	"""
@@ -246,7 +250,7 @@ def Fifo(procs,  q=5,  debug=False,  sorter=None):
 		plan.BasicLap()
 	return plan.terminados
 
-def MasCorto(procs,  q=5,  debug=False):
+def MasCorto(procs,  q=1,  debug=False):
 	"""Primero el mas corto"""
 	sorter = lambda p: p.cpu
 	return Fifo(procs,  q,  debug,  sorter)
