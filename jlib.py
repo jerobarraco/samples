@@ -152,6 +152,9 @@ def aa2aproc(arr):
 class Plan:
 	p = None
 	def __init__(self,  procs,  q,  dbug=False,  keysort=None, changeprio=False):
+		#Creamos la lista de procesos, activos y terminados
+		#la variable con el tiempo, el quantum
+		#los flags para cambiar la prioridad y depurar y la funcion para ordenar
 		self.procs = aa2aproc(procs)
 		self.act = []
 		self.terminados = []
@@ -174,7 +177,7 @@ class Plan:
 				self.act.append(i)
 				
 		if self.p:
-			if self.cp :
+			if self.cp : #si el flag para cambiar la prioridad esta, lo hacemos
 				self.p.prio+=1
 				self.p.q *=2
 			self.act.append(self.p)
@@ -186,37 +189,47 @@ class Plan:
 		for i in self.act:
 			if i in self.procs:
 				self.procs.remove(i)
-		if self.keysort:
+				
+		if self.keysort: #ordenamos si llega a ser necesario
 			self.act.sort(key=self.keysort)#siempre hay un keysort default
 			
 	def __dbg(self):
+		#funcion que imprime datos si se requieren
 		if self.dbug:
 			p = self.p
 			print "T: %3d -> P%2d (%2d:%d/%d)" % (self.time,  p.num,  p.cpu,  p.prio,  p.q)
+			
 	def Quedan(self):
+		#devuelve verdadero si aun hay procesos por ejecutarse
 		return bool(self.procs or self.act or self.p)
 		
 	def BasicLap(self):
 		"""Realiza una vuelta rapida, 
 		en donde el primer proceso se 
 		ejecuta hasta q termina ej: Fifo/Primero+Corto"""
+		#Calculamos los activos
 		self.activos()
+		#Si hay activos
 		if self.act:
-			#no lo guardamos en self.p para que activos no lo meta d nuevo
+			#Lo procesamos
 			self.p = self.act[0]
 			self.__dbg()
 			self.time += self.p.cpu
 			self.p.fin = self.time
 			self.terminados.append(self.p)
 			self.act.remove(self.p)
-			self.p = None #solo para las RRLap
+			#solo para las RRLap, borramos self.p para que el activo no lo vuelva a meter
+			self.p = None 
 		else:
+			#Sino, aumentamos el tiempo
 			self.time += self.q
 		
 	def RRLap(self):
 		"""Realiza una vuelta RoundRobin"""
 		self.activos()
+		#Si hay activos
 		if self.act:
+			#Lo procesamos
 			self.p = self.act[0]
 			self.__dbg()
 			q = self.q*self.p.q
@@ -224,10 +237,12 @@ class Plan:
 			self.time += q
 			self.act.remove(self.p)
 			if self.p.cpu <= 0:
+				#Si se termino el tiempo de cpu, lo eliminamos
 				self.p.fin = self.time
 				self.terminados.append(self.p)
 				self.p = None
 		else: 
+			#sino aumentamos el tiempo
 			self.time += self.q
 		
 		
@@ -236,12 +251,8 @@ class Plan:
 @procs : array de procesos como explica mas arriba
 @q : int (o float a tu riesgo) : tamaño del quantum (infiere en Fifo y MasCorto si ningun proceso entra en el tiempo 0)
 @debug: True o False, indica si imprime los pasos
-@mcolas: True o False, solo para Prio, es lo mismo que llamar a MColas
-
-tanto en fifo como en mcolas hay un detalle que no lo hablamos hasta ahora, 
-si especificamos el quantum y ningun proceso entra en 0 o hay tiempos muertos, afecta el calculo
-dejando el q=1 puede llegar a dar los resultados esperados"""
-def Fifo(procs,  q=1,  debug=False,  sorter=None):
+@mcolas: True o False, solo para Prio, es lo mismo que llamar a MColas"""
+def Fifo(procs,  q=5,  debug=False,  sorter=None):
 	"""
 	Fifo (First In First Out (primero el primero))
 	"""
@@ -250,7 +261,7 @@ def Fifo(procs,  q=1,  debug=False,  sorter=None):
 		plan.BasicLap()
 	return plan.terminados
 
-def MasCorto(procs,  q=1,  debug=False):
+def MasCorto(procs,  q=5,  debug=False):
 	"""Primero el mas corto"""
 	sorter = lambda p: p.cpu
 	return Fifo(procs,  q,  debug,  sorter)
@@ -270,10 +281,14 @@ def Prio(procs,  q=5,  debug=False,  mcolas=False):
 def MColas(procs,  q=5,  debug=False):
 	"""Colas multiples"""
 	return Prio(procs,  q=q,  debug=debug,  mcolas=True)
-
-for i in MColas(procs,  debug=True): print i
+	
+	
+	
 """
 Ejemplos :
+for i in MColas(procs,  debug=True): print i
+
+
 procs = [
 [20, 1, 0],
 [15, 1, 10],
@@ -293,4 +308,74 @@ for i in Prio(procs): print i.num ,  i.fin
 
 for i in MColas(procs):    print i.num,  i.fin
 
+"""
+
+###Recursos
+def PorRecursos(procesos,  recursos,  debug = False):
+	"""
+	@procs: array con procesos
+	@recursos: array con recursos disponibles"""
+	#definicion de clases y procedimientos internos es mala practica :D
+	#pero mantiene el namespace limpio
+	
+	class p: #una clase para cada proceso
+		def __init__(self, parr=([],[]), num=0):
+			self.num = num 
+			self.asign = parr[0][:]
+			self.solic = parr[1][:]
+			
+		def __str__(self):
+			return "P%2d: Asignados: %s Solicita: %s" % (self.num ,  self.asign ,  self.solic)
+			
+		def CanRun(self,  libres):
+			#Devuelve True si el proceso puede ejecutarse (estan los recursos que solicita)
+			#sino False
+			for (i, j) in zip(self.solic, libres):
+				if i > j: return False
+			return True	
+
+	def fkey(p):
+		#funcion para ordenar los procesos
+		return sum(p.asign)
+		
+	procs = [ p(arr,  num) for (num,  arr) in enumerate(procesos)]
+	#Creamos un array de instancias de procesos
+	
+	procs.sort(key=fkey,  reverse=True)
+	#y los ordenamos
+	#copiamos los recuros libres y creamos una lista de procesos terminados
+	libres = recursos[:]
+	terminados = []
+	
+	#Flag para saber si se ejecuto alguno (=True para que entre en el while)
+	ran = True 
+	
+	while procs and ran:
+		ran = False
+		for i in procs:#buscamos un proceso
+			if i.CanRun(libres):#que se pueda ejecutar
+				if debug: print "Se ejecutara: " + str(i)
+				#se coloca el flag
+				ran = True
+				#se actualizan los recursos disponibles
+				libres = [j+k for j,k in zip(i.asign, libres)]
+				#y se pasa el proceso a la lista de terminados
+				terminados.append(i)
+				procs.remove(i)
+				if debug: print "Recursos libres: " + str(libres)
+				#se sale del for para que se comienze desde el primer item
+				break
+				
+	if not ran:
+		print "Sistema Lockeado!!"
+	return terminados
+
+"""
+Ejemplos:
+p1 = [ [2, 0,  1] ,  [1,  1, 0] ]
+p2 = [ [1,  0,  1],  [0,  1,  1] ]
+p3 = [[1,  1,  1],  [1,  0,  0]]
+pr = [ p1,  p2,  p3]
+recs  = [0,  1,  1]
+for i in PorRecursos(pr,  recs,  debug=True): print i
 """
