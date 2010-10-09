@@ -87,10 +87,10 @@ def F(c):
 	@c: entero"""
 	sum =1
 	for i in xrange(c):
-		sum*= 1+i
+		sum *= 1+i
 	return sum
 
-def nPr(n,  r):
+def nPr(n, r):
 	""""Permutaciones
 	@n : int tamaño de la muestra
 	@r : int tamaño del grupo
@@ -103,9 +103,27 @@ def nCr(n, r):
 	@n : int, tamaño de la muestra
 	@r : int, tamaño del grupo
 	"""
-	return nPr(n, r )/F(r)
-	#return fac(n)/( fac(r)*fac(n-r))
-
+	#return nPr(n, r)/F(r)
+	return F(n)/(F(r)*F(n-r))#este es apenas mas rapido
+	
+def Distrib(x, n, p):
+	"""Distribución binaria
+	@x: valor
+	@n: tamaño de la muestra
+	@p: probabilidade de acierto
+	"""
+	return nCr(n, x)*(p**x)*((1.0-p)**(n-x))
+	
+def SDistrib(x, n, p):
+	"""Sumatoria de distribucion binaria
+	@x: valor
+	@n: tamaño de la muestra
+	@p: probabilidade de acierto
+	"""
+	z=0
+	for i in range(x+1):
+		z+= Distrib(i,n,p)
+	return z
 
 #####################
 # Sistema y Arquitectura de datos #
@@ -373,9 +391,15 @@ def PorRecursos(procesos,  recursos,  debug = False):
 """
 Ejemplos:
 p1 = [ [2, 0,  1] ,  [1,  1, 0] ]
+#cada proceso es un array con dos arrays 
+#uno para los recursos asignados otro para los solicitados
 p2 = [ [1,  0,  1],  [0,  1,  1] ]
 p3 = [[1,  1,  1],  [1,  0,  0]]
+
+#lista de procesos
 pr = [ p1,  p2,  p3]
+
+#recursos libres
 recs  = [0,  1,  1]
 for i in PorRecursos(pr,  recs,  debug=True): print i
 """
