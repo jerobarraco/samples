@@ -161,7 +161,9 @@ distrib_normal =[
 ]
 
 def PEst(z):
-	"devuelve la probabilidad estandard a partir de -infinito hasta z"
+	"""devuelve la probabilidad estandard a partir de -infinito hasta z
+	@z es un valor TIPIFICADO (curva estandar)"""
+	
 	z = int(round(z*100)) # lo convertimos a un entero , usando solo dos decimales
 	if z<0:
 		s = -1
@@ -172,20 +174,53 @@ def PEst(z):
 	if z > 400: z=400
 	return 0.5 + (s*distrib_normal[z])
 		
-def PNorm(u,  d,  x1,  x2):
-	"""Devuelve el valor de la distribución normal estandar
+def PDNormal(x1,  x2,  u,  d):
+	"""Devuelve el valor de la probabilidad en una 
+	distribución normal
 	para un valor de x entre X1 y X2 (x1<x<x2)
-	@u : media
-	@d : desviación estandar
 	@x2 : x mayor del rango
 	@x1 =0 x menor del rango
+	@u : media
+	@d : desviación estandar
 	x2 TIENE que ser mayor que x1
 	"""
 	d = float(d)
 	z1 = (x1-u)/d
 	z2 = (x2-u)/d
 	return PEst(z2)-PEst(z1)
+
+def Gauss(x, u, d):
+	"""devuelve el valor (imagen (y)) 
+		de un PUNTO x para una campana de gauss.
+		@x variable aleatoria 
+		@u media
+		@d desviación estandar
+		"""
+	import math
+	d=float(d)
+	z = (x-u)/d#Tipificamos
+	a=(z**2)/-2.0
+	b=math.e**a
+	return (1.0/math.sqrt(2))*b
 	
+def RSNormal(x1, x2, u, d, div=1000.0):
+	"""Como PDNorm pero sin usar tabla, 
+	excesivamente lento y probablemente no mas exacto
+	@x1 x inicial
+	@x2 x final (ha de ser mayor que x1)
+	@u media
+	@d desviacion estandar
+	@div cantidad de divisiones por entero
+	"""
+	base = 1.0/div
+	z=0.0
+	x=x1
+	while x < x2:
+		z+= Gauss(x,u,d)*base
+		x += base
+	return z
+print PDNormal(45, 55, 50, 5)
+print RSNormal(45, 55, 50, 5)
 #####################
 # Sistema y Arquitectura de datos #
 #####################
