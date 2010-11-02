@@ -499,3 +499,47 @@ pr = [ p1,  p2,  p3]
 recs  = [0,  1,  1]
 for i in PorRecursos(pr,  recs,  debug=True): print i
 """
+#Ejemplo de una tabla de asignacion de paginas
+#Array de arrays, el 1º item es la pagina virtual, el 2º es el marco (pagina fisica) donde está alojada, o None si no lo esta
+
+ta=[ [0,2], [1,4], [2,0], [3,None], [4,10], [5,None], [6,1], [7,6], [8,3],[9,None],[10,None]]
+
+def TransDir(ta, dir, bs=4, fisica=False ):
+	"""
+	Transforma una direccion de virtual a fisica y viceversa
+	@ta = tabla de asignacion de paginas (ver "ta" mas arriba)
+	@dir = direccion a transformar (ej: 30488)
+	@bs=4 tamaño de cada pagina (en KB) (default 4 o sea 4096)
+	@fisica=False indica si la direccion es fisica o virtual. (default fisica)
+	@return int con la direccion o "Fallo" si hay fallo de pagina
+	"""
+	def getini(p): return p[0]
+	#multiplicamos el blocksize por un K
+	bs*=1024
+	#obtenemos la pagina (truncamos con int)
+	pag=int(dir/bs)
+	#calculamos el offset
+	off=dir-(pag*bs)
+	#invertimos el array si la direccion es física
+	if fisica:
+		ta = [[j,i] for [i,j] in ta]
+	#lo ordenamos
+	ta.sort(key=getini,reverse=True)
+	print "pag %s, ini %s, offset %s" %( pag, pag*bs, off)
+	for i, j in ta: #esta revertida
+		if i==pag: #por el orden asumimos que el anterior es mayor
+			#en caso de ser una direccion fisica que no tiene ninguna pagina
+			#nunca entraria aca, porque i==None
+			if j is None:
+				#si j==None entonces rompemos el for para que de fallo
+				break
+			else:
+				#si J no es None, entonces esta alocada en memoria
+				#calculamos la direccion
+				d =(j*bs)+off
+				#informamos
+				print 'pag %s, dir %s' %(j,d)
+				#devolvemos
+				return d				
+	#Si llegamos acá, es porque la pagina no esta alocada.
+	return 'Fallo'
