@@ -71,6 +71,12 @@ def Comp9(num):
 #########
 # Estadistica #
 #########
+x=[4,6,11,3,16]
+y=[50,50,40,60,30]
+
+def Media(arr):
+	#devuelve la media (promedio) de un array de numeros
+	return sum(arr)/float(len(arr))
 
 def Mediana(nums):
 	#Devuelve la mediana de un array de numeros
@@ -81,7 +87,42 @@ def Mediana(nums):
 	else:
 		l= l/2
 		return (nums[l]+nums[l-1])/2.0
-
+		
+def Var(arr):
+	"""dado un array, devuelve la Varianza (poblacional (n-1))
+	@arr array"""
+	suma =0
+	p= Media(arr) 
+	for x in arr:
+		suma += (x-p)**2
+	return suma/ (float(len(arr))-1.0)
+	
+def DEst(arr):
+	"""dado un array, devuelve la Desviación Estandar (poblacional (n-1))
+	@arr array"""
+	import math
+	return math.sqrt(Var(arr))
+	
+def Covar(x, y):
+	"""Devuelve la Covarianza de dos array de numeros
+	(deberia ser una matriz pero es mas facil manejarlos asi :P)
+	@x, y cada uno un array de numeros, han de tener la misma longitud, 
+	y el orden de cada uno importa (ya que deben corresponderse tal matriz)"""
+	#covarianza
+	mx =Media(x)
+	my =Media(y)
+	s=0
+	for i,j in zip(x,y):
+		s+= (i-mx)*(j-my)
+	return float(s)/(len(x)-1.0)
+	
+def CCorr(x, y):
+	"""Devuelve el Coeficiente de Correspondencia entre 2 vectores
+	(deberia ser una matriz pero es mas facil manejarlos asi :P)
+	@x, y cada uno un array de numeros, han de tener la misma longitud, 
+	y el orden de cada uno importa (ya que deben corresponderse tal matriz)"""
+	return Covar(x,y)/(DEst(x) * DEst(y))
+	
 def F(c):
 	"""factorial de un numero
 	@c: entero"""
@@ -219,8 +260,10 @@ def RSNormal(x1, x2, u, d, div=1000.0):
 		z+= Gauss(x,u,d)*base
 		x += base
 	return z
-print PDNormal(45, 55, 50, 5)
-print RSNormal(45, 55, 50, 5)
+	
+#print PDNormal(45, 55, 50, 5)
+#print RSNormal(45, 55, 50, 5)
+
 #####################
 # Sistema y Arquitectura de datos #
 #####################
