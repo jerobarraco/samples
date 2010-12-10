@@ -6,7 +6,7 @@ from xml.sax import make_parser, ContentHandler, ErrorHandler
 
 HEADER=u"""<?xml version="1.0" encoding="UTF-8"?>"""
 
-class Empty:
+class Node:
 	def __init__(self):
 		self._value=''
 		self._parent = None
@@ -20,7 +20,7 @@ def normalize_whitespace(text):
 
 class cHandler(ContentHandler, ErrorHandler):
 	def __init__(self):
-		self.__curobj = self.__object = Empty()
+		self.__curobj = self.__object = Node()
 
 	#Various
 	def GetObject(self):		return self.__object
@@ -32,7 +32,7 @@ class cHandler(ContentHandler, ErrorHandler):
 		if not (name in self.__curobj.__dict__ ):
 			self.__curobj.__dict__[name] = []
 		
-		new = Empty()
+		new = Node()
 		new.__dict__.update(attrs)
 		new._parent = self.__curobj
 		self.__curobj.__dict__[name].append(new)
@@ -108,10 +108,12 @@ class Dao:
 	allows a transparent use of python object, and then
 	you can save to or load it from an xml."""
 	def __init__(self, rootTag,  fname=""):
-		if fname :	self.LoadFromFile(fname)
+		if fname :
+		  self.__root = rootTag
+		  self.LoadFromFile(fname)
 		else:
-			self.__object=None
-			self.NewObject(rootTag)
+			self.__object=self.NewObject(rootTag)
+			
 
 	def LoadFromFile(self, fname=""):
 		"""This method loads an object from a file in the xml format,
@@ -129,8 +131,9 @@ class Dao:
 		self.__parser.setContentHandler(handler)
 		self.__parser.setErrorHandler(handler)
 		self.__parser.parse(self.__filename)
-		self.__object = handler.GetObject().proyecto[0]
-		self.__object._name = 'proyecto'
+		self.__object = getattr(handler.GetObject(), self.__root)[0]
+		self.__object._parent = None
+		self.__object._name = self.__root
 		return self.__object
 
 	def SaveToFile(self, fname=""):
@@ -156,7 +159,8 @@ class Dao:
 		"""Creates a new object, and deletes any data of the object before, (if any)"""
 		del self.__object
 		self.__fname = ""
-		self.__object = Empty()
+		self.__object = Node()
+		self.__root = tag
 		return self.__object
 
 	def GetFileName(self):
