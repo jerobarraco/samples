@@ -14,7 +14,6 @@ package com.game
 		[Embed(source = "/data/nave/nave_escudo.png")] private var ImgEscudo:Class;
 		[Embed(source = "/data/nave/nave_lanzabombas.png")] private var ImgBombas:Class;
 		[Embed(source = "/data/nave/nave_propulsores.png")] private var ImgPropulsores:Class;
-		//TODO: poner health, bounding box
 		//Sprites para las partes
 		private var cannon1:FlxSprite;
 		private var cannon2:FlxSprite;
@@ -25,7 +24,8 @@ package com.game
 		
 		private var speed:Number = 400;
 		private var base_speed:Number = 100;
-		private var features:Array; //array de bools para los features
+		public var features:Array = [ true,true,true,true,true,true,true,true] ; //array de bools para los features
+
 		
 		private var my_pos:FlxPoint = new FlxPoint;
 		
@@ -44,17 +44,18 @@ package com.game
 			//array con la lista de features activos
 			features = new Array;
 			/*
-			 * 0= cannon1
-			 * 1= cannon2
-			 * 2= cannon3
-			 * 3= escudo
-			 * 4= bombas
-			 * 5= speed1
-			 * 6= speed2
-			 * 7= speed3
+			* 0= cannon1
+			* 1= cannon2
+			* 2= cannon3
+			* 3= escudo
+			* 4= bombas
+			* 5= speed1
+			* 6= speed2
+			* 7= speed3
 			* 
 			*/
-			for (var i:int = 0; i < 9; i++) {
+			for (var i:int = 0; i < 8; i++) {
+
 				features[i] = true;
 			}
 			
@@ -103,7 +104,7 @@ package com.game
 				x += FlxG.elapsed * speed;
 				if (x > FlxG.width - width) x = FlxG.width - width;
 			}
-			
+
 			if (FlxG.keys.justPressed("ONE")) {
 				SetFeature(0, !features[0]);
 			}
@@ -137,10 +138,11 @@ package com.game
 				
 				switch(true) {
 					case features[0]: Shoot(FlxPoint.add(my_pos, cannon_1), Shots.STATE_HOMMING);
-					case features[1]: Shoot(FlxPoint.add(my_pos, cannon_5), Shots.STATE_HOMMING);
-					case features[2]: Shoot(FlxPoint.add(my_pos, cannon_2), Shots.STATE_NORMAL);
-					case features[3]: Shoot(FlxPoint.add(my_pos, cannon_3), Shots.STATE_NORMAL);
-					case features[4]: Shoot(FlxPoint.add(my_pos, cannon_4), Shots.STATE_NORMAL);
+					case features[1]: 
+						Shoot(FlxPoint.add(my_pos, cannon_2), Shots.STATE_NORMAL);
+						Shoot(FlxPoint.add(my_pos, cannon_3), Shots.STATE_NORMAL);
+						Shoot(FlxPoint.add(my_pos, cannon_4), Shots.STATE_NORMAL);
+					case features[2]: Shoot(FlxPoint.add(my_pos, cannon_5), Shots.STATE_HOMMING);
 				}
 			}
 			
@@ -176,6 +178,8 @@ package com.game
 				{
 					shots.members[i].reset(pos.x, pos.y);
 					shots.members[i].state = Type;
+					shots.members[i].friend = true;
+					
 					return;
 				}
 			}
@@ -183,6 +187,7 @@ package com.game
 			var shot:Shots = new Shots(pos.x, pos.y);
 			shot.reset(pos.x, pos.y);
 			shot.state = Type;
+			shot.friend = true;
 			shots.members.push(PlayState.lyr_Pshots.add(shot));
 		}
 		public function SetFeature(feat:int, val:Boolean):void {
