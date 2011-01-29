@@ -6,10 +6,10 @@ package com.game
 	
 	public class Shots extends FlxSprite
 	{
-		private static var STATE_NORMAL:int = 0;
-		private static var STATE_HOMMING:int =1;
+		public static var STATE_NORMAL:int = 0;
+		public static var STATE_HOMMING:int =1;
 		
-		private var state:int = STATE_HOMMING;
+		public var state:int = STATE_HOMMING;
 		
 		[Embed(source = "/data/Spark.png")] private var ImgSpark:Class;
 		
@@ -17,7 +17,7 @@ package com.game
 		
 		private var speed:Number = 200;
 		
-		private var target:FlxPoint = new FlxPoint(300,200);
+		public var target:FlxPoint = new FlxPoint();
 		
 		public function Shots(X:Number, Y:Number):void 
 		{
@@ -26,7 +26,7 @@ package com.game
 			_sparks = PlayState.lyr_top.add(new FlxEmitter(X,Y)) as FlxEmitter;
 			_sparks.createSprites(ImgSpark, 10, 16, true, 0);
 			
-			createGraphic(2,2);
+			createGraphic(6,2,0xffff0000);
 			
 			maxThrust = speed;
 			exists = false;
