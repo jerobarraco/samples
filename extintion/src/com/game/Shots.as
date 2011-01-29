@@ -17,7 +17,7 @@ package com.game
 		
 		private var speed:Number = 200;
 		
-		public var target:FlxPoint = new FlxPoint();
+		public var target:Enemy;
 		
 		public function Shots(X:Number, Y:Number):void 
 		{
@@ -29,7 +29,12 @@ package com.game
 			createGraphic(6,2,0xffff0000);
 			
 			maxThrust = speed;
+			
 			exists = false;
+			
+			target = find_target();
+			
+			
 		}
 		
 		override public function update():void
@@ -45,10 +50,7 @@ package com.game
 			
 			thrust = maxThrust;
 			
-			if(x>FlxG.width
-			|| x<0
-			|| y<0
-			|| y> FlxG.height)
+			if(!onScreen() && state==STATE_NORMAL)
 				this.kill()
 			
 			super.update();
@@ -61,6 +63,17 @@ package com.game
 		
 		public function update_homming():void
 		{
+			if(target==null)
+			{
+				state=STATE_NORMAL;
+				return;
+			}
+			if(target.dead)
+			{
+				target = find_target();
+				return;
+			}
+				
 			//Aiming
 			var dx:Number = (x + width / 2) - target.x;
 			var dy:Number = (y + height / 2) - target.y;
@@ -106,7 +119,26 @@ package com.game
 			velocity.x = velocity.y = 0;
 			acceleration.x = acceleration.y = 0;
 			
+			target = find_target();
+			
 			super.reset(X,Y);
+		}
+		
+		public function find_target():Enemy
+		{
+			var enes:Array = PlayState.lyr_enemy.members;
+			
+			for(var i:int; i<enes.length; i++)
+			{
+				var ene:Enemy = enes[i];
+				if(ene.exists)
+				{
+					return ene;
+				}
+				else
+					return null;
+			}
+			return null;
 		}
 		
 	}

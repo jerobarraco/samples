@@ -23,19 +23,9 @@ package com.game
 		private var bombas:FlxSprite;
 		private var propulsores:FlxSprite;
 		
-		private var speed:Number = 300;
-		private var features:Array;
-		/*
-		 * 0= cannon1
-		 * 1= cannon2
-		 * 2= cannon3
-		 * 3= escudo
-		 * 4= bombas
-		 * 5= propulsores
-		 * 
-		 * 
-		 * 
-		 */
+		private var speed:Number = 400;
+		private var base_speed:Number = 100;
+		private var features:Array; //array de bools para los features
 		
 		private var my_pos:FlxPoint = new FlxPoint;
 		
@@ -53,7 +43,18 @@ package com.game
 			health = 10;
 			//array con la lista de features activos
 			features = new Array;
-			for (var i:int = 0; i < 6; i++) {
+			/*
+			 * 0= cannon1
+			 * 1= cannon2
+			 * 2= cannon3
+			 * 3= escudo
+			 * 4= bombas
+			 * 5= speed1
+			 * 6= speed2
+			 * 7= speed3
+			* 
+			*/
+			for (var i:int = 0; i < 9; i++) {
 				features[i] = true;
 			}
 			
@@ -77,8 +78,7 @@ package com.game
 			PlayState.lyr_player.add(bombas);
 			
 			propulsores = new FlxSprite(x, y, ImgPropulsores);
-			PlayState.lyr_player.add(propulsores);		
-			
+			PlayState.lyr_player.add(propulsores);
 		}
 		
 		override public function update():void
@@ -102,6 +102,34 @@ package com.game
 			{
 				x += FlxG.elapsed * speed;
 				if (x > FlxG.width - width) x = FlxG.width - width;
+			}
+			
+			if (FlxG.keys.justPressed("ONE")) {
+				SetFeature(0, !features[0]);
+			}
+			if (FlxG.keys.justPressed("TWO")) {
+				SetFeature(1, !features[1]);
+			}
+			if (FlxG.keys.justPressed("THREE")) {
+				SetFeature(2, !features[2]);
+			}
+			if (FlxG.keys.justPressed("FOUR")) {
+				SetFeature(3, !features[3]);
+			}
+			if (FlxG.keys.justPressed("FIVE")) {
+				SetFeature(4, !features[4]);
+			}
+			if (FlxG.keys.justPressed("SIX")) {
+				SetFeature(5, !features[5]);
+			}
+			if (FlxG.keys.justPressed("SEVEN")) {
+				SetFeature(6, !features[6]);
+			}
+			if (FlxG.keys.justPressed("EIGHT")) {
+				SetFeature(7, !features[7]);
+			}
+			if (FlxG.keys.justPressed("NINE")) {
+				SetFeature(8, !features[8]);
 			}
 			if(FlxG.keys.justPressed("Z") || FlxG.keys.justPressed("SPACE"))
 			{
@@ -157,37 +185,40 @@ package com.game
 			shot.state = Type;
 			shots.members.push(PlayState.lyr_Pshots.add(shot));
 		}
-		
+		public function SetFeature(feat:int, val:Boolean):void {
+			//Prender o apagar una feat
+			features[feat] = val;
+			if (val) {
+				switch(feat) {
+					case 0: cannon1.reset(x, y); break;
+					case 1: cannon2.reset(x, y); break;
+					case 2: cannon3.reset(x, y); break;
+					case 3: escudo.reset(x, y); break;
+					case 4: bombas.reset(x, y); break;
+					case 5: propulsores.reset(x, y); break;
+					case 6:  speed += base_speed; break;
+					case 7:  speed += base_speed; break ;
+					case 8:  speed += base_speed; break;
+				}
+			}else{
+				switch(feat) {
+					case 0: cannon1.kill(); break;
+					case 1: cannon2.kill(); break;
+					case 2: cannon3.kill(); break;
+					case 3: escudo.kill(); break;
+					case 4: bombas.kill(); break;
+					case 5: propulsores.kill(); break;
+					case 6: speed -= base_speed; break;
+					case 7: speed -= base_speed; break;
+					case 8: speed -= base_speed; break;
+				}
+			}
+		}
 		public function Hit(shot:Enemy, me:FlxSprite):void 
 		{
 			shot.kill();
 			health -= 1;
-			 switch(health) {
-				case 9: 
-					cannon1.kill(); 
-					features[0] = false;
-					break;
-				case 8: 
-					cannon2.kill(); 
-					features[1] = false;
-					break;
-				case 7: 
-					cannon3.kill(); 
-					features[2] = false;
-					break;
-				case 6:
-					bombas.kill(); 
-					features[3] = false;
-					break;
-				case 5: 
-					escudo.kill();
-					features[4] = false;
-					break;
-				case 4: 
-					propulsores.kill(); 
-					features[5] = false;
-					break;
-			}
+			
 			if (health < 0) {
 				kill();
 			}

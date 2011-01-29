@@ -35,7 +35,6 @@ package com.game
 			for(var j:int = 0; j<10; j++)
 			{
 				var enes:Enemy = new Enemy(0,0);
-				enes.kill();
 				lyr_enemy.add(enes);
 			}
 			
