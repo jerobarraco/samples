@@ -58,7 +58,7 @@ package com.game
 			
 			thrust = maxThrust;
 			
-			if(!onScreen() && state==STATE_NORMAL)
+			if(!onScreen())// && state==STATE_NORMAL)
 				this.kill()
 			
 			super.update();
@@ -138,7 +138,6 @@ package com.game
 		public function find_target():Enemy
 		{
 			var enes:Array = PlayState.enemies_array;
-			trace(enes.length);
 			
 			for(var i:int; i<enes.length; i++)
 			{
