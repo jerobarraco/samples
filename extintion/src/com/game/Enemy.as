@@ -2,8 +2,12 @@ package com.game
 {
 	import org.flixel.FlxEmitter;
 	import org.flixel.FlxG;
+	import org.flixel.FlxGroup;
+	import org.flixel.FlxPoint;
 	import org.flixel.FlxSprite;
 	import org.osmf.layout.AbsoluteLayoutFacet;
+	
+	import utils.Utils;
 	
 	public class Enemy extends FlxSprite
 	{
@@ -20,6 +24,10 @@ package com.game
 
 		private var explo:FlxEmitter = new FlxEmitter;
 		
+		public var init_pos:FlxPoint = new FlxPoint();
+		
+		private var base_health:Number = 3;
+		
 		public function Enemy(X:Number=0, Y:Number=0, SimpleGraphic:Class=null)
 		{
 			super(X, Y, SimpleGraphic);
@@ -31,6 +39,7 @@ package com.game
 			
 			exists = false;
 			dead = true;
+			
 		}
 		
 		override public function update():void
@@ -65,14 +74,42 @@ package com.game
 			super.update();
 		}
 		
+		public var move_angle:Number = 0;
+		
 		public function update_uno():void
 		{
 			x-= FlxG.elapsed * 100;
+			
+			move_angle += FlxG.elapsed*200 ;
+			
+			var radian:Number = Utils.deg_to_rad(move_angle);
+			
+			y = init_pos.y + (40* (Math.cos(radian)));
+			
+			trace(health);
 		}
+		
+		private var shot_angle:Number = 0;
+		
+		private var shot_timer:Number=0;
+		private var shot_timer_max:Number= .1;
 		
 		public function update_dos():void
 		{
-			
+			if(x>FlxG.width-150)
+			{
+				x-= FlxG.elapsed*150;
+			}
+			else
+			{
+				shot_timer+=FlxG.elapsed;
+				if(shot_timer>shot_timer_max)
+				{
+					Shoot(new FlxPoint(x,y),shot_angle);
+					shot_angle +=10;
+					shot_timer = 0;
+				}
+			}
 		}
 		
 		public function update_tres():void
@@ -90,15 +127,43 @@ package com.game
 			
 		}
 		
-		
+		private function Shoot(Pos:FlxPoint, Angle:Number):void
+		{
+			var shots:FlxGroup = PlayState.lyr_Pshots;
+			var pos:FlxPoint = Pos;
+			
+			for (var i:uint = 0; i < shots.members.length; i++)
+			{
+				if (!shots.members[i].exists)
+				{
+					shots.members[i].reset(pos.x, pos.y);
+					shots.members[i].state = 3;
+					shots.members[i].friend = false;
+					shots.members[i].angle = Angle;
+					return;
+				}
+			}
+			//sino se crea y se agrega al array (push) dentro de la capa de sprites
+			var shot:Shots = new Shots(pos.x, pos.y);
+			shot.reset(pos.x, pos.y);
+			shot.state = 3;
+			shot.friend = false;
+			shot.angle = Angle;
+			shots.members.push(PlayState.lyr_Eshots.add(shot));
+		}
 		
 		override public function kill():void
 		{
 			explo.at(this);
 			explo.start();
 			
-			
 			super.kill();
+		}
+		
+		override public function reset(X:Number, Y:Number):void
+		{
+			health = base_health * (type +1);
+			super.reset(X,Y);
 		}
 	}
 }
