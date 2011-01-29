@@ -86,7 +86,6 @@ package com.game
 			
 			y = init_pos.y + (40* (Math.cos(radian)));
 			
-			trace(health);
 		}
 		
 		private var shot_angle:Number = 0;
@@ -105,7 +104,7 @@ package com.game
 				shot_timer+=FlxG.elapsed;
 				if(shot_timer>shot_timer_max)
 				{
-					Shoot(new FlxPoint(x,y),shot_angle);
+					Shoot(new FlxPoint(x+width/2,y+height/2),shot_angle);
 					shot_angle +=10;
 					shot_timer = 0;
 				}
@@ -129,7 +128,7 @@ package com.game
 		
 		private function Shoot(Pos:FlxPoint, Angle:Number):void
 		{
-			var shots:FlxGroup = PlayState.lyr_Pshots;
+			var shots:FlxGroup = PlayState.lyr_Eshots;
 			var pos:FlxPoint = Pos;
 			
 			for (var i:uint = 0; i < shots.members.length; i++)
@@ -140,6 +139,7 @@ package com.game
 					shots.members[i].state = 3;
 					shots.members[i].friend = false;
 					shots.members[i].angle = Angle;
+					
 					return;
 				}
 			}
