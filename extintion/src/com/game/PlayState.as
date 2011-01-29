@@ -22,7 +22,7 @@ package com.game
 			lyr_top = new FlxGroup;
 			
 			var player:Ship = new Ship(20,20);
-			lyr_enemy.add(player);
+			lyr_player.add(player);
 			
 			for(var i:int = 0; i<10; i++)
 			{
@@ -43,17 +43,20 @@ package com.game
 			this.add(lyr_top);
 		}
 		
-		private var enemy:int=0;
+		private var enemy:int=1;
 		
 		override public function update():void
 		{
 			ene_spawn_timer+=FlxG.elapsed;
 			if(ene_spawn_timer>ene_spawn_timer_max)
 			{
-				if (lyr_enemy.members[enemy].dead)
-				{
-					lyr_enemy.members[enemy].reset(FlxG.width, Math.random()*FlxG.height);
-					enemy+=1;
+				var tmp:Enemy;
+				for each (tmp in lyr_enemy.members) {
+					if (tmp.dead) {
+							tmp.reset(FlxG.width, Math.random() * FlxG.height);
+							enemy += 1;
+							break;
+					}
 				}
 				ene_spawn_timer=0;
 			}
