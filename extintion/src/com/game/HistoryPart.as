@@ -5,17 +5,15 @@ package com.game
 	public class HistoryPart extends FlxState
 	{
 		private var img:FlxSprite;
-		private static var showed:Array = [false, false, false, false, false, false, false, false];
-		[Embed(source = "/data/Historia/02a Black Screen Inicio.png")] private var Img1:Class;
-		[Embed(source = "/data/Historia/04 Warning Screen.png")] private var Img2:Class;
-		[Embed(source = "/data/Historia/Edit.png")] private var Img3:Class;
-		[Embed(source = "/data/Historia/02.png")] private var Img4:Class;
-		[Embed(source = "/data/Historia/03.png")] private var Img5:Class;
-		[Embed(source = "/data/Historia/04.png")] private var Img6:Class;
-		[Embed(source = "/data/Historia/05.png")] private var Img7:Class;
-		[Embed(source = "/data/Historia/06.png")] private var Img8:Class;
 		
-		private var Imgs:Array = [Img1, Img2, Img3, Img4, Img5, Img6, Img7, Img8];
+		[Embed(source = "/data/Historia/Data/02.png")] private var Img1:Class;
+		[Embed(source = "/data/Historia/Data/03.png")] private var Img2:Class;
+		[Embed(source = "/data/Historia/Data/04.png")] private var Img3:Class;
+		[Embed(source = "/data/Historia/Data/05.png")] private var Img4:Class;
+		[Embed(source = "/data/Historia/Data/06.png")] private var Img5:Class;
+		
+		private var Imgs:Array = [Img1, Img2, Img3, Img4, Img5];
+		private static var showed:Array = [false, false, false, false, false];
 		
 		private var promptframes:int;
 		private var prompt:FlxText;
@@ -65,13 +63,13 @@ package com.game
 
 			if (FlxG.keys.justPressed("Z") ) {
 				FlxG.level += 1;
+				if (FlxG.level > 6) FlxG.level = 6;
 				var state:PlayState = new PlayState;
 					
 				FlxG.state = state;
 				state.set_feats(features);
 			}
 		}
-		private static var Pantallas:Array= [];
 		private static var Messages:Array=[
 			"Captain's Log: No Humans Era, Day One – Time: Unknown.\n"+
 			"“It seems we are the only ship could scape from annihilation of our race.\n"+

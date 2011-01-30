@@ -23,7 +23,7 @@ package com.game
 		
 		public static var player:Ship;
 		
-		public static var dificulty:int =1;
+		public static var dificulty:int=1;
 		
 		private var levels:Levels;
 		
