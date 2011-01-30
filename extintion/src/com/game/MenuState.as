@@ -14,6 +14,7 @@ package com.game
 			[ 
 				"Primary Cannon", "Secondary Cannon", "Auto-defense Proyectile System", 
 				"External Protection Shield System", "Bomb Launcher", "Propeller 1" , "Propeller 2", "Propeller 3"];
+				
 		override public function create():void
 		{
 			prompt = new FlxText(25, 400, 30, "_ ");
@@ -52,9 +53,9 @@ package com.game
 				if (features[i] && FlxG.keys.justPressed(options[i]) ){
 					features [i] = false;
 					//load another state
-					var nuevo = new PlayState;
+					var nuevo:PlayState = new PlayState;
 					FlxG.state = nuevo;
-					nuevo.SetFeats(features);
+					nuevo.set_feats(features);
 					return;
 				}
 			}
