@@ -34,10 +34,12 @@ package com.game
 				}
 			}
 			var toptext:String;
-			toptext = "Jam-OS >\n Status Report\n Active System Status: " + (c/feats.length*100).toString() + "% \nERROR: A fatal error has ocurred, a process must be terminated:\n" 
+			toptext = "Jam-OS >\n Status Report\n Active System Status: " + (c/feats.length*100).toString() + "% \n\nERROR: A fatal error has ocurred, a process must be terminated to continue:\n" 
 			toptext += texto;
-			if (c == 0)
+			if (c == 0){
 				toptext += "\n\nExtermination inmineHDR   -   (j×s)  IiCCPsRGB IEC61966-2.1  xÚSwX“÷>ß÷eVBØð±—l œHUÄ‚Õ Hˆâ (¸gAŠˆZ‹U\8îÜ§µ}zïííû×û¼çœçüÎyÏ€&‘æ¢j 9R…<:ØOHÄÉ½€HàæËÂgÅ  ðyx~t°?üäœ—›#ÑÁþ8?çæäáæfçlïôÅ¢þkðo>!ñßþ¼"
+				//todo: poner un timer e ir a la pantalla de error final
+			}
 			mitexto = new FlxText(10, 10, 1000, toptext);
 			mitexto.setFormat(null, 12);
 			this.add(mitexto);
