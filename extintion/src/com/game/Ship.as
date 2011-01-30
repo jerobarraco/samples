@@ -36,7 +36,7 @@ package com.game
 		private var Sprites:Array;
 		private var Images:Array;
 		
-		private var speed:Number = 400;
+		private var speed:Number = 300;
 		private var base_speed:Number = 100;
 		private var hitmultiplier:Number = 1;
 		public var features:Array = [ true,true,true,true,false,true,true,true] ; //array de bools para los features
@@ -75,24 +75,24 @@ package com.game
 			PlayState.lyr_player.add(this);
 			//Creamos las partes
 			Images = [
-				ImgCanon1, ImgCanon2, ImgCanon3, ImgEscudo, ImgBombas,
+				ImgCanon1, ImgCanon2, ImgCanon3, ImgBombas,
 				ImgPropulsores, ImgPropulsores14, ImgPropulsores16,
-				ImgFuego, ImgFuego14, ImgFuego16
+				ImgFuego, ImgFuego14, ImgFuego16, ImgEscudo
 			];
 			
 			Sprites = new Array;
 			for (var i:int = 0; i < Images.length; i++) {
-				if (i <= 7) {
-						Sprites[i] = new FlxSprite(x, y, Images[i]);
+				if ((i < 7) || (i>9)) {
+					Sprites[i] = new FlxSprite(x, y, Images[i]);
 				}else
-				 {
+				{
 					Sprites[i] = new FlxSprite(x, y);
 					Sprites[i].loadGraphic(Images[i], true, false, 50, 40);
 				
 					Sprites[i].addAnimation("fuego", [0, 1, 2], 5, true);	
 					Sprites[i].play("fuego");
 				}
-					PlayState.lyr_player.add(Sprites[i]);
+				PlayState.lyr_player.add(Sprites[i]);
 			}
 		}
 		
@@ -145,6 +145,11 @@ package com.game
 			}
 			if (FlxG.keys.justPressed("NINE")) {
 				SetFeature(8, !features[8]);
+			}
+			if (FlxG.keys.justPressed("P")) {
+				var state:HistoryState1 = new HistoryState1;
+				FlxG.state = state;
+				state.features = features;
 			}
 			if(FlxG.keys.justPressed("Z") || FlxG.keys.justPressed("SPACE"))
 			{
@@ -202,24 +207,24 @@ package com.game
 					case 2: Sprites[2].reset(x, y); break;//homming
 					//shield
 					case 3: 
-						Sprites[3].reset(x, y); 
+						Sprites[10].reset(x, y); 
 						hitmultiplier = 1;
 						break; 
 					//Bomb
 					case 4: Sprites[4].reset(x, y); break;
 					//Propeller1
 					case 5: 
-						Sprites[5].reset(x, y); 
-						Sprites[8].reset(x, y); 
+						Sprites[4].reset(x, y); 
+						Sprites[7].reset(x, y); 
 						speed += base_speed; break;
 					//Propeller2
 					case 6: 
-						Sprites[6].reset(x, y); 
-						Sprites[9].reset(x, y); 
+						Sprites[5].reset(x, y); 
+						Sprites[8].reset(x, y); 
 						speed += base_speed; break;
 					case 7:
-						Sprites[7].reset(x, y); 
-						Sprites[10].reset(x, y);
+						Sprites[6].reset(x, y); 
+						Sprites[9].reset(x, y);
 						speed += base_speed; break;
 				}
 			}else {
@@ -233,21 +238,21 @@ package com.game
 						hitmultiplier = 2;
 						break; 
 					//Bomb
-					case 4: Sprites[4].kill(); break;
+					case 4: Sprites[10].kill(); break;
 					//Propeller1
 					case 5: 
-						Sprites[5].kill(); 
-						Sprites[8].kill(); 
+						Sprites[4].kill(); 
+						Sprites[7].kill(); 
 						speed -= base_speed; break;
 					//Propeller2
 					case 6: 
-						Sprites[6].kill(); 
-						Sprites[9].kill(); 
+						Sprites[5].kill(); 
+						Sprites[8].kill(); 
 						speed -= base_speed; break;
 					//Propeller3
 					case 7:
-						Sprites[7].kill(); 
-						Sprites[10].kill();
+						Sprites[6].kill(); 
+						Sprites[9].kill();
 						speed -= base_speed; break;
 				}
 			}

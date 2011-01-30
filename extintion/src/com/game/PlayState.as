@@ -27,7 +27,7 @@ package com.game
 		private var ene_spawn_timer_max:Number = 2;
 		
 		private var video:Video;
-		
+		public static var dificulty:int = 0;
 		override public function create():void
 		{
 			lyr_back = new FlxGroup;
