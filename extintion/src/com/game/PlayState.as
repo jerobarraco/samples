@@ -23,7 +23,7 @@ package com.game
 		
 		public static var player:Ship;
 		
-		public static var dificulty:int=1;
+		public static var data_timer:Number=10;
 		
 		private var levels:Levels;
 		
@@ -110,9 +110,20 @@ package com.game
 				var nuevo:MenuState = new MenuState;
 				FlxG.state = nuevo;
 				nuevo.SetFeats(player.features);
-				
 				Levels.main_theme.stop();
 			}
+			data_timer -= FlxG.elapsed;
+			if (data_timer < 0) {
+				data_timer = 10;
+				Levels.main_theme.stop();
+				
+				var nuevo2:HistoryPart = new HistoryPart;
+				FlxG.state = nuevo2;
+				nuevo2.features = player.features;
+				
+				
+			}
+			
 		}
 		
 		public static function get_single_enemy():Enemy
