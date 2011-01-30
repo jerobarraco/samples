@@ -50,7 +50,7 @@ package com.game
 		private var cannon_3:FlxPoint = new FlxPoint(47, 19);
 		private var cannon_4:FlxPoint = new FlxPoint(35, 27);
 		private var cannon_5:FlxPoint = new FlxPoint(23, 32);
-		
+		private var cheats:Boolean = true;
 		//todo: timer para ver datos;
 		public function Ship(X:Number=0, Y:Number=0):void
 		{
@@ -119,38 +119,39 @@ package com.game
 				x += FlxG.elapsed * speed;
 				if (x > FlxG.width - width) x = FlxG.width - width;
 			}
-
-			if (FlxG.keys.justPressed("ONE")) {
-				SetFeature(0, !features[0]);
-			}
-			if (FlxG.keys.justPressed("TWO")) {
-				SetFeature(1, !features[1]);
-			}
-			if (FlxG.keys.justPressed("THREE")) {
-				SetFeature(2, !features[2]);
-			}
-			if (FlxG.keys.justPressed("FOUR")) {
-				SetFeature(3, !features[3]);
-			}
-			if (FlxG.keys.justPressed("FIVE")) {
-				SetFeature(4, !features[4]);
-			}
-			if (FlxG.keys.justPressed("SIX")) {
-				SetFeature(5, !features[5]);
-			}
-			if (FlxG.keys.justPressed("SEVEN")) {
-				SetFeature(6, !features[6]);
-			}
-			if (FlxG.keys.justPressed("EIGHT")) {
-				SetFeature(7, !features[7]);
-			}
-			if (FlxG.keys.justPressed("NINE")) {
-				SetFeature(8, !features[8]);
-			}
-			if (FlxG.keys.justPressed("Q")) {
-				var state:HistoryPart = new HistoryPart;
-				FlxG.state = state;
-				state.features = features;
+			if (cheats){
+				if (FlxG.keys.justPressed("ONE")) {
+					SetFeature(0, !features[0]);
+				}
+				if (FlxG.keys.justPressed("TWO")) {
+					SetFeature(1, !features[1]);
+				}
+				if (FlxG.keys.justPressed("THREE")) {
+					SetFeature(2, !features[2]);
+				}
+				if (FlxG.keys.justPressed("FOUR")) {
+					SetFeature(3, !features[3]);
+				}
+				if (FlxG.keys.justPressed("FIVE")) {
+					SetFeature(4, !features[4]);
+				}
+				if (FlxG.keys.justPressed("SIX")) {
+					SetFeature(5, !features[5]);
+				}
+				if (FlxG.keys.justPressed("SEVEN")) {
+					SetFeature(6, !features[6]);
+				}
+				if (FlxG.keys.justPressed("EIGHT")) {
+					SetFeature(7, !features[7]);
+				}
+				if (FlxG.keys.justPressed("NINE")) {
+					SetFeature(8, !features[8]);
+				}
+				if (FlxG.keys.justPressed("Q")) {
+					var state:HistoryPart = new HistoryPart;
+					FlxG.state = state;
+					state.features = features;
+				}
 			}
 			if(FlxG.keys.justPressed("Z") || FlxG.keys.justPressed("SPACE"))
 			{
