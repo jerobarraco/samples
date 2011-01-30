@@ -21,8 +21,8 @@ package com.game
 		public var type:int = 0;
 		
 		[Embed(source = "/data/enemigos/Enemigo_nodisparador_mediano1.PNG")] private var ImgEne1:Class;
-		[Embed(source = "/data/enemigos/Enemigo_nodisparador_mediano1.PNG")] private var ImgEne2:Class;
-		[Embed(source = "/data/enemigos/Enemigo_nodisparador_mediano1.PNG")] private var ImgEne3:Class;
+		[Embed(source = "/data/enemigos/Enemigo_disparador-eslabon-4-.PNG")] private var ImgEne2:Class;
+		[Embed(source = "/data/enemigos/Enemigo_disparador-1-.PNG")] private var ImgEne3:Class;
 		[Embed(source = "/data/enemigos/Enemigo_disparador-5-.PNG")] private var ImgEne4:Class;
 		[Embed(source = "/data/enemigos/Enemigo_nodisparador_grande1.PNG")] private var ImgEne5:Class;
 		
@@ -118,6 +118,8 @@ package com.game
 			{
 				if(shot_angle<1280)
 				{
+					play("giro");
+
 					shot_timer+=FlxG.elapsed;
 					if(shot_timer>shot_timer_max)
 					{
@@ -180,7 +182,7 @@ package com.game
 					shots.members[i].state = Shots.STATE_ENE;
 					shots.members[i].friend = false;
 					shots.members[i].reset(pos.x, pos.y);
-					shots.members[i].thrust = shot_speed;
+					shots.members[i].speed = shot_speed;
 					shots.members[i].angle = Angle;
 					
 					return;
@@ -191,7 +193,7 @@ package com.game
 			shot.state = Shots.STATE_ENE;
 			shot.friend = false;
 			shot.reset(pos.x, pos.y);
-			shot.thrust = shot_speed;
+			shot.speed = shot_speed;
 			shot.angle = Angle;
 			shots.members.push(PlayState.lyr_Eshots.add(shot));
 		}
@@ -220,7 +222,8 @@ package com.game
 			}
 			else if(type == TYPE_TRES)
 			{
-				loadGraphic(ImgEne3);
+				loadGraphic(ImgEne3,true);
+				addAnimation("giro",[0,1,2,3],30);
 			}
 			else if(type == TYPE_CUATRO)
 			{

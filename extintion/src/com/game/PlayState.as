@@ -9,9 +9,9 @@ package com.game
 
 	public class PlayState extends FlxState
 	{
-		[Embed(source = "/data/fondos/fondo01.PNG")] private var ImgFondo1:Class;
-		[Embed(source = "/data/fondos/fondo02.PNG")] private var ImgFondo2:Class;
-
+		[Embed(source = "/data/fondos/fondo01-2.PNG")] private var ImgFondo1:Class;
+		[Embed(source = "/data/fondos/fondo02-2.PNG")] private var ImgFondo2:Class;
+		
 		public static var lyr_back:FlxGroup;
 		public static var lyr_player:FlxGroup;
 		public static var lyr_enemy:FlxGroup;
@@ -23,11 +23,15 @@ package com.game
 		
 		public static var player:Ship;
 		
+		public static var dificulty:int =1;
+		
+		private var levels:Levels;
+		
 		private var ene_spawn_timer:Number = 10;
 		private var ene_spawn_timer_max:Number = 2;
 		
 		private var video:Video;
-		public static var dificulty:int = 0;
+		
 		override public function create():void
 		{
 			lyr_back = new FlxGroup;
@@ -37,7 +41,7 @@ package com.game
 			lyr_Eshots = new FlxGroup;
 			lyr_top = new FlxGroup;
 			
-			player = new Ship(20, 20);
+			player = new Ship(40, FlxG.height/2);
 			
 			for(var i:int = 0; i<10; i++)
 			{
@@ -56,12 +60,15 @@ package com.game
 //			video.zoom = 1;
 			
 			var back:FlxBackdrop = new FlxBackdrop(ImgFondo1);
-			back.velocity.x = -90;
+			back.velocity.x = -80;
 			lyr_back.add(back);
 			
 			back = new FlxBackdrop(ImgFondo2);
-			back.velocity.x = -100;
+			back.velocity.x = -110;
 			lyr_back.add(back);
+			
+			levels = new Levels(FlxG.level);
+			add(levels);
 			
 			this.add(lyr_back);
 			this.add(lyr_Pshots);
@@ -73,13 +80,13 @@ package com.game
 			this.add(lyr_Eshots);
 		}
 		
-		private var enemy:int=1;
+//		private var enemy:int=1;
 		
 		override public function update():void
 		{
-			ene_spawn_timer+=FlxG.elapsed;
-			if(ene_spawn_timer>ene_spawn_timer_max)
-			{
+//			ene_spawn_timer+=FlxG.elapsed;
+//			if(ene_spawn_timer>ene_spawn_timer_max)
+//			{
 //				var tmp:Enemy;
 //				for each (tmp in lyr_enemy.members) {
 //					if (tmp.dead) {
@@ -89,10 +96,8 @@ package com.game
 //					}
 //				}
 				
-				spawn_enemys(Enemy.TYPE_CINCO);
-				
-				ene_spawn_timer=0;
-			}
+//				ene_spawn_timer=0;
+//			}
 			
 			//colisiones
 			FlxU.overlap(lyr_Pshots, lyr_enemy, shot_enemy);
@@ -104,69 +109,12 @@ package com.game
 				var nuevo:MenuState = new MenuState;
 				FlxG.state = nuevo;
 				nuevo.SetFeats(player.features);
+				
+				Levels.main_theme.stop();
 			}
 		}
 		
-		public function spawn_enemys(type:int):void
-		{
-			var pos:FlxPoint = new FlxPoint;
-			var ene:Enemy;
-			
-			if(type == Enemy.TYPE_UNO)
-			{
-				for(var j:int; j< Math.floor(Math.random()*4); j++)
-				{
-					ene = get_single_enemy();
-					ene.type = Enemy.TYPE_UNO;
-					ene.reset(FlxG.width,Math.random()*(FlxG.height-ene.height)+ene.height)
-				}
-			}
-			else if(type == Enemy.TYPE_DOS)
-			{
-				pos.set(FlxG.width,Math.random()*FlxG.height);
-				for(var i:int; i<10; i++)
-				{
-					ene = get_single_enemy();
-					ene.type = Enemy.TYPE_DOS;
-					ene.init_pos = pos;
-					ene.move_angle = 30*i;
-					ene.reset(pos.x+ene.width*i,pos.y)
-				}
-			}
-			else if(type == Enemy.TYPE_TRES)
-			{
-				var gap:Number = 80;
-				ene = get_single_enemy();
-				ene.type = Enemy.TYPE_TRES;
-				ene.reset(FlxG.width, FlxG.height/2 +gap);
-				
-				ene = get_single_enemy();
-				ene.type = Enemy.TYPE_TRES;
-				ene.reset(FlxG.width, FlxG.height/2 -gap);
-			}
-			else if(type == Enemy.TYPE_CUATRO)
-			{
-				gap = Math.random()*100+50;
-				ene = get_single_enemy();
-				ene.type = Enemy.TYPE_CUATRO;
-				ene.reset(FlxG.width, FlxG.height/2 +gap);
-				
-				ene = get_single_enemy();
-				ene.type = Enemy.TYPE_CUATRO;
-				ene.reset(FlxG.width, FlxG.height/2 -gap);
-			}
-			else if(type == Enemy.TYPE_CINCO)
-			{
-				for(var k:int; k< Math.floor(Math.random()*6); k++)
-				{
-					ene = get_single_enemy();
-					ene.type = Enemy.TYPE_CINCO;
-					ene.reset(FlxG.width,Math.random()*(FlxG.height-ene.height)+ene.height)
-				}
-			}
-		}
-		
-		private function get_single_enemy():Enemy
+		public static function get_single_enemy():Enemy
 		{
 			var enes:Array = enemies_array;
 			var ene:Enemy;

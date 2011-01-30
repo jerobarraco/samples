@@ -40,7 +40,7 @@ package com.game
 				toptext += "\n\nExtermination inmineHDR   -   (j×s)  IiCCPsRGB IEC61966-2.1  xÚSwX“÷>ß÷eVBØð±—l œHUÄ‚Õ Hˆâ (¸gAŠˆZ‹U\8îÜ§µ}zïííû×û¼çœçüÎyÏ€&‘æ¢j 9R…<:ØOHÄÉ½€HàæËÂgÅ  ðyx~t°?üäœ—›#ÑÁþ8?çæäáæfçlïôÅ¢þkðo>!ñßþ¼"
 				//todo: poner un timer e ir a la pantalla de error final
 			}
-			mitexto = new FlxText(10, 10, 1000, toptext);
+			mitexto = new FlxText(10, 10, 600, toptext);
 			mitexto.setFormat(null, 12);
 			this.add(mitexto);
 			features = feats;

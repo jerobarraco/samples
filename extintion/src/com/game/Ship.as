@@ -68,7 +68,7 @@ package com.game
 			* 
 			*/
 			for (var i:int = 0; i < 8; i++) {
-				features[i] = true;
+				features[i] = (i!=3) ;
 			}
 			
 			loadGraphic(ImgPlayer);

@@ -11,11 +11,11 @@ package com.game
 		public var state:int = STATE_HOMMING;
 		
 		[Embed(source = "/data/Spark.png")] private var ImgSpark:Class;
-		[Embed(source = "/data/Nave/Proyectil.png")] private var ImgShot:Class;
+		[Embed(source = "/data/nave/shot.png")] private var ImgShot:Class;
 		
 		private var _sparks:FlxEmitter;
 		
-		private var speed:Number = 500;
+		public var speed:Number = 200;
 		
 		public var target:Enemy;
 		
@@ -45,19 +45,22 @@ package com.game
 			if(state==STATE_NORMAL)
 			{
 				update_normal();
-				thrust = maxThrust;
+				//thrust = maxThrust;
 			}
 			else if(state==STATE_HOMMING)
 			{
 				update_homming();
-				thrust = maxThrust;
+				//thrust = maxThrust;
 			}
 			else if(state==STATE_ENE)
 			{
 				
 			}
 			
-
+			var move:FlxPoint = FlxU.rotatePoint(1,0,0,0,angle);
+			velocity.x = -move.x*speed;
+			velocity.y = -move.y*speed;
+			
 			if(!onScreen())
 				this.kill()
 			
