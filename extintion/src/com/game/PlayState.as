@@ -112,12 +112,12 @@ package com.game
 				var nuevo:MenuState = new MenuState;
 				FlxG.state = nuevo;
 				nuevo.SetFeats(player.features);
-				Ship.main_theme.stop();
+				//Ship.main_theme.stop();
 			}
 			data_timer -= FlxG.elapsed;
 			if (data_timer < 0) {
 				data_timer = 10;
-				Ship.main_theme.stop();
+				//Ship.main_theme.stop();
 				
 				var nuevo2:HistoryPart = new HistoryPart;
 				FlxG.state = nuevo2;
