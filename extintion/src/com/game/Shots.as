@@ -6,10 +6,12 @@ package com.game
 	{
 		public static var STATE_NORMAL:int = 0;
 		public static var STATE_HOMMING:int =1;
+		public static var STATE_ENE:int =2;
 		
 		public var state:int = STATE_HOMMING;
 		
 		[Embed(source = "/data/Spark.png")] private var ImgSpark:Class;
+		[Embed(source = "/data/Nave/Proyectil.png")] private var ImgShot:Class;
 		
 		private var _sparks:FlxEmitter;
 		
@@ -26,14 +28,7 @@ package com.game
 			_sparks = PlayState.lyr_top.add(new FlxEmitter(X,Y)) as FlxEmitter;
 			_sparks.createSprites(ImgSpark, 10, 16, true, 0);
 			
-			if(friend)
-			{
-				createGraphic(6,2,0xffff0000);
-			}
-			else
-			{
-				createGraphic(6,2,0xff0000ff);
-			}
+			loadRotatedGraphic(ImgShot);
 			
 			maxThrust = speed;
 			
@@ -50,15 +45,20 @@ package com.game
 			if(state==STATE_NORMAL)
 			{
 				update_normal();
+				thrust = maxThrust;
 			}
 			else if(state==STATE_HOMMING)
 			{
 				update_homming();
+				thrust = maxThrust;
+			}
+			else if(state==STATE_ENE)
+			{
+				
 			}
 			
-			thrust = maxThrust;
-			
-			if(!onScreen())// && state==STATE_NORMAL)
+
+			if(!onScreen())
 				this.kill()
 			
 			super.update();
@@ -138,6 +138,7 @@ package com.game
 		public function find_target():Enemy
 		{
 			var enes:Array = PlayState.enemies_array;
+			trace(enes.length);
 			
 			for(var i:int; i<enes.length; i++)
 			{
