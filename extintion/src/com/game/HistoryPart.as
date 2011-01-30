@@ -6,11 +6,13 @@ package com.game
 	{
 		private var img:FlxSprite;
 		
-		[Embed(source = "/data/Historia/Data/02.png")] private var Img1:Class;
-		[Embed(source = "/data/Historia/Data/03.png")] private var Img2:Class;
-		[Embed(source = "/data/Historia/Data/04.png")] private var Img3:Class;
-		[Embed(source = "/data/Historia/Data/05.png")] private var Img4:Class;
-		[Embed(source = "/data/Historia/Data/06.png")] private var Img5:Class;
+		[Embed(source = "/data/Historia/Data/Screens/00.png")] private var Img1:Class;
+		[Embed(source = "/data/Historia/Data/Screens/01.png")] private var Img1:Class;
+		[Embed(source = "/data/Historia/Data/Screens/02.png")] private var Img1:Class;
+		[Embed(source = "/data/Historia/Data/Screens/03.png")] private var Img1:Class;
+		[Embed(source = "/data/Historia/Data/Screens/04.png")] private var Img1:Class;
+		[Embed(source = "/data/Historia/Data/Screens/05.png")] private var Img1:Class;
+		[Embed(source = "/data/Historia/Data/Screens/06.png")] private var Img1:Class;
 		
 		private var Imgs:Array = [Img1, Img2, Img3, Img4, Img5];
 		private static var showed:Array = [false, false, false, false, false];
@@ -28,8 +30,8 @@ package com.game
 				}
 			}
 			if (avail.length == 0) {
-				for (var i:int = 0; i < showed.length; i++) {
-					showed[i] = false;
+				for (var j:int = 0; j < showed.length; j++) {
+					showed[j] = false;
 				}
 				FlxG.state = new HistoryEnd;
 				return;				

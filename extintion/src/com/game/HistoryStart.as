@@ -27,7 +27,7 @@ package com.game
 		private var start:FlxSprite;
 		private var cont:Number=0;
 		private var flag:Boolean=false;
-		public var features;
+		public var features:Array;
 		override public function create():void
 		{
 			img = new FlxSprite(0, 0, ImgScreen);
