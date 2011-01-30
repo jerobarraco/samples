@@ -1,6 +1,5 @@
 package com.game
 {
-	import org.flashdevelop.utils.FlashConnect;
 	import org.flixel.*;
 	
 	public class Ship extends FlxSprite
@@ -13,7 +12,14 @@ package com.game
 		[Embed(source = "/data/nave/nave_canones3.png")] private var ImgCanon3:Class;
 		[Embed(source = "/data/nave/nave_escudo.png")] private var ImgEscudo:Class;
 		[Embed(source = "/data/nave/nave_lanzabombas.png")] private var ImgBombas:Class;
-		[Embed(source = "/data/nave/nave_propulsores.png")] private var ImgPropulsores:Class;
+		[Embed(source = "/data/nave/nave_propulsores1-2.png")] private var ImgPropulsores:Class;
+		[Embed(source = "/data/nave/nave_propulsores1-4.png")] private var ImgPropulsores14:Class;
+		[Embed(source = "/data/nave/nave_propulsores1-6.png")] private var ImgPropulsores16:Class;
+		[Embed(source = "/data/nave/nave_fuego1.png")] private var ImgFuego:Class;
+		[Embed(source = "/data/nave/nave_fuego1-4.png")] private var ImgFuego14:Class;
+		[Embed(source = "/data/nave/nave_fuego1-6.png")] private var ImgFuego16:Class;
+		
+		
 		//Sprites para las partes
 		private var cannon1:FlxSprite;
 		private var cannon2:FlxSprite;
@@ -21,21 +27,28 @@ package com.game
 		private var escudo:FlxSprite;		
 		private var bombas:FlxSprite;
 		private var propulsores:FlxSprite;
+		private var propulsores14:FlxSprite;
+		private var propulsores16:FlxSprite;
+		private var fuego:FlxSprite;
+		private var fuego14:FlxSprite;
+		private var fuego16:FlxSprite;
+		
+		private var Sprites:Array;
+		private var Images:Array;
 		
 		private var speed:Number = 400;
 		private var base_speed:Number = 100;
-		public var features:Array = [ true,true,true,true,true,true,true,true] ; //array de bools para los features
+		private var hitmultiplier:Number = 1;
+		public var features:Array = [ true,true,true,true,false,true,true,true] ; //array de bools para los features
 
-		
 		private var my_pos:FlxPoint = new FlxPoint;
 		
 		//Puntos de los disparos
-		private var cannon_1:FlxPoint = new FlxPoint(17, 7);
-		private var cannon_2:FlxPoint = new FlxPoint(30, 12);
-		private var cannon_3:FlxPoint = new FlxPoint(40, 19);
-		private var cannon_4:FlxPoint = new FlxPoint(29, 27);
-		private var cannon_5:FlxPoint = new FlxPoint(18, 37);
-		
+		private var cannon_1:FlxPoint = new FlxPoint(23, 6);
+		private var cannon_2:FlxPoint = new FlxPoint(35, 11);
+		private var cannon_3:FlxPoint = new FlxPoint(47, 19);
+		private var cannon_4:FlxPoint = new FlxPoint(35, 27);
+		private var cannon_5:FlxPoint = new FlxPoint(23, 32);
 		
 		public function Ship(X:Number=0, Y:Number=0):void
 		{
@@ -55,31 +68,32 @@ package com.game
 			* 
 			*/
 			for (var i:int = 0; i < 8; i++) {
-
 				features[i] = true;
 			}
 			
 			loadGraphic(ImgPlayer);
 			PlayState.lyr_player.add(this);
 			//Creamos las partes
+			Images = [
+				ImgCanon1, ImgCanon2, ImgCanon3, ImgEscudo, ImgBombas,
+				ImgPropulsores, ImgPropulsores14, ImgPropulsores16,
+				ImgFuego, ImgFuego14, ImgFuego16
+			];
 			
-			cannon1 = new FlxSprite(x, y, ImgCanon1);
-			PlayState.lyr_player.add(cannon1);
-			
-			cannon2 = new FlxSprite(x, y , ImgCanon2);
-			PlayState.lyr_player.add(cannon2);
-			
-			cannon3 = new FlxSprite(x, y , ImgCanon3);
-			PlayState.lyr_player.add(cannon3);
-			
-			escudo = new FlxSprite(x, y, ImgEscudo);
-			PlayState.lyr_player.add(escudo);
-			
-			bombas = new FlxSprite(x, y, ImgBombas);
-			PlayState.lyr_player.add(bombas);
-			
-			propulsores = new FlxSprite(x, y, ImgPropulsores);
-			PlayState.lyr_player.add(propulsores);
+			Sprites = new Array;
+			for (var i:int = 0; i < Images.length; i++) {
+				if (i <= 7) {
+						Sprites[i] = new FlxSprite(x, y, Images[i]);
+				}else
+				 {
+					Sprites[i] = new FlxSprite(x, y);
+					Sprites[i].loadGraphic(Images[i], true, false, 50, 40);
+				
+					Sprites[i].addAnimation("fuego", [0, 1, 2], 5, true);	
+					Sprites[i].play("fuego");
+				}
+					PlayState.lyr_player.add(Sprites[i]);
+			}
 		}
 		
 		override public function update():void
@@ -136,34 +150,22 @@ package com.game
 			{
 				my_pos.set(x, y);
 				
-				switch(true) {
-					case features[0]: Shoot(FlxPoint.add(my_pos, cannon_1), Shots.STATE_HOMMING);
-					case features[1]: 
-						Shoot(FlxPoint.add(my_pos, cannon_2), Shots.STATE_NORMAL);
-						Shoot(FlxPoint.add(my_pos, cannon_3), Shots.STATE_NORMAL);
-						Shoot(FlxPoint.add(my_pos, cannon_4), Shots.STATE_NORMAL);
-					case features[2]: Shoot(FlxPoint.add(my_pos, cannon_5), Shots.STATE_HOMMING);
+				if (features[0]) { //main
+					Shoot(FlxPoint.add(my_pos, cannon_3), Shots.STATE_NORMAL);
+				}
+				if (features[1]) { //soporte
+					Shoot(FlxPoint.add(my_pos, cannon_2), Shots.STATE_NORMAL);
+					Shoot(FlxPoint.add(my_pos, cannon_4), Shots.STATE_NORMAL);
+				}
+				if (features[2]) { //homming
+					 Shoot(FlxPoint.add(my_pos, cannon_1), Shots.STATE_HOMMING);
+					 Shoot(FlxPoint.add(my_pos, cannon_5), Shots.STATE_HOMMING);
 				}
 			}
-			
-			cannon1.x = x;
-			cannon1.y = y;
-			
-			cannon2.x = x;
-			cannon2.y = y;
-			
-			cannon3.x = x;
-			cannon3.y = y;
-			
-			escudo.x = x;
-			escudo.y = y;
-			
-			bombas.x = x;
-			bombas.y = y;
-			
-			propulsores.x = x;
-			propulsores.y = y;
-			
+			for (var i:int = 0; i < Sprites.length; i++ ) {
+				Sprites[i].x = x;
+				Sprites[i].y = y;
+			}
 			super.update();
 		}
 		
@@ -179,7 +181,6 @@ package com.game
 					shots.members[i].reset(pos.x, pos.y);
 					shots.members[i].state = Type;
 					shots.members[i].friend = true;
-					
 					return;
 				}
 			}
@@ -194,35 +195,67 @@ package com.game
 			//Prender o apagar una feat
 			features[feat] = val;
 			if (val) {
+				//Sprites[feat].reset(x, y);
 				switch(feat) {
-					case 0: cannon1.reset(x, y); break;
-					case 1: cannon2.reset(x, y); break;
-					case 2: cannon3.reset(x, y); break;
-					case 3: escudo.reset(x, y); break;
-					case 4: bombas.reset(x, y); break;
-					case 5: propulsores.reset(x, y); break;
-					case 6:  speed += base_speed; break;
-					case 7:  speed += base_speed; break ;
-					case 8:  speed += base_speed; break;
+					case 0: Sprites[0].reset(x, y); break;//main
+					case 1: Sprites[1].reset(x, y); break;//secundario
+					case 2: Sprites[2].reset(x, y); break;//homming
+					//shield
+					case 3: 
+						Sprites[3].reset(x, y); 
+						hitmultiplier = 1;
+						break; 
+					//Bomb
+					case 4: Sprites[4].reset(x, y); break;
+					//Propeller1
+					case 5: 
+						Sprites[5].reset(x, y); 
+						Sprites[8].reset(x, y); 
+						speed += base_speed; break;
+					//Propeller2
+					case 6: 
+						Sprites[6].reset(x, y); 
+						Sprites[9].reset(x, y); 
+						speed += base_speed; break;
+					case 7:
+						Sprites[7].reset(x, y); 
+						Sprites[10].reset(x, y);
+						speed += base_speed; break;
 				}
-			}else{
+			}else {
 				switch(feat) {
-					case 0: cannon1.kill(); break;
-					case 1: cannon2.kill(); break;
-					case 2: cannon3.kill(); break;
-					case 3: escudo.kill(); break;
-					case 4: bombas.kill(); break;
-					case 5: propulsores.kill(); break;
-					case 6: speed -= base_speed; break;
-					case 7: speed -= base_speed; break;
-					case 8: speed -= base_speed; break;
+					case 0: Sprites[0].kill(); break;//main
+					case 1: Sprites[1].kill(); break;//secundario
+					case 2: Sprites[2].kill(); break;//homming
+					//shield
+					case 3: 
+						Sprites[3].kill(); 
+						hitmultiplier = 2;
+						break; 
+					//Bomb
+					case 4: Sprites[4].kill(); break;
+					//Propeller1
+					case 5: 
+						Sprites[5].kill(); 
+						Sprites[8].kill(); 
+						speed -= base_speed; break;
+					//Propeller2
+					case 6: 
+						Sprites[6].kill(); 
+						Sprites[9].kill(); 
+						speed -= base_speed; break;
+					//Propeller3
+					case 7:
+						Sprites[7].kill(); 
+						Sprites[10].kill();
+						speed -= base_speed; break;
 				}
 			}
 		}
 		public function Hit(shot:Enemy, me:FlxSprite):void 
 		{
 			shot.kill();
-			health -= 1;
+			health -= 1*hitmultiplier;
 			
 			if (health < 0) {
 				kill();
@@ -231,21 +264,15 @@ package com.game
 		override public function kill():void
 		{
 			super.kill();
-			cannon1.kill();
-			cannon2.kill();
-			cannon3.kill();
-			bombas.kill();
-			escudo.kill();
-			propulsores.kill();
+			for (var i:int = 0; i < Sprites.length; i++) {
+				Sprites[i].kill();
+			}
 		}
 		override public function reset(X:Number, Y:Number):void {
 			super.reset(X, Y);		
-			cannon1.reset(X, Y);
-			cannon2.reset(X, Y);
-			cannon3.reset(X, Y);
-			bombas.reset(X, Y);
-			escudo.reset(X, Y);
-			propulsores.reset(X, Y);
+			for (var i:int = 0; i < Sprites.length; i++) {
+				Sprites[i].reset(X, Y);
+			}
 			health = 10;
 		}
 	}
