@@ -22,7 +22,7 @@ package com.game
 			cont+=FlxG.elapsed;
 			if (cont>1){			
 				scroll.visible=true;
-				scroll.y-=15;				
+				scroll.y-=10;				
 			}
 			
 			if (scroll.y<=-600) {
@@ -30,7 +30,7 @@ package com.game
 				cont2+=FlxG.elapsed;
 			}
 
-			if (cont2>1){
+			if (cont2>1.5){
 				FlxG.state = new HistoryStart;
 				//pasar al estado siguiente, en otras palabras, reiniciar
 			}
