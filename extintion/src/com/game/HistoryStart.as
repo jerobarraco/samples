@@ -95,7 +95,7 @@ package com.game
 					var nuevo:PlayState = new PlayState;
 					FlxG.state = nuevo;
 					//importante para cuando se va a jugar de nuevo
-					nuevo.set_feats([true, true, true, true, false, true, true, true ]);
+					nuevo.set_feats([true, true, true, true, false, true, true, true]);
 					//pasar al estado siguiente
 				}
 			}

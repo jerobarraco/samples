@@ -19,21 +19,18 @@ package com.game
 		[Embed(source = "/data/nave/nave_fuego1-4.png")] private var ImgFuego14:Class;
 		[Embed(source = "/data/nave/nave_fuego1-6.png")] private var ImgFuego16:Class;
 		
+		[Embed(source = '/Data/Musica/sound.swf', symbol = 'Maintheme1.mp3')] private var MusMain1:Class;
+		[Embed(source = '/Data/Musica/sound.swf', symbol = 'Maintheme2.mp3')] private var MusMain2:Class;
+		[Embed(source = '/Data/Musica/sound.swf', symbol = 'Maintheme3.mp3')] private var MusMain3:Class;
+		[Embed(source = '/Data/Musica/sound.swf', symbol = 'Maintheme4.mp3')] private var MusMain4:Class;
+		[Embed(source = '/Data/Musica/sound.swf', symbol = 'Maintheme5.mp3')] private var MusMain5:Class;
+		[Embed(source = '/Data/Musica/sound.swf', symbol = 'Maintheme6.mp3')] private var MusMain6:Class;
+		[Embed(source = '/Data/Musica/sound.swf', symbol = 'Maintheme7.mp3')] private var MusMain7:Class;
 		
-		//Sprites para las partes
-		/*
-		private var cannon1:FlxSprite;
-		private var cannon2:FlxSprite;
-		private var cannon3:FlxSprite;
-		private var escudo:FlxSprite;		
-		private var bombas:FlxSprite;
-		private var propulsores:FlxSprite;
-		private var propulsores14:FlxSprite;
-		private var propulsores16:FlxSprite;
-		private var fuego:FlxSprite;
-		private var fuego14:FlxSprite;
-		private var fuego16:FlxSprite;
-		*/
+		public static var main_theme:FlxSound = new FlxSound;
+		
+		public static var music_number:int = 0;
+		
 		private var Sprites:Array;
 		private var Images:Array;
 		
@@ -69,8 +66,8 @@ package com.game
 			* 7= speed3
 			* 
 			*/
-			for (var i:int = 0; i < 8; i++) {
-				features[i] = (i!=3) ;
+			for (var j:int = 0; j < 8; i++) {
+				features[j] = (j!=3);
 			}
 			
 			loadGraphic(ImgPlayer);
@@ -96,6 +93,8 @@ package com.game
 				}
 				PlayState.lyr_player.add(Sprites[i]);
 			}
+			
+			music_number +=1;
 		}
 		override public function update():void
 		{
@@ -198,6 +197,7 @@ package com.game
 			shot.friend = true;
 			shots.members.push(PlayState.lyr_Pshots.add(shot));
 		}
+		
 		public function SetFeature(feat:int, val:Boolean):void {
 			//Prender o apagar una feat
 			features[feat] = val;
@@ -258,7 +258,39 @@ package com.game
 						speed -= base_speed; break;
 				}
 			}
+			
+			if(music_number==1)
+			{
+				main_theme.loadEmbedded(MusMain7,true);
+			}
+			else if(music_number==2)
+			{
+				main_theme.loadEmbedded(MusMain6,true);
+			}
+			else if(music_number==3)
+			{
+				main_theme.loadEmbedded(MusMain5,true);
+			}
+			else if(music_number==4)
+			{
+				main_theme.loadEmbedded(MusMain4,true);
+			}
+			else if(music_number==5)
+			{
+				main_theme.loadEmbedded(MusMain3,true);
+			}
+			else if(music_number==6)
+			{
+				main_theme.loadEmbedded(MusMain2,true);
+			}
+			else if(music_number>=7)
+			{
+				main_theme.loadEmbedded(MusMain1,true);
+			}
+			
+			main_theme.play();
 		}
+		
 		public function Hit2(shot:Shots, me:FlxSprite):void {
 			shot.kill();
 			health -= 1 * hitmultiplier;
@@ -266,6 +298,7 @@ package com.game
 				kill();
 			}
 		}
+		
 		public function Hit(shot:Enemy, me:FlxSprite):void 
 		{
 			shot.kill();

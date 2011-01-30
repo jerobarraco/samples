@@ -55,6 +55,8 @@ package com.game
 				lyr_enemy.add(enes);
 			}
 			
+			enemies_array = lyr_enemy.members;
+			
 //			video = new Video();
 //			video.Escala = 1;
 //			video.zoom = 1;
@@ -110,12 +112,12 @@ package com.game
 				var nuevo:MenuState = new MenuState;
 				FlxG.state = nuevo;
 				nuevo.SetFeats(player.features);
-				Levels.main_theme.stop();
+				Ship.main_theme.stop();
 			}
 			data_timer -= FlxG.elapsed;
 			if (data_timer < 0) {
 				data_timer = 10;
-				Levels.main_theme.stop();
+				Ship.main_theme.stop();
 				
 				var nuevo2:HistoryPart = new HistoryPart;
 				FlxG.state = nuevo2;

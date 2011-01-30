@@ -5,6 +5,10 @@ package com.game
 
 	public class MenuState extends FlxState
 	{
+		[Embed(source = '/Data/Musica/sound.swf', symbol = 'BIT_crazy_menu.mp3')] private var MusMain1:Class;
+
+		private var theme:FlxSound = new FlxSound;
+		
 		private var mitexto:FlxText;
 		private var prompt:FlxText;
 		private var promptframes:int;
@@ -21,6 +25,10 @@ package com.game
 			prompt.setFormat(null, 16);
 			this.add(prompt);
 			promptframes = 20;
+			
+			theme.loadEmbedded(MusMain1);
+			theme.play();
+			
 		}
 		public function SetFeats(feats:Array):void {
 			var texto:String;
@@ -57,6 +65,7 @@ package com.game
 				if (features[i] && FlxG.keys.justPressed(options[i]) ){
 					features [i] = false;
 					//load another state
+					theme.stop();
 					var nuevo:PlayState = new PlayState;
 					FlxG.state = nuevo;
 					nuevo.set_feats(features);

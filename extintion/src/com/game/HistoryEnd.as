@@ -19,10 +19,10 @@ package com.game
 			this.add(blk);
 		}
 		override public function update():void {
-			if (FlxG.keys.justPressed("ENTER") || FlxG.keys.justPressed("ESCAPE") ) {
+			/*if (FlxG.keys.justPressed("ENTER") || FlxG.keys.justPressed("ESCAPE") ) {
 				FlxG.state = new HistoryStart;
 				//pasar al estado siguiente, en otras palabras, reiniciar
-			}
+			}*/
 			cont-=FlxG.elapsed;
 			if (cont<0){
 				blk.visible=!blk.visible;
