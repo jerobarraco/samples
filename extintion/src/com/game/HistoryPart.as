@@ -5,11 +5,17 @@ package com.game
 	public class HistoryPart extends FlxState
 	{
 		private var img:FlxSprite;
-		private static var showed:Array = [false, false, false];
+		private static var showed:Array = [false, false, false, false, false, false, false, false];
 		[Embed(source = "/data/Historia/02a Black Screen Inicio.png")] private var Img1:Class;
 		[Embed(source = "/data/Historia/04 Warning Screen.png")] private var Img2:Class;
 		[Embed(source = "/data/Historia/Edit.png")] private var Img3:Class;
-		private var Imgs:Array = [Img1, Img2, Img3];
+		[Embed(source = "/data/Historia/02.png")] private var Img4:Class;
+		[Embed(source = "/data/Historia/03.png")] private var Img5:Class;
+		[Embed(source = "/data/Historia/04.png")] private var Img6:Class;
+		[Embed(source = "/data/Historia/05.png")] private var Img7:Class;
+		[Embed(source = "/data/Historia/06.png")] private var Img8:Class;
+		
+		private var Imgs:Array = [Img1, Img2, Img3, Img4, Img5, Img6, Img7, Img8];
 		
 		private var promptframes:int;
 		private var prompt:FlxText;
@@ -41,20 +47,21 @@ package com.game
 			
 			var mitexto:FlxText = new FlxText(10, 10, 600, thismesg);
 			mitexto.setFormat("System", 12);
-			this.add(mitexto);*/
+			this.add(mitexto);
 			
 			prompt = new FlxText(25, 400, 30, "_ ");
 			prompt.setFormat(null, 16);
 			this.add(prompt);
-			promptframes = 20;			
+			promptframes = 20;*/			
 			///Creando imagenes
 		}
 		override public function update():void {
+			/*
 			promptframes -= 1;
 			if (promptframes < 0) {
 				promptframes = 20;
 				prompt.visible = !prompt.visible;
-			}
+			}*/
 
 			if (FlxG.keys.justPressed("Z") ) {
 				FlxG.level += 1;

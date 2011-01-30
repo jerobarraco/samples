@@ -258,11 +258,17 @@ package com.game
 				}
 			}
 		}
+		public function Hit2(shot:Shots, me:FlxSprite):void {
+			shot.kill();
+			health -= 1 * hitmultiplier;
+			if (health < 0) {
+				kill();
+			}
+		}
 		public function Hit(shot:Enemy, me:FlxSprite):void 
 		{
 			shot.kill();
 			health -= 1*hitmultiplier;
-			
 			if (health < 0) {
 				kill();
 			}

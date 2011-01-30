@@ -141,7 +141,6 @@ package com.game
 		public function find_target():Enemy
 		{
 			var enes:Array = PlayState.enemies_array;
-			trace(enes.length);
 			
 			for(var i:int; i<enes.length; i++)
 			{

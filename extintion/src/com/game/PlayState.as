@@ -102,7 +102,7 @@ package com.game
 			//colisiones
 			FlxU.overlap(lyr_Pshots, lyr_enemy, shot_enemy);
 			FlxU.overlap(lyr_enemy, lyr_player, player.Hit);
-			FlxU.overlap(lyr_Eshots, lyr_player, player.Hit);
+			FlxU.overlap(lyr_Eshots, lyr_player, player.Hit2);
 			super.update();
 			
 			if(player.dead)
