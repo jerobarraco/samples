@@ -13,8 +13,8 @@ package com.game
 		private var featnames:Array =
 			[ 
 				"Primary Cannon", "Secondary Cannon", "Auto-defense Proyectile System", 
-				"External Protection Shield System", "Bomb Launcher", "Propeller 1" , "Propeller 2", "Propeller 3"];
-				
+				"External Protection Shield System", "Bomb Launcher", "Propeller 1" , "Propeller 2", "Propeller 3"
+			];
 		override public function create():void
 		{
 			prompt = new FlxText(25, 400, 30, "_ ");
@@ -49,7 +49,7 @@ package com.game
 			promptframes -= 1;
 			if (promptframes < 0) {
 				promptframes = 20;
-				prompt.visible = !prompt.visible;
+				prompt.visible = ! prompt.visible;
 			}
 			for (var i:int = 0; i < features.length; i++) {
 				if (features[i] && FlxG.keys.justPressed(options[i]) ){

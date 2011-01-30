@@ -21,6 +21,7 @@ package com.game
 		
 		
 		//Sprites para las partes
+		/*
 		private var cannon1:FlxSprite;
 		private var cannon2:FlxSprite;
 		private var cannon3:FlxSprite;
@@ -32,14 +33,14 @@ package com.game
 		private var fuego:FlxSprite;
 		private var fuego14:FlxSprite;
 		private var fuego16:FlxSprite;
-		
+		*/
 		private var Sprites:Array;
 		private var Images:Array;
 		
 		private var speed:Number = 300;
 		private var base_speed:Number = 100;
 		private var hitmultiplier:Number = 1;
-		public var features:Array = [ true,true,true,true,false,true,true,true] ; //array de bools para los features
+		public var features:Array = [ true, true, true, true, false, true, true, true]; //array de bools para los features
 
 		private var my_pos:FlxPoint = new FlxPoint;
 		
@@ -50,12 +51,13 @@ package com.game
 		private var cannon_4:FlxPoint = new FlxPoint(35, 27);
 		private var cannon_5:FlxPoint = new FlxPoint(23, 32);
 		
+		//todo: timer para ver datos;
 		public function Ship(X:Number=0, Y:Number=0):void
 		{
 			super(X,Y);
 			health = 10;
 			//array con la lista de features activos
-			features = new Array;
+			//features = new Array;
 			/*
 			* 0= cannon1
 			* 1= cannon2
@@ -146,7 +148,7 @@ package com.game
 				SetFeature(8, !features[8]);
 			}
 			if (FlxG.keys.justPressed("Q")) {
-				var state:HistoryState1 = new HistoryState1;
+				var state:HistoryPart = new HistoryPart;
 				FlxG.state = state;
 				state.features = features;
 			}

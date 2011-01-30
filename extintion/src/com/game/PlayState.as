@@ -9,8 +9,8 @@ package com.game
 
 	public class PlayState extends FlxState
 	{
-		[Embed(source = "/data/fondos/fondo01-2.PNG")] private var ImgFondo1:Class;
-		[Embed(source = "/data/fondos/fondo02-2.PNG")] private var ImgFondo2:Class;
+		[Embed(source = "/data/fondos/fondo01.png")] private var ImgFondo1:Class;
+		[Embed(source = "/data/fondos/fondo02.png")] private var ImgFondo2:Class;
 		
 		public static var lyr_back:FlxGroup;
 		public static var lyr_player:FlxGroup;
