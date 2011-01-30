@@ -95,7 +95,6 @@ package com.game
 				PlayState.lyr_player.add(Sprites[i]);
 			}
 		}
-		
 		override public function update():void
 		{
 			if(FlxG.keys.UP)
@@ -146,7 +145,7 @@ package com.game
 			if (FlxG.keys.justPressed("NINE")) {
 				SetFeature(8, !features[8]);
 			}
-			if (FlxG.keys.justPressed("P")) {
+			if (FlxG.keys.justPressed("Q")) {
 				var state:HistoryState1 = new HistoryState1;
 				FlxG.state = state;
 				state.features = features;
@@ -211,7 +210,7 @@ package com.game
 						hitmultiplier = 1;
 						break; 
 					//Bomb
-					case 4: Sprites[4].reset(x, y); break;
+					case 4: Sprites[3].reset(x, y); break;
 					//Propeller1
 					case 5: 
 						Sprites[4].reset(x, y); 
@@ -234,11 +233,11 @@ package com.game
 					case 2: Sprites[2].kill(); break;//homming
 					//shield
 					case 3: 
-						Sprites[3].kill(); 
+						Sprites[10].kill(); 
 						hitmultiplier = 2;
 						break; 
 					//Bomb
-					case 4: Sprites[10].kill(); break;
+					case 4: Sprites[3].kill(); break;
 					//Propeller1
 					case 5: 
 						Sprites[4].kill(); 
