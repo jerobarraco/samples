@@ -18,12 +18,13 @@ package com.game
 		public static var lyr_Pshots:FlxGroup;
 		public static var lyr_Eshots:FlxGroup;
 		public static var lyr_top:FlxGroup;
+		public static var lyr_hud:FlxGroup;
 		
 		public static var enemies_array:Array = new Array;
 		
 		public static var player:Ship;
 		
-		public static var data_timer:Number=10;
+		public static var data_timer:Number=30;
 		
 		private var levels:Levels;
 		
@@ -109,23 +110,20 @@ package com.game
 			
 			if(player.dead)
 			{
+				Ship.main_theme.stop();
 				var nuevo:MenuState = new MenuState;
 				FlxG.state = nuevo;
 				nuevo.SetFeats(player.features);
-				//Ship.main_theme.stop();
 			}
 			data_timer -= FlxG.elapsed;
 			if (data_timer < 0) {
 				data_timer = 10;
-				//Ship.main_theme.stop();
+				Ship.main_theme.stop();
 				
 				var nuevo2:HistoryPart = new HistoryPart;
 				FlxG.state = nuevo2;
-				nuevo2.features = player.features;
-				
-				
+				nuevo2.features = player.features;				
 			}
-			
 		}
 		
 		public static function get_single_enemy():Enemy

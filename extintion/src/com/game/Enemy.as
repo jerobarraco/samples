@@ -4,6 +4,7 @@ package com.game
 	import org.flixel.FlxG;
 	import org.flixel.FlxGroup;
 	import org.flixel.FlxPoint;
+	import org.flixel.FlxSound;
 	import org.flixel.FlxSprite;
 	import org.flixel.FlxU;
 	import org.osmf.layout.AbsoluteLayoutFacet;
@@ -25,6 +26,10 @@ package com.game
 		[Embed(source = "/data/enemigos/Enemigo_disparador-1-.PNG")] private var ImgEne3:Class;
 		[Embed(source = "/data/enemigos/Enemigo_disparador-5-.PNG")] private var ImgEne4:Class;
 		[Embed(source = "/data/enemigos/Enemigo_nodisparador_grande1.PNG")] private var ImgEne5:Class;
+		
+		[Embed(source = '/Data/Musica/sound.swf', symbol = 'explosion_corta.mp3')] private var SndExplo:Class;
+
+		private var sound_explo:FlxSound;
 		
 		[Embed(source = "/data/part_explo.png")] private var ImgExplo:Class;
 
@@ -50,6 +55,8 @@ package com.game
 			
 			player = PlayState.player;
 			
+			sound_explo = new FlxSound;
+			sound_explo.loadEmbedded(SndExplo);			
 		}
 		
 		override public function update():void
@@ -202,6 +209,8 @@ package com.game
 		{
 			explo.at(this);
 			explo.start();
+			
+			sound_explo.play();
 			
 			super.kill();
 		}

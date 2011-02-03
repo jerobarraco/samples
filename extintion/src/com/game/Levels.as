@@ -4,56 +4,17 @@ package com.game
 
 	public class Levels extends FlxObject
 	{
-		[Embed(source = '/Data/Musica/sound.swf', symbol = 'Maintheme1.mp3')] private var MusMain1:Class;
-		[Embed(source = '/Data/Musica/sound.swf', symbol = 'Maintheme2.mp3')] private var MusMain2:Class;
-		[Embed(source = '/Data/Musica/sound.swf', symbol = 'Maintheme3.mp3')] private var MusMain3:Class;
-		[Embed(source = '/Data/Musica/sound.swf', symbol = 'Maintheme4.mp3')] private var MusMain4:Class;
-		[Embed(source = '/Data/Musica/sound.swf', symbol = 'Maintheme5.mp3')] private var MusMain5:Class;
-		[Embed(source = '/Data/Musica/sound.swf', symbol = 'Maintheme6.mp3')] private var MusMain6:Class;
-		[Embed(source = '/Data/Musica/sound.swf', symbol = 'Maintheme7.mp3')] private var MusMain7:Class;
-		
 		private var cur_level:int = 0
 			
-		public static var main_theme:FlxSound = new FlxSound;
 		
 		public function Levels(Level:int)
 		{
 			cur_level = Level;
 			
-			if(cur_level==0)
-			{
-				main_theme.loadEmbedded(MusMain7,true);
-			}
-			else if(cur_level==1)
-			{
-				main_theme.loadEmbedded(MusMain6,true);
-			}
-			else if(cur_level==2)
-			{
-				main_theme.loadEmbedded(MusMain5,true);
-			}
-			else if(cur_level==3)
-			{
-				main_theme.loadEmbedded(MusMain4,true);
-			}
-			else if(cur_level==4)
-			{
-				main_theme.loadEmbedded(MusMain3,true);
-			}
-			else if(cur_level==5)
-			{
-				main_theme.loadEmbedded(MusMain2,true);
-			}
-			else if(cur_level==6)
-			{
-				main_theme.loadEmbedded(MusMain1,true);
-			}
-			
-			main_theme.play();
 		}
 		
 		private var timer1:Number= 0;
-		private var timer1_limit:Number =5;
+		private var timer1_limit:Number = 5;
 		
 		private var timer2:Number = 0;
 		private var timer2_limit:Number = 2;
@@ -75,7 +36,7 @@ package com.game
 			timer3+=FlxG.elapsed;
 			timer4+=FlxG.elapsed;
 			
-			if(cur_level==0)
+			if(cur_level==0) //----------------------- NIVEL 0 ------------------------------
 			{
 				if(!fase1)
 				{
@@ -90,11 +51,11 @@ package com.game
 					if(timer4>timer4_limit)
 					{
 						spawn_enemys(Enemy.TYPE_UNO)
-						timer4=0;
+						timer4=0.3;
 					}
 				}
 			}
-			else if(cur_level==1)
+			else if(cur_level==1)//---------------- NIVEL 1 --------------------------------
 			{
 				if(!fase1)
 				{
@@ -109,7 +70,7 @@ package com.game
 					if(timer4>timer4_limit)
 					{
 						spawn_enemys(Enemy.TYPE_UNO)
-						timer4=0;
+						timer4=0.2;
 					}
 					
 					if(!fase2)
@@ -122,33 +83,261 @@ package com.game
 					}
 					else
 					{
-						if(timer3>timer3_limit)
+						if(timer4>timer4_limit)
+						{
+							spawn_enemys(Enemy.TYPE_UNO);
+							timer1 =0;
+						}
+						
+						if(timer1>timer1_limit)
 						{
 							spawn_enemys(Enemy.TYPE_DOS);
-							timer3 =0;
+							timer1 =0;
 						}
 						
 					}
 				}
 			}
-			else if (cur_level==2)
+			else if (cur_level==2)//-------------------------- NIVEL 2 ---------------------------
+			{
+				if(timer4>timer4_limit)
+				{
+					spawn_enemys(Enemy.TYPE_UNO);
+					timer4=0.2;
+				}
+					
+				if(timer2>timer2_limit)
+				{
+					spawn_enemys(Enemy.TYPE_DOS);
+					timer2=0;
+				}
+				
+				if(timer1>timer1_limit)
+				{
+					spawn_enemys(Enemy.TYPE_UNO);
+					timer1 =0.2;
+				}
+			}
+			else if (cur_level==3)//-------------------------- NIVEL 3 ---------------------------
+			{
+				if(timer3>timer3_limit)
+				{
+					spawn_enemys(Enemy.TYPE_UNO);
+					timer3=0;
+				}
+					
+				if(timer2>timer2_limit)
+				{
+					spawn_enemys(Enemy.TYPE_DOS);
+					timer2=0;
+				}
+				
+				if(timer1>timer1_limit)
+				{
+					spawn_enemys(Enemy.TYPE_CINCO);
+					timer1 =0;
+				}
+			}
+			else if (cur_level==4)//-------------------------- NIVEL 4 ---------------------------
+			{
+				if(timer3>timer3_limit)
+				{
+					spawn_enemys(Enemy.TYPE_UNO);
+					timer3=0;
+				}
+					
+				if(timer2>timer2_limit)
+				{
+					spawn_enemys(Enemy.TYPE_DOS);
+					timer2=0;
+				}
+				
+				if(timer1>timer1_limit)
+				{
+					spawn_enemys(Enemy.TYPE_CINCO);
+					timer1 =0;
+				}
+			}
+			else if (cur_level==5)//-------------------------- NIVEL 5 ---------------------------
 			{
 				if(timer2>timer2_limit)
 				{
-					spawn_enemys(Enemy.TYPE_UNO)
+					spawn_enemys(Enemy.TYPE_DOS);
 					timer2=0;
 				}
 					
 				if(timer3>timer3_limit)
 				{
-					spawn_enemys(Enemy.TYPE_DOS);
-					timer3 =0;
+					spawn_enemys(Enemy.TYPE_CINCO);
+					timer3=0;
 				}
 				
 				if(timer1>timer1_limit)
 				{
+					spawn_enemys(Enemy.TYPE_CUATRO);
+					timer1 =0;
+				}
+			}
+			else if (cur_level==6)//-------------------------- NIVEL 6 ---------------------------
+			{
+				if(timer2>timer2_limit)
+				{
+					spawn_enemys(Enemy.TYPE_DOS);
+					timer2=0;
+				}
+					
+				if(timer3>timer3_limit)
+				{
+					spawn_enemys(Enemy.TYPE_CINCO);
+					timer3=0;
+				}
+				
+				if(timer1>timer1_limit)
+				{
+					spawn_enemys(Enemy.TYPE_CUATRO);
+					timer1 =0;
+				}
+			}
+			else if (cur_level==7)//-------------------------- NIVEL 7 ---------------------------
+			{
+				if(timer2>timer2_limit)
+				{
+					spawn_enemys(Enemy.TYPE_DOS);
+					timer2=-0.5;
+				}
+					
+				if(timer3>timer3_limit)
+				{
+					spawn_enemys(Enemy.TYPE_CINCO);
+					timer3=0;
+				}
+				
+				if(timer1>timer1_limit)
+				{
+					spawn_enemys(Enemy.TYPE_CUATRO);
+					timer1 =-2;
+				}
+			}
+			else if (cur_level==8)//-------------------------- NIVEL 8 ---------------------------
+			{
+				if(timer2>timer2_limit)
+				{
+					spawn_enemys(Enemy.TYPE_DOS);
+					timer2=0;
+				}
+					
+				if(timer3>timer3_limit)
+				{
+					spawn_enemys(Enemy.TYPE_CINCO);
+					timer3=0;
+				}
+				
+				if(timer4>timer4_limit)
+				{
+					spawn_enemys(Enemy.TYPE_CUATRO);
+					timer4 =-3;
+				}
+				if(timer1>timer1_limit)
+				{
 					spawn_enemys(Enemy.TYPE_TRES);
 					timer1 =0;
+				}
+			}
+			else if (cur_level==9)//-------------------------- NIVEL 9 ---------------------------
+			{
+							
+				if(timer4>timer4_limit)
+				{
+					spawn_enemys(Enemy.TYPE_CINCO);
+					timer4=0;
+				}
+				
+				if(timer3>timer3_limit)
+				{
+					spawn_enemys(Enemy.TYPE_CUATRO);
+					timer4 =-1;
+				}
+				if(timer1>timer1_limit)
+				{
+					spawn_enemys(Enemy.TYPE_TRES);
+					timer1 =0;
+				}
+			}
+			else if (cur_level==10)//-------------------------- NIVEL 10 ---------------------------
+			{
+						
+				if(timer4>timer4_limit)
+				{
+					spawn_enemys(Enemy.TYPE_CINCO);
+					timer4=0;
+				}
+				
+				if(timer3>timer3_limit)
+				{
+					spawn_enemys(Enemy.TYPE_CUATRO);
+					timer3=0;
+				}
+				if(timer2>timer2_limit)
+				{
+					spawn_enemys(Enemy.TYPE_TRES);
+					timer2 =0;
+				}
+			}
+			else if (cur_level==11)//-------------------------- NIVEL 11 ---------------------------
+			{
+				if(timer4>timer4_limit)
+				{
+					spawn_enemys(Enemy.TYPE_CINCO);
+					timer4=0;
+				}
+				
+				if(timer3>timer3_limit)
+				{
+					spawn_enemys(Enemy.TYPE_CUATRO);
+					timer3=0;
+				}
+				if(timer2>timer2_limit)
+				{
+					spawn_enemys(Enemy.TYPE_TRES);
+					timer2 =0;
+				}
+			}
+			else if (cur_level==12)//-------------------------- NIVEL 12 ---------------------------
+			{
+				if(timer4>timer4_limit)
+				{
+					spawn_enemys(Enemy.TYPE_CINCO);
+					timer4=0;
+				}
+				
+				if(timer3>timer3_limit)
+				{
+					spawn_enemys(Enemy.TYPE_CUATRO);
+					timer3=0;
+				}
+				if(timer2>timer2_limit)
+				{
+					spawn_enemys(Enemy.TYPE_TRES);
+					timer2 =0;
+				}
+			}
+			else if (cur_level==13)//-------------------------- NIVEL 13 ---------------------------
+			{
+				if(timer4>timer4_limit)
+				{
+					spawn_enemys(Enemy.TYPE_CINCO);
+					timer4=0;
+				}
+				
+				if(timer3>timer3_limit)
+				{
+					spawn_enemys(Enemy.TYPE_CUATRO);
+					timer3=2;
+				}
+				if(timer2>timer2_limit)
+				{
+					spawn_enemys(Enemy.TYPE_TRES);
+					timer2 =1;
 				}
 			}
 			

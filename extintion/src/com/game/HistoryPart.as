@@ -20,6 +20,9 @@ package com.game
 		[Embed(source = "/data/Historia/Fake/05.png")] private var Img11:Class;
 		[Embed(source = "/data/Historia/Fake/06.png")] private var Img12:Class;
 		
+		[Embed(source = '/Data/Musica/sound.swf', symbol = 'EsperaXP.mp3')] private var MusEspera:Class;
+		
+		private var theme:FlxSound = new FlxSound;
 		
 		private var Imgs:Array = [Img1, Img2, Img3, Img4, Img5, Img6, Img7, Img8, Img9, Img10, Img11, Img12];
 		private static var showed:Array = [false, false, false, false, false, false, false, false, false, false, false, false];
@@ -59,6 +62,8 @@ package com.game
 			this.add(prompt);
 			promptframes = 20;
 			
+			theme.loadEmbedded(MusEspera, true);
+			theme.play();
 			/*
 			var thismesg:String = Messages[usar];
 			
@@ -79,6 +84,7 @@ package com.game
 				prompt.visible = !prompt.visible;
 			}
 			if (FlxG.keys.justPressed("ENTER") ) {
+				theme.stop()
 				FlxG.level += 1;
 				if (FlxG.level > 6) FlxG.level = 6;
 				var state:PlayState = new PlayState;

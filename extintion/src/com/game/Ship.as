@@ -27,9 +27,16 @@ package com.game
 		[Embed(source = '/Data/Musica/sound.swf', symbol = 'Maintheme6.mp3')] private var MusMain6:Class;
 		[Embed(source = '/Data/Musica/sound.swf', symbol = 'Maintheme7.mp3')] private var MusMain7:Class;
 		
+		[Embed(source = '/Data/Musica/sound.swf', symbol = 'disparo.mp3')] private var Snddisp:Class;
+		[Embed(source = '/Data/Musica/sound.swf', symbol = 'downgrade.mp3')] private var SndDown:Class;
+
+		
 		public static var main_theme:FlxSound = new FlxSound;
 		
 		public static var music_number:int = 0;
+		
+		private var sound_disp:FlxSound;
+		private var sound_down:FlxSound;
 		
 		private var Sprites:Array;
 		private var Images:Array;
@@ -47,7 +54,7 @@ package com.game
 		private var cannon_3:FlxPoint = new FlxPoint(47, 19);
 		private var cannon_4:FlxPoint = new FlxPoint(35, 27);
 		private var cannon_5:FlxPoint = new FlxPoint(23, 32);
-		private var cheats:Boolean = true;
+		private var cheats:Boolean = false;
 		//todo: timer para ver datos;
 		public function Ship(X:Number=0, Y:Number=0):void
 		{
@@ -66,8 +73,8 @@ package com.game
 			* 7= speed3
 			* 
 			*/
-			for (var j:int = 0; j < 8; i++) {
-				features[j] = (j!=3);
+			for (var j:int = 0; j < 8; j++) {
+				features[j] = (j!=3) ;
 			}
 			
 			loadGraphic(ImgPlayer);
@@ -95,6 +102,12 @@ package com.game
 			}
 			
 			music_number +=1;
+			
+			sound_disp = new FlxSound();
+			sound_disp.loadEmbedded(Snddisp);
+			
+			sound_down = new FlxSound();
+			sound_down.loadEmbedded(SndDown);
 		}
 		override public function update():void
 		{
@@ -151,6 +164,9 @@ package com.game
 					FlxG.state = state;
 					state.features = features;
 				}
+				if (FlxG.keys.justPressed("W")) {
+					kill();
+				}
 			}
 			if(FlxG.keys.justPressed("Z") || FlxG.keys.justPressed("SPACE"))
 			{
@@ -167,6 +183,8 @@ package com.game
 					 Shoot(FlxPoint.add(my_pos, cannon_1), Shots.STATE_HOMMING);
 					 Shoot(FlxPoint.add(my_pos, cannon_5), Shots.STATE_HOMMING);
 				}
+				
+				sound_disp.play();
 			}
 			for (var i:int = 0; i < Sprites.length; i++ ) {
 				Sprites[i].x = x;
@@ -297,6 +315,7 @@ package com.game
 			if (health < 0) {
 				kill();
 			}
+			sound_down.play();
 		}
 		
 		public function Hit(shot:Enemy, me:FlxSprite):void 
@@ -306,6 +325,8 @@ package com.game
 			if (health < 0) {
 				kill();
 			}
+			sound_down.play();
+
 		}
 		override public function kill():void
 		{

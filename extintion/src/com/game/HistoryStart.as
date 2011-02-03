@@ -1,5 +1,6 @@
 package com.game
 {
+	
 	import org.flixel.*;
 	import org.flixel.data.FlxKeyboard;
 	
@@ -11,10 +12,11 @@ package com.game
 		[Embed(source = "/data/Historia/Welcome_3.png")] private var ImgWelcome3:Class;
 		[Embed(source = "/data/Historia/Welcome_4.png")] private var ImgWelcome4:Class;
 		[Embed(source = "/data/Historia/Warning_Screen.png")] private var ImgWarning:Class;
-		[Embed(source = "/data/Historia/Warning_Code_226x27.png")] private var ImgWarningC:Class;
+		[Embed(source = "/data/Historia/Warning_Code.png")] private var ImgWarningC:Class;
 		[Embed(source = "/data/Historia/Load_AV.png")] private var ImgLoadAV:Class;
 		[Embed(source = "/data/Historia/Barra_carga_antivirus_560x27.png")] private var ImgLoadAVC:Class;
 		[Embed(source = "/data/Historia/ZtoStart.png")] private var ImgStart:Class;
+
 		private var img:FlxSprite;
 		private var welcome1:FlxSprite;
 		private var welcome2:FlxSprite;
@@ -28,6 +30,9 @@ package com.game
 		private var cont:Number=0;
 		private var flag:Boolean=false;
 		public var features:Array;
+		
+		private var progres_av:ProgressBar;
+		
 		override public function create():void
 		{
 			img = new FlxSprite(0, 0, ImgScreen);
@@ -37,9 +42,11 @@ package com.game
 			welcome4 = new FlxSprite(0, 0, ImgWelcome4);
 			warn = new FlxSprite(0, 0, ImgWarning);
 			warnc = new FlxSprite(207, 170, ImgWarningC);
+			
 			av = new FlxSprite(0, 0, ImgLoadAV);
 			avc = new FlxSprite(38, 48, ImgLoadAVC);
 			start = new FlxSprite(0, 0, ImgStart);
+			
 			this.add(img);
 			this.add(welcome1);
 			welcome1.visible = false;
@@ -60,6 +67,10 @@ package com.game
 			this.add(start);
 			start.visible = false;
 			FlxG.level = 0;
+			
+			progres_av = new ProgressBar(this,38,48,561,30);
+			progres_av.set_visible(false);
+			
 		}
 		override public function update():void {
 			cont+=FlxG.elapsed;
@@ -81,21 +92,24 @@ package com.game
 			}
 			if (cont>12.5&&cont<16) {
 				warn.visible = true;
-				warnc.visible = true;
+				warnc.visible = (cont%2)<1;
 			}
 			if (cont>16&&cont<18) {
 				av.visible = true;
+				progres_av.set_visible(true);
+				progres_av.animate_bar(75);
 			}
-			if (cont>18&&cont<22) {
-				avc.visible = true;
+			if (cont>18&&cont<19) {
+				//avc.visible = true;
 			}
-			if (cont>22) {
+			if (cont>19) {
 				start.visible = true;
+				
 				if (FlxG.keys.justPressed("Z")) {
 					var nuevo:PlayState = new PlayState;
 					FlxG.state = nuevo;
 					//importante para cuando se va a jugar de nuevo
-					nuevo.set_feats([true, true, true, true, false, true, true, true]);
+					nuevo.set_feats([true, true, true, true, false, true, true, true ]);
 					//pasar al estado siguiente
 				}
 			}
