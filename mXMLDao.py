@@ -7,9 +7,10 @@ from xml.sax import make_parser, ContentHandler, ErrorHandler
 HEADER=u"""<?xml version="1.0" encoding="UTF-8"?>"""
 
 class Node:
-	def __init__(self):
-		self._value=''
-		self._parent = None
+	def __init__(self, value = None, name = None, parent = None):
+		self._value= value
+		self._name = name
+		self._parent = parent
 
 def setlistitem(list, item ):
 	if item not in list : list.append(item)
@@ -157,9 +158,8 @@ class Dao:
 
 	def NewObject(self,  tag):
 		"""Creates a new object, and deletes any data of the object before, (if any)"""
-		del self.__object
 		self.__fname = ""
-		self.__object = Node()
+		self.__object = Node(name=tag)
 		self.__root = tag
 		return self.__object
 
