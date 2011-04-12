@@ -1,0 +1,1 @@
+from datetime import date, datetime; print ("Faltan %s dias para tu cumpleaños" % ( ( ( date( datetime.now().year,  input("Para su cumpleaños\n Ingrese el mes\n"), input("Ingrese el dia\n") ) - date(datetime.now().year, datetime.now().month, datetime.now().day) ).days + 365) % 365 ) )
