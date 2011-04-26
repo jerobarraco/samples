@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 import javax.swing.JOptionPane;
 
 public class m {
@@ -119,9 +117,7 @@ public class m {
 		// se aceptan letras numeros y guion bajo "_"
 		//usar un array para guardar los subtotales
 		
-		JOptionPane jop = new JOptionPane();
-		
-		boolean sec = Segura(jop.showInputDialog("Ingrese su clave"));
+		boolean sec = Segura(JOptionPane.showInputDialog("Ingrese su clave"));
 		
 		if (sec){
 			System.out.println("Su contraseña es segura");
