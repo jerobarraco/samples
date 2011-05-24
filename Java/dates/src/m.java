@@ -1,6 +1,5 @@
 import java.util.GregorianCalendar;
 
-
 public class m {
 
 	/**
@@ -23,6 +22,6 @@ public class m {
 	}
 	public static void main(String[] args) {
 		EJDate inst = new EJDate();
-		System.out.println("Faltan %s días para su cumpleaños.".format( String.valueOf(inst.diasHastaMiCumple())) );
+		System.out.println(String.format("Faltan %s días para su cumpleaños.", String.valueOf(inst.diasHastaMiCumple())) );
 	}
 }

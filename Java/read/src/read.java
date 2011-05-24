@@ -27,13 +27,13 @@ public class read {
 		
 		for (int i=0; i<s ; i++){
 			int c = (Integer) vec.get(i);
-			if (i<min){
-				min = i;
+			if (c<min){
+				min = c;
 			}
-			if (i>max){
-				max = i;
+			if (c>max){
+				max = c;
 			}
-			prom += i;
+			prom += c;
 		}
 		prom /= s;
 		System.out.println("El mayor es "+max);

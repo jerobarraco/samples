@@ -16,17 +16,17 @@ public class m {
 	public static void PrintDate(GregorianCalendar gc){
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd-hh:mm");
 		System.out.println("Dia " + gc.get(Calendar.DAY_OF_MONTH));
-		System.out.println("Mes " +  gc.get(Calendar.MONTH)+1);
+		System.out.println("Mes " +  (gc.get(Calendar.MONTH)+1));
 		System.out.println("Año "+ gc.get(Calendar.YEAR));
 		System.out.println(sdf.format(gc.getTime()));
 	}
 	public static void ejercicio2(Integer dias){
-		GregorianCalendar  gc = new GregorianCalendar();
+		GregorianCalendar gc = new GregorianCalendar();
 		gc.setTime(new Date());
 		PrintDate(gc);
 		System.out.println("-----");
 		gc.add(Calendar.DAY_OF_MONTH, dias);
-		PrintDate(gc);
+		PrintDate(gc);		
 	}
 
 }

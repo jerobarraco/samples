@@ -1,4 +1,3 @@
-
 public class m {
 
 	/**
@@ -30,7 +29,8 @@ public class m {
 			return new Integer(tmp);
 		}
 		/*boolean t = tmp.contains(".");
-		return t ? new Double (tmp) : new Integer(tmp);*/ 
+		return t ? new Double (tmp) : new Integer(tmp);
+		*/ 
 	}
 	public static void ejercicio1(){
 		Number n1, n2;
@@ -53,6 +53,7 @@ public class m {
 					Integer i2 = (Integer) n2;
 					System.out.println(Integer.toBinaryString(i1)+" - "+Integer.toBinaryString(i2));
 					System.out.println(Integer.toHexString(i1)+" - "+Integer.toHexString(i2));
+					
 				}
 			}
 		}catch (Exception e){
