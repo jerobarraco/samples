@@ -7,14 +7,14 @@ from xml.sax import make_parser, ContentHandler, ErrorHandler
 HEADER=u"""<?xml version="1.0" encoding="UTF-8"?>"""
 
 class Node:
-	def __init__(self, value = None, name = None, parent = None):
-		self._value= value
+	def __init__(self, value = '', name = None, parent = None):
+		self._value = value
 		self._name = name
 		self._parent = parent
 
 def setlistitem(list, item ):
 	if item not in list : list.append(item)
-		
+
 def normalize_whitespace(text):
 	"Remove redundant whitespace from a string"
 	return ' '.join(text.split())
@@ -32,7 +32,7 @@ class cHandler(ContentHandler, ErrorHandler):
 		name is the item where it belongs. attrs is the attributes."""
 		if not (name in self.__curobj.__dict__ ):
 			self.__curobj.__dict__[name] = []
-		
+
 		new = Node()
 		new.__dict__.update(attrs)
 		new._parent = self.__curobj
@@ -81,9 +81,9 @@ class cXml_Writer:
 			if key[0] != '_':
 				if type(val) == list:
 					childs.append((key,  val))
-				else : 
+				else :
 					self.__Write(u' '+ key + u'="' + val + u'"')
-	
+
 		if len(childs) ==0:
 			self.__Write(u"/>\n")
 		else:
@@ -92,7 +92,7 @@ class cXml_Writer:
 				for item in child:
 					self.__PrintItem(name,  item, level+1)
 			self.__Write((u"	"*level) + u"</" + name + u">\n")
-		
+
 	def __Write(self,  string):
 		self.__file.write(string.encode("UTF8"))
 
@@ -114,7 +114,7 @@ class Dao:
 		  self.LoadFromFile(fname)
 		else:
 			self.__object=self.NewObject(rootTag)
-			
+
 
 	def LoadFromFile(self, fname=""):
 		"""This method loads an object from a file in the xml format,
@@ -171,5 +171,5 @@ class Dao:
 
 
 if __name__=='__main__':
-	c = Dao('proyecto', '/home/nande/Dev/Svn/kafx/trunks/example.xml')
-	c.SaveToFile('/home/nande/test.xml')
+	c = Dao('proyect', 'c:\\Svn\\kafx\\nbproject\\proyect.xml')
+	c.SaveToFile('c:/test.xml')
