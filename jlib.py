@@ -27,14 +27,40 @@ Las cosas sin documentacion no se supone que se usen fuera de la biblioteca.
 """
 
 #######################
+# Organizacion Contable de la Empresa #
+#######################
+def printTabbed(s, size=15):
+	print s.expandtabs(size)
+	
+def InteresSimple(Capital, Interes, Periodos=1, imprimir = True):
+	i = Capital*Interes
+	renta = i*Periodos
+	if imprimir:
+		printTabbed("Capital\tInteres\tRenta")
+		printTabbed("%s\t%s\t%s"%(Capital, i, renta))
+	return renta
+
+def InteresCompuesto(capital, Interes, periodos=1):
+	printTabbed("Capital\tInteres\tInteres Cap.\t")
+	renta = 0
+	for j in range(1, periodos+1):
+		i = InteresSimple(capital, Interes, 1, False)
+		renta += i
+		ci = capital + i
+		printTabbed("%s\t%s\t%s"%(capital, i, ci))
+		capital = ci
+	print "Renta %s" % renta
+	
+#######################
 # Sistema de representacion de datos #
 #######################
 
-"""
-Conversion  de Numeros entre bases:
-en el caso de hexadecimal es mejor usar la funcion hex 
-o numeros prefijando 0x, pero esto ayuda a entender el "algoritmo" que usamos
-"""
+	"""
+	Conversion  de Numeros entre bases:
+	en el caso de hexadecimal es mejor usar la funcion hex
+	o numeros prefijando 0x, pero esto ayuda a entender el 'algoritmo' que usamos
+	"""
+
 digits =['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f']
 def DecToBase(number, base):
 	"""Devuelve un String con la representacion del numero en otra Base
@@ -42,7 +68,7 @@ def DecToBase(number, base):
 	@base = numero entero indicando la base (ej 2:binario 8:octal 16:hexadecimal)
 	"""
 	d=number
-	s='' 
+	s=''
 	while d >= base:
 			d, m =divmod (d, base)
 			s= digits[m]+s
@@ -52,7 +78,7 @@ def DecToBase(number, base):
 def BaseToDec(number, base):
 	"""devuelve un numero en decimal partiendo de un numero en otra base representado como string
 	@number string con la representacion del numero en otra base
-	@base entero con la base original 
+	@base entero con la base original
 	"""
 	res=0
 	number = number.lower()
@@ -60,10 +86,10 @@ def BaseToDec(number, base):
 		res= res*base + digits.index(i)
 	return res
 
-def Comp10(num): 
+def Comp10(num):
 	"Intento de complemento a la base (para sistemas decimales)"
 	return (10**len(str(num)))-num
-	
+
 def Comp9(num):
 	"Intento de complemento a la base-1 (para sistemas decimales)"
 	return Comp10(num)-1 #:D
@@ -80,33 +106,33 @@ def Media(arr):
 
 def Mediana(nums):
 	#Devuelve la mediana de un array de numeros
-	nums.sort() 
+	nums.sort()
 	l = len(nums)
 	if l % 2:
 		return nums[l/2]
 	else:
 		l= l/2
 		return (nums[l]+nums[l-1])/2.0
-		
+
 def Var(arr):
 	"""dado un array, devuelve la Varianza (poblacional (n-1))
 	@arr array"""
 	suma =0
-	p= Media(arr) 
+	p= Media(arr)
 	for x in arr:
 		suma += (x-p)**2
 	return suma/ (float(len(arr))-1.0)
-	
+
 def DEst(arr):
 	"""dado un array, devuelve la Desviación Estandar (poblacional (n-1))
 	@arr array"""
 	import math
 	return math.sqrt(Var(arr))
-	
+
 def Covar(x, y):
 	"""Devuelve la Covarianza de dos array de numeros
 	(deberia ser una matriz pero es mas facil manejarlos asi :P)
-	@x, y cada uno un array de numeros, han de tener la misma longitud, 
+	@x, y cada uno un array de numeros, han de tener la misma longitud,
 	y el orden de cada uno importa (ya que deben corresponderse tal matriz)"""
 	#covarianza
 	mx =Media(x)
@@ -115,14 +141,14 @@ def Covar(x, y):
 	for i,j in zip(x,y):
 		s+= (i-mx)*(j-my)
 	return float(s)/(len(x)-1.0)
-	
+
 def CCorr(x, y):
 	"""Devuelve el Coeficiente de Correspondencia entre 2 vectores
 	(deberia ser una matriz pero es mas facil manejarlos asi :P)
-	@x, y cada uno un array de numeros, han de tener la misma longitud, 
+	@x, y cada uno un array de numeros, han de tener la misma longitud,
 	y el orden de cada uno importa (ya que deben corresponderse tal matriz)"""
 	return Covar(x,y)/(DEst(x) * DEst(y))
-	
+
 def F(c):
 	"""factorial de un numero
 	@c: entero"""
@@ -137,8 +163,8 @@ def nPr(n, r):
 	@r : int tamaño del grupo
 	"""
 	return F(n)/F(n-r)
-	
-def nCr(n, r): 
+
+def nCr(n, r):
 	"""
 	Combinatoria
 	@n : int, tamaño de la muestra
@@ -146,7 +172,7 @@ def nCr(n, r):
 	"""
 	#return nPr(n, r)/F(r)
 	return F(n)/(F(r)*F(n-r))#este es apenas mas rapido
-	
+
 def Distrib(x, n, p):
 	"""Distribución binaria
 	@x: valor
@@ -154,7 +180,7 @@ def Distrib(x, n, p):
 	@p: probabilidade de acierto
 	"""
 	return nCr(n, x)*(p**x)*((1.0-p)**(n-x))
-	
+
 def SDistrib(x, n, p):
 	"""Sumatoria de distribucion binaria
 	@x: valor
@@ -197,26 +223,26 @@ distrib_normal =[
 0.4965, 0.4966, 0.4967, 0.4968, 0.4969, 0.4970, 0.4971, 0.4972, 0.4973, 0.4974,
 0.4974, 0.4975, 0.4976, 0.4977, 0.4977, 0.4978, 0.4979, 0.4979, 0.4980, 0.4981,
 0.4981, 0.4982, 0.4982, 0.4983, 0.4984, 0.4984, 0.4985, 0.4985, 0.4986, 0.4986,
-0.4987, 0.4987, 0.4987, 0.4988, 0.4988, 0.4989, 0.4989, 0.4989, 0.4990, 0.4990, 
+0.4987, 0.4987, 0.4987, 0.4988, 0.4988, 0.4989, 0.4989, 0.4989, 0.4990, 0.4990,
 0.499
 ]
 
 def PEst(z):
 	"""devuelve la probabilidad estandard a partir de -infinito hasta z
 	@z es un valor TIPIFICADO (curva estandar)"""
-	
+
 	z = int(round(z*100)) # lo convertimos a un entero , usando solo dos decimales
 	if z<0:
 		s = -1
 		z = -z
 	else:
 		s = 1
-	
+
 	if z > 400: z=400
 	return 0.5 + (s*distrib_normal[z])
-		
+
 def PDNormal(x1,  x2,  u,  d):
-	"""Devuelve el valor de la probabilidad en una 
+	"""Devuelve el valor de la probabilidad en una
 	distribución normal
 	para un valor de x entre X1 y X2 (x1<x<x2)
 	@x2 : x mayor del rango
@@ -231,9 +257,9 @@ def PDNormal(x1,  x2,  u,  d):
 	return PEst(z2)-PEst(z1)
 
 def Gauss(x, u, d):
-	"""devuelve el valor (imagen (y)) 
+	"""devuelve el valor (imagen (y))
 		de un PUNTO x para una campana de gauss.
-		@x variable aleatoria 
+		@x variable aleatoria
 		@u media
 		@d desviación estandar
 		"""
@@ -243,9 +269,9 @@ def Gauss(x, u, d):
 	a=(z**2)/-2.0
 	b=math.e**a
 	return (1.0/math.sqrt(2))*b
-	
+
 def RSNormal(x1, x2, u, d, div=1000.0):
-	"""Como PDNorm pero sin usar tabla, 
+	"""Como PDNorm pero sin usar tabla,
 	excesivamente lento y probablemente no mas exacto
 	@x1 x inicial
 	@x2 x final (ha de ser mayor que x1)
@@ -260,7 +286,7 @@ def RSNormal(x1, x2, u, d, div=1000.0):
 		z+= Gauss(x,u,d)*base
 		x += base
 	return z
-	
+
 #print PDNormal(45, 55, 50, 5)
 #print RSNormal(45, 55, 50, 5)
 
@@ -287,7 +313,7 @@ def a2proc(procarr, num = 0):
 		q = 1
 		def __str__(self):
 			return "P%2d: %2d -> %3d" % (self.num , self.ini,  self.fin)
-			
+
 	tp = p()
 	tp.cpu, tp.prio, tp.ini = procarr
 	tp.num = num
@@ -298,14 +324,14 @@ def aa2aproc(arr):
 	#interno
 	#por un array de array devuelve un array de procesos
 	#por_duracion indica si se ordenan por duracion o por inicio
-	
+
 	def getini(p): return p.ini
 	#pasamos un array de array a un array de procs
 	a= [a2proc(j, i+1) for i, j in enumerate(arr)]
 	#los ordenamos
 	a.sort(key=getini)
 	return a
-	
+
 class Plan:
 	p = None
 	def __init__(self,  procs,  q,  dbug=False,  keysort=None, changeprio=False):
@@ -321,48 +347,48 @@ class Plan:
 		self.dbug = dbug
 		self.keysort = keysort
 		self.procs.sort(key=lambda p: p.ini)
-		#esto es importante si hay 2 procesos que entran en tiempos parecidos pero 
+		#esto es importante si hay 2 procesos que entran en tiempos parecidos pero
 		#diferentes, y en desorden (pej, dos procesos que entran antes de que termine el quantum
 		# el primero con tiempo 13 y el segundo con tiempo 11
-		
+
 	def activos(self):
 		#devuelve los procesos activos, para RRobbin
 		#procs ha de ser un array de procesos (como en aa2aproc)
 		#p = el proceso que se estaba ejecutando
-		for i in self.procs: 
+		for i in self.procs:
 			if i.ini <self.time :
 				self.act.append(i)
-				
+
 		if self.p:
 			if self.cp : #si el flag para cambiar la prioridad esta, lo hacemos
 				self.p.prio+=1
 				self.p.q *=2
 			self.act.append(self.p)
-			
+
 		for i in self.procs :
 			if i.ini == self.time:
 				self.act.append(i)
-				
+
 		for i in self.act:
 			if i in self.procs:
 				self.procs.remove(i)
-				
+
 		if self.keysort: #ordenamos si llega a ser necesario
 			self.act.sort(key=self.keysort)#siempre hay un keysort default
-			
+
 	def __dbg(self):
 		#funcion que imprime datos si se requieren
 		if self.dbug:
 			p = self.p
 			print "T: %3d -> P%2d (%2d:%d/%d)" % (self.time,  p.num,  p.cpu,  p.prio,  p.q)
-			
+
 	def Quedan(self):
 		#devuelve verdadero si aun hay procesos por ejecutarse
 		return bool(self.procs or self.act or self.p)
-		
+
 	def BasicLap(self):
-		"""Realiza una vuelta rapida, 
-		en donde el primer proceso se 
+		"""Realiza una vuelta rapida,
+		en donde el primer proceso se
 		ejecuta hasta q termina ej: Fifo/Primero+Corto"""
 		#Calculamos los activos
 		self.activos()
@@ -376,11 +402,11 @@ class Plan:
 			self.terminados.append(self.p)
 			self.act.remove(self.p)
 			#solo para las RRLap, borramos self.p para que el activo no lo vuelva a meter
-			self.p = None 
+			self.p = None
 		else:
 			#Sino, aumentamos el tiempo
 			self.time += self.q
-		
+
 	def RRLap(self):
 		"""Realiza una vuelta RoundRobin"""
 		self.activos()
@@ -398,11 +424,11 @@ class Plan:
 				self.p.fin = self.time
 				self.terminados.append(self.p)
 				self.p = None
-		else: 
+		else:
 			#sino aumentamos el tiempo
 			self.time += self.q
-		
-		
+
+
 
 """Estas son las funciones a llamar, los parametros son:
 @procs : array de procesos como explica mas arriba
@@ -422,14 +448,14 @@ def MasCorto(procs,  q=5,  debug=False):
 	"""Primero el mas corto"""
 	sorter = lambda p: p.cpu
 	return Fifo(procs,  q,  debug,  sorter)
-	
+
 def RRobin(procs,  q=5,  debug=False,  sorter=None,  mcolas=False):
 	"""Round Robin"""
 	plan = Plan(procs,  q,  debug,  sorter,  mcolas)
 	while plan.Quedan():
 		plan.RRLap()
 	return plan.terminados
-	
+
 def Prio(procs,  q=5,  debug=False,  mcolas=False):
 	"""Por prioridad"""
 	sort = lambda p: p.prio
@@ -438,9 +464,9 @@ def Prio(procs,  q=5,  debug=False,  mcolas=False):
 def MColas(procs,  q=5,  debug=False):
 	"""Colas multiples"""
 	return Prio(procs,  q=q,  debug=debug,  mcolas=True)
-	
-	
-	
+
+
+
 """
 Ejemplos :
 for i in MColas(procs,  debug=True): print i
@@ -474,39 +500,39 @@ def PorRecursos(procesos,  recursos,  debug = False):
 	@recursos: array con recursos disponibles"""
 	#definicion de clases y procedimientos internos es mala practica :D
 	#pero mantiene el namespace limpio
-	
+
 	class p: #una clase para cada proceso
 		def __init__(self, parr=([],[]), num=0):
-			self.num = num 
+			self.num = num
 			self.asign = parr[0][:]
 			self.solic = parr[1][:]
-			
+
 		def __str__(self):
 			return "P%2d: Asignados: %s Solicita: %s" % (self.num ,  self.asign ,  self.solic)
-			
+
 		def CanRun(self,  libres):
 			#Devuelve True si el proceso puede ejecutarse (estan los recursos que solicita)
 			#sino False
 			for (i, j) in zip(self.solic, libres):
 				if i > j: return False
-			return True	
+			return True
 
 	def fkey(p):
 		#funcion para ordenar los procesos
 		return sum(p.asign)
-		
+
 	procs = [ p(arr,  num) for (num,  arr) in enumerate(procesos)]
 	#Creamos un array de instancias de procesos
-	
+
 	procs.sort(key=fkey,  reverse=True)
 	#y los ordenamos
 	#copiamos los recuros libres y creamos una lista de procesos terminados
 	libres = recursos[:]
 	terminados = []
-	
+
 	#Flag para saber si se ejecuto alguno (=True para que entre en el while)
-	ran = True 
-	
+	ran = True
+
 	while procs and ran:
 		ran = False
 		for i in procs:#buscamos un proceso
@@ -522,7 +548,7 @@ def PorRecursos(procesos,  recursos,  debug = False):
 				if debug: print "Recursos libres: " + str(libres)
 				#se sale del for para que se comienze desde el primer item
 				break
-				
+
 	if not ran:
 		print "Sistema Lockeado!!"
 	return terminados
@@ -530,7 +556,7 @@ def PorRecursos(procesos,  recursos,  debug = False):
 """
 Ejemplos:
 p1 = [ [2, 0,  1] ,  [1,  1, 0] ]
-#cada proceso es un array con dos arrays 
+#cada proceso es un array con dos arrays
 #uno para los recursos asignados otro para los solicitados
 p2 = [ [1,  0,  1],  [0,  1,  1] ]
 p3 = [[1,  1,  1],  [1,  0,  0]]
@@ -583,6 +609,6 @@ def TransDir(ta, dir, bs=4, fisica=False ):
 				#informamos
 				print 'pag %s, dir %s' %(j,d)
 				#devolvemos
-				return d				
+				return d
 	#Si llegamos acá, es porque la pagina no esta alocada.
 	return 'Fallo'
