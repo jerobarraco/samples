@@ -3,8 +3,10 @@ package model;
 import java.util.*;
 public class Universidad {
 	private Map<Integer, Alumno> alumnos;
+	private List <Carrera> carreras;
 	public Universidad(){
 		alumnos = new TreeMap<Integer, Alumno>();
+		carreras = new ArrayList<Carrera>();
 	}
 	public Alumno add(Integer pLib){
 		Alumno a = new Alumno(pLib);

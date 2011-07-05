@@ -23,8 +23,6 @@ public class m extends JFrame{
 	
 	public m(){
 		GregorianCalendar a = new GregorianCalendar();
-		
-		super("mititulo");
         this.setSize(400,500);
         this.setTitle("Primer Aplicacion Swing");
         l = new JLabel("Something to look at",
@@ -78,7 +76,7 @@ public class m extends JFrame{
 		JOptionPane.showMessageDialog(null, "La suma es "+ suma);
 	}
 	public static void main(String args[]){
-		//new m();		
+		new m();		
 		try{
 			Ej2();
 		}
