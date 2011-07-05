@@ -1,76 +1,80 @@
 # -*- coding: utf-8 -*-
+"""Gracias y dedicado a
+Gervasio H. Barraco Mármol
+por trabajo de consultoría sobre el tema :B
+"""
 activoP = [
-#las dio la profe
-'Caja',
-'FONDO FIJO (caja chica)',
-'Banco',
-'Banco caja de ahorro',
-'Banco Plazo Fijo',
-'Deudores (Por venta/Prendario/Morosos)',
-'Anticipo de/a proveedores',
+	#las dio la profe
+	'Caja',
+	'FONDO FIJO (caja chica)',
+	'Banco',
+	'Banco caja de ahorro',
+	'Banco Plazo Fijo',
+	'Deudores (Por venta/Prendario/Morosos)',
+	'Anticipo de/a proveedores',
 
-"Equipos de computacion",
-'Instalaciones',
-"Muebles y útiles",
-'Rodados'
-'Valores a DEPOSITAR',
-'Documentos a Cobrar',
-'Créditos',
-'IVA Crédito',
-'Anticipos Impuesto Ganancia',
-'Retenciones Ing Brutos',
-'Retenciones Municipales',
-'Bienes*',
+	"Equipos de computacion",
+	'Instalaciones',
+	"Muebles y útiles",
+	'Rodados'
+	'Valores a DEPOSITAR',
+	'Documentos a Cobrar',
+	'Créditos',
+	'IVA Crédito',
+	'Anticipos Impuesto Ganancia',
+	'Retenciones Ing Brutos',
+	'Retenciones Municipales',
+	'Bienes*',
 ]
 
 activoNP = [
-'Bienes de cambio',
-'Fondo de oportunidades',
-'Inversiones temporales',
-'Clientes',
-'Documentos por cobrar',
-'Funcionarios y empleados',
-'IVA acreditable',
-'Inventarios',
-'Mercancía en tránsito',
-'Anticipo de impuestos',
+	'Bienes de cambio',
+	'Fondo de oportunidades',
+	'Inversiones temporales',
+	'Clientes',
+	'Documentos por cobrar',
+	'Funcionarios y empleados',
+	'IVA acreditable',
+	'Inventarios',
+	'Mercancía en tránsito',
+	'Anticipo de impuestos',
 
-'Papelería y útiles',
-'Propaganda y publicidad',
-'Muestras m�dicas y papeler�a',
-'Primas de seguros y fianzas',
-'Rentas pagadas por anticipado',
-'Intereses pagados por anticipado',
-'Terrenos',
-'Edificios',
-'Maquinaria',
-'Mobiliario y equipo de oficina',
-'Equipo de transporte',
-'Equipo de entrega y reparto',
-'Derechos de autor',
-'Patentes',
-'Marcas registradas',
-'Nombres comerciales',
-'Crédito mercantil',
-'Gastos de investigaci�n y desarrollo',
-'Gastos de mercadotecnia',
-'Gastos preoperativos',
-'Descuento en emisi�n de obligaciones',
-'Gastos en colocaci�n de valores',
-'Gastos de constituci�n',
-'Gastos de organizaci�n',
-'Gastos de instalaci�n',
-'Papelería y Útiles',
-'Propaganda y publicidad',
-'Primas de seguros y fianzas',
-'Muestras m�dicas y literatura',
-'Rentas pagadas por anticipado',
-'Intereses pagados por anticipado',
-'Fondo de amortizaci�n de obligaciones',
-'Dep�sitos en garantía',
-'Inversiones en proceso',
-'Terrenos no utilizados',
-'Maquinaria no utilizada'
+	'Papelería y útiles',
+	'Propaganda y publicidad',
+	'Muestras m�dicas y papeler�a',
+	'Primas de seguros y fianzas',
+	'Rentas pagadas por anticipado',
+	'Intereses pagados por anticipado',
+	'Terrenos',
+	'Edificios',
+	'Maquinaria',
+	'Mobiliario y equipo de oficina',
+	'Equipo de transporte',
+	'Equipo de entrega y reparto',
+	'Derechos de autor',
+	'Patentes',
+	'Marcas registradas',
+	'Nombres comerciales',
+	'Crédito mercantil',
+	'Gastos de investigaci�n y desarrollo',
+	'Gastos de mercadotecnia',
+	'Gastos preoperativos',
+	'Descuento en emisi�n de obligaciones',
+	'Gastos en colocaci�n de valores',
+	'Gastos de constituci�n',
+	'Gastos de organizaci�n',
+	'Gastos de instalaci�n',
+	'Papelería y Útiles',
+	'Propaganda y publicidad',
+	'Primas de seguros y fianzas',
+	'Muestras m�dicas y literatura',
+	'Rentas pagadas por anticipado',
+	'Intereses pagados por anticipado',
+	'Fondo de amortizaci�n de obligaciones',
+	'Dep�sitos en garantía',
+	'Inversiones en proceso',
+	'Terrenos no utilizados',
+	'Maquinaria no utilizada'
 ]
 
 pasivoP = [
@@ -115,8 +119,8 @@ respP = [
 	'diferencia de cambio',
 	'intereses *',
 ]
-
 respNP = []
+
 resnP = [
 	'Amortización',
 	'costo vta mercaderia',
@@ -152,6 +156,7 @@ patnP = [
 	'Ajuste Capital'
 ]
 patnNP = []
+
 import random
 
 array = []
@@ -215,4 +220,4 @@ for i, l in array:
 	else:
 		print "Mal, respuesta : %s\n"%c
 
-print "Acertaste %s correctas de %s"%(acertadas, total)
+print "Acertaste %s de %s (de un total de %s)"%(acertadas, total, len(array))
