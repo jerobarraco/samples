@@ -12,9 +12,14 @@ public class Universidad {
 	public void addAlumno(Alumno pa){
 		alumnos.put(pa.getLibreta(), pa);
 	}
-	public void printList(){
+	public void printAlumnos(){
 		for (Integer l: alumnos.keySet()){
 			System.out.println(alumnos.get(l));
+		}
+	}
+	public void printCarreras(){
+		for (Carrera c: carreras){
+			System.out.println(c);
 		}
 	}
 	public Alumno getAlumno(Integer plib){

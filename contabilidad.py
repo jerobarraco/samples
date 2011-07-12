@@ -16,32 +16,30 @@ activoP = [
 	"Equipos de computacion",
 	'Instalaciones',
 	"Muebles y útiles",
-	'Rodados'
+	'Rodados',
 	'Valores a DEPOSITAR',
 	'Documentos a Cobrar',
 	'Créditos',
 	'IVA Crédito',
-	'Anticipos Impuesto Ganancia',
+	'Anticipo de impuestos',
 	'Retenciones Ing Brutos',
 	'Retenciones Municipales',
 	'Bienes*',
+	'Clientes',
+  'Documentos por cobrar',
 ]
 
 activoNP = [
 	'Bienes de cambio',
 	'Fondo de oportunidades',
 	'Inversiones temporales',
-	'Clientes',
-	'Documentos por cobrar',
 	'Funcionarios y empleados',
 	'IVA acreditable',
 	'Inventarios',
 	'Mercancía en tránsito',
-	'Anticipo de impuestos',
-
 	'Papelería y útiles',
 	'Propaganda y publicidad',
-	'Muestras m�dicas y papeler�a',
+	'Muestras médicas y papelería',
 	'Primas de seguros y fianzas',
 	'Rentas pagadas por anticipado',
 	'Intereses pagados por anticipado',
@@ -56,10 +54,10 @@ activoNP = [
 	'Marcas registradas',
 	'Nombres comerciales',
 	'Crédito mercantil',
-	'Gastos de investigaci�n y desarrollo',
+	'Gastos de investigación y desarrollo',
 	'Gastos de mercadotecnia',
 	'Gastos preoperativos',
-	'Descuento en emisi�n de obligaciones',
+	'Descuento en emisión de obligaciones',
 	'Gastos en colocaci�n de valores',
 	'Gastos de constituci�n',
 	'Gastos de organizaci�n',
@@ -67,7 +65,7 @@ activoNP = [
 	'Papelería y Útiles',
 	'Propaganda y publicidad',
 	'Primas de seguros y fianzas',
-	'Muestras m�dicas y literatura',
+	'Muestras médicas y literatura',
 	'Rentas pagadas por anticipado',
 	'Intereses pagados por anticipado',
 	'Fondo de amortizaci�n de obligaciones',
@@ -107,7 +105,6 @@ pasivoNP= [
 	'Acreedores bancarios',
 	'Documentos por pagar a largo plazo',
 	'Obligaciones en circulación',
-
 ]
 
 respP = [
@@ -117,12 +114,11 @@ respP = [
 	'descuentos obtenidos',
 	'intereses ganados',
 	'diferencia de cambio',
-	'intereses *',
+	'intereses ganados',
 ]
 respNP = []
 
 resnP = [
-	'Amortización',
 	'costo vta mercaderia',
 	'Intereses pagados',
 	'Intereses bancarios',
@@ -209,15 +205,18 @@ random.shuffle(array)
 
 acertadas = 0
 total = 0
-for i, l in array:
-	q = "Activo/Pasivo/ResPos/ResNeg/PatNet/Salir? [AP+-NS]\n %s"%i
-	c = raw_input(q).lower().strip()
-	if c == 's': break
-	total +=1
-	if c == l :
-		acertadas +=1
-		print "Bien\n"
-	else:
-		print "Mal, respuesta : %s\n"%c
-
-print "Acertaste %s de %s (de un total de %s)"%(acertadas, total, len(array))
+try:
+	for i, l in array:
+		q = "Activo/Pasivo/ResPos/ResNeg/PatNet/Salir? [AP+-NS]\n %s"%i
+		c = raw_input(q).lower().strip()
+		if c == 's': break
+		total +=1
+		if c == l :
+			acertadas +=1
+			print "Bien\n"
+		else:
+			print "Mal, respuesta : %s\n"%c
+except Exception, e:
+	print e
+finally:
+	print "Acertaste %s de %s (de un total de %s)"%(acertadas, total, len(array))
