@@ -8,17 +8,17 @@ import form.*;
 public class m {
 	public static Universidad uni = new Universidad() ;
 	public static void main(String[] args) {
-		Menu.show();
+		/*Menu.show();
 		return;
+*/		
 		
-		/*
 		SwingUtilities.invokeLater(new Runnable(){
 			public void run(){
 				FMain f = new FMain();
 				f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				f.setVisible(true);
 			}
-		});*/
+		});
 	}
 
 }
