@@ -11,11 +11,14 @@ public class SQLManager {
 	private static Connection con = null;
 	
 	private static SQLManager sm = null;
-
+	
+	public String host = "localhost";
+	public Integer port = 3050;
+	public String db = "c:\\Svn\\pysnipps\\Java\\lab4\\BD_guia1.FDB";
 	private SQLManager() throws SQLException, ClassNotFoundException {
 		Class.forName("org.firebirdsql.jdbc.FBDriver");
-		String url = "jdbc:firebirdsql:localhost/3050:C:/DB.FDB";
-		//String url = "jdbc:firebirdsql:192.168.1.98/3050:C:/DB.FDB";
+		String url = "jdbc:firebirdsql:"+ host + "/" + port.toString() + 
+						":"+db;
 		con = DriverManager.getConnection(url, "SYSDBA", "masterkey");
 		con.setAutoCommit(true);
 	}

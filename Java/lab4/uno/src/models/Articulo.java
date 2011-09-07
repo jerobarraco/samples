@@ -1,15 +1,24 @@
 package models;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import org.hibernate.annotations.CollectionOfElements;
+
 /**
  *
  * @author Administrador
@@ -18,6 +27,7 @@ import javax.persistence.Table;
 @Table(name="ARTICULOS")
 public class Articulo implements Serializable {
 	private static final long serialVersionUID = 1L;
+	public static enum TOrigen {LOCAL, EXTRANGERO};	
 	
 	@Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="GEN_ARTICULO")
@@ -36,16 +46,76 @@ public class Articulo implements Serializable {
 	private String descripcion;
 	
 	@Basic
+	
 	@Column(precision=18, scale=4)
-	private double preciocosto;
+	private double precioCosto;
+	
+	@Basic
+	@org.hibernate.annotations.Type(type="big_decimal")
+	@Column(precision=18, scale=4)
+	private BigDecimal precioVenta;
 	
 	@Lob
 	private String obs;
 	
+	@Lob
+	private byte[] imagen;
+	
 	@Basic 
-	@org.hibernate.annotations.Type(type="integer")
+	@org.hibernate.annotations.Type(type="boolean")
 	private boolean activo;
 
+	@Temporal (TemporalType.DATE)
+	private java.util.Date fechaIngreso;
+
+	@Enumerated (EnumType.ORDINAL)
+	private TOrigen origen;
+
+	public List<String> getPalabras_clave() {
+		return palabras_clave;
+	}
+
+	public void setPalabras_clave(List<String> palabras_clave) {
+		this.palabras_clave = palabras_clave;
+	}
+	
+	@CollectionOfElements
+	private List<String> palabras_clave;
+	
+	
+	
+	public Date getFechaIngreso() {
+		return fechaIngreso;
+	}
+
+	public void setFechaIngreso(Date fechaIngreso) {
+		this.fechaIngreso = fechaIngreso;
+	}
+
+	public byte[] getImagen() {
+		return imagen;
+	}
+
+	public void setImagen(byte[] imagen) {
+		this.imagen = imagen;
+	}
+
+	public TOrigen getOrigen() {
+		return origen;
+	}
+
+	public void setOrigen(TOrigen origen) {
+		this.origen = origen;
+	}
+
+	public BigDecimal getPrecioVenta() {
+		return precioVenta;
+	}
+
+	public void setPrecioVenta(BigDecimal precioVenta) {
+		this.precioVenta = precioVenta;
+	}
+		
 	public boolean isActivo() {
 		return activo;
 	}
@@ -70,12 +140,12 @@ public class Articulo implements Serializable {
 		this.obs = obs;
 	}
 
-	public double getPreciocosto() {
-		return preciocosto;
+	public double getPrecioCosto() {
+		return precioCosto;
 	}
 
-	public void setPreciocosto(double preciocosto) {
-		this.preciocosto = preciocosto;
+	public void setPrecioCosto(double precioCosto) {
+		this.precioCosto = precioCosto;
 	}
 	
 	public String getCodigo() {
@@ -93,10 +163,6 @@ public class Articulo implements Serializable {
 	public void setIdarticulo(Integer idarticulo) {
 		this.idarticulo = idarticulo;
 	}
-
-	
-	
-	
 	
 	public Long getId() {
 		return id;

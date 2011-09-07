@@ -16,6 +16,6 @@
 			<property name="generateDdl" value="true"/>
 			<!-- ojo que esto no es compatible con jpa1-->
 			 <property name="hibernate.id.new_generator_mappings" value="true"/>
-</properties>
+		</properties>
   </persistence-unit>
 </persistence>

@@ -12,13 +12,21 @@ public class m {
 		EntityTransaction tx = em.getTransaction();
     tx.begin();
     try{
-			Sujeto s = new Sujeto();
-			s.setTurno(Sujeto.Dias.DOMINGO);
+				Sujeto s = new Sujeto();
+				s.setTurno(Sujeto.Dias.DOMINGO);
 				em.persist(s);
+				tx.commit();
+				tx = em.getTransaction();
+				tx.begin();
+				
+				Articulo a = new Articulo();
+				em.persist(a);
         tx.commit();
     }catch(Exception e){
-        tx.rollback();
 				e.printStackTrace();				
+			
+        tx.rollback();
+				
     }
     em.close();
 	}
