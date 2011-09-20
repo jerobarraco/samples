@@ -1,12 +1,12 @@
 #-------------------------------------------------------------------------------
-# Name:        module1
-# Purpose:
+# Name:        zodb
+# Purpose:      Probar zodb
 #
-# Author:      Administrador
+# Author:      Barraco M?rmol Jer?nimo
 #
 # Created:     31/08/2011
-# Copyright:   (c) Administrador 2011
-# Licence:     <your licence>
+# Copyright:   (c) Barraco M?rmol Jer?nimo
+# Licence:     GPL
 #-------------------------------------------------------------------------------
 #!/usr/bin/env python
 
@@ -16,22 +16,23 @@ import transaction
 
 from persistent import Persistent
 
-class IndexedItem(Persistent):
-	sequence = 'global_seq'
+class Indexed(Persistent):
 	container = 'globals'
 	id = 0
 	def __init__(self, root):
 		Persistent.__init__(self)
-		root[self.sequence] +=1
-		self.id = root[self.sequence]
+		seqs = root['sequences']
+		seqs[self.container] +=1
+		self.id = seqs[self.container]
 		root[self.container][self.id] = self
-		
-class Articulo(Persistent):
+
+class Articulo(Indexed):
+	id = 0
+	container = 'articulos'
 	def __init__(self, root):
-
-		root['last_art'] +=1
-
-		self.id = root['last_art']
+		#self.sequence = 'seq_articulos'
+		#self.container = 'articulos'
+		super(Articulo, self).__init__(root)
 		self.codigo = ""
 		self.descripcion = ""
 		self.precioCosto= 0
@@ -39,7 +40,6 @@ class Articulo(Persistent):
 		self.obs = ""
 		self.imagen = list()
 		self.activo = False
-		root['articulos'][self.id]= self
 
 class MyZODB(object):
 	def __init__(self, path):
@@ -61,24 +61,28 @@ class MyZODB(object):
 		if self.active:
 			self.close()
 
+def initDb(root):
+	if not root.has_key('articulos'):
+			root['articulos'] = Obt()
+	if not root.has_key('sequences'):
+		root['sequences'] = Obt()
+	if not root['sequences'].has_key('articulos'):
+			root['sequences']['articulos'] = 0
+
 def main():
 	mzdb = MyZODB('data.fs')
 	try:
 		root = mzdb.getRoot()
-
-		if not root.has_key('articulos'):
-			root['articulos'] = Obt()
-		if not root.has_key('last_art'):
-			root['last_art'] = 0
-
+		initDb(root)
 		articulos = root['articulos']
 		na = Articulo(root)
 
 		for k,v in articulos.items():
-			print k, v
+			print k, v, v.id
 		transaction.commit()
 	finally:
 		mzdb.close()
+
 
 if __name__ == '__main__':
     main()
