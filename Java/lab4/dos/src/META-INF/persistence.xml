@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+  <persistence-unit name="pu">
+    <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    <class>dos.Estacionamiento</class>
+    <class>dos.Profesor</class>
+    <properties>
+			<property name="hibernate.dialect" value="org.hibernate.dialect.FirebirdDialect"/>
+			<property name="hibernate.connection.driver_class" value="org.firebirdsql.jdbc.FBDriver"/>
+			<property name="hibernate.hbm2ddl.auto" value="update"/>
+			<property name="hibernate.connection.username" value="SYSDBA"/>
+			<property name="hibernate.connection.password" value="masterkey"/>
+			<property name="hibernate.connection.url" value="jdbc:firebirdsql:localhost:c:/Svn/pysnipps/Java/lab4/dos/db.fdb"/>
+			<property name="hibernate.cache.provider_class" value="org.hibernate.cache.NoCacheProvider"/>
+			<property name="showSql" value="true"/>
+			<property name="generateDdl" value="true"/>
+			<!-- ojo que esto no es compatible con jpa1-->
+			 <property name="hibernate.id.new_generator_mappings" value="true"/>
+		</properties>
+  </persistence-unit>
+</persistence>
