@@ -9,7 +9,7 @@
 # Licence:     GPL
 #-------------------------------------------------------------------------------
 #!/usr/bin/env python
-
+import sys
 from ZODB import FileStorage, DB
 from BTrees.OOBTree import OOBTree as Obt
 import transaction
@@ -45,6 +45,7 @@ class MyZODB(object):
 	def __init__(self, path):
 		self.storage = FileStorage.FileStorage(path)
 		self.db = DB(self.storage)
+		#ZODB databases can be accessed from multithreaded Python programs. The Storage and DB instances can be shared among several threads, as long as individual Connection instances are created for each thread.
 		self.connection = self.db.open()
 		self.dbroot = self.connection.root()
 		self.active = True
@@ -80,6 +81,9 @@ def main():
 		for k,v in articulos.items():
 			print k, v, v.id
 		transaction.commit()
+		if mzdb.db.supportsUndo():
+			print "Wow, puedo deshacer todo esto mir?"
+			print mzdb.db.undoLog(0, sys.maxint)
 	finally:
 		mzdb.close()
 
