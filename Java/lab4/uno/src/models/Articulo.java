@@ -71,6 +71,9 @@ public class Articulo implements Serializable {
 	@Enumerated (EnumType.ORDINAL)
 	private TOrigen origen;
 
+	@CollectionOfElements
+	private List<String> palabras_clave;
+	
 	public List<String> getPalabras_clave() {
 		return palabras_clave;
 	}
@@ -79,8 +82,7 @@ public class Articulo implements Serializable {
 		this.palabras_clave = palabras_clave;
 	}
 	
-	@CollectionOfElements
-	private List<String> palabras_clave;
+	
 	
 	
 	

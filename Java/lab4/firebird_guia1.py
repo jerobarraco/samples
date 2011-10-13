@@ -162,3 +162,44 @@ SELECT f.TIPO, f.NUMERO, f.FECHA, f.CUIT from facturas f inner join facturas_ite
 """
 #30
 "update provincias set nombre ='ENTRE RIOS' where id = 1"
+
+#31
+"update productos set precio = precio*1.10"
+
+#32
+"UPDATE facturas_items SET precio = (SELECT FIRST 1 precio FROM productos WHERE productos.codigo=facturas_items.producto_codigo);"
+
+#33
+"UPDATE clienteS SET nombre = UPPER(nombre);"
+
+#34
+"select * from facturas where fecha > CAST('NOW' as DATE);" #la forma mas fea que vi de conseguir la fecha actual (me imagino que es para poder conseguirla con diferentes tipos
+
+#35
+"select * from facturas where fecha > '2003/07/31'"
+
+#36
+"""select * from facturas where CAST(SUBSTRING( CAST(fecha AS varchar(30)) from 6 for 2) as integer) =8;"""#EL HORROR EL JJJJOOOORRRROOOOORRRR!
+#si la db me llega a tirar la fecha de otra forma o con un solo caracter de mas o menos voy muerto.. esta es la morma mas sensata:
+"select * from facturas where EXTRACT(MONTH from fecha) = 08;"
+
+#37
+"UPDATE clientes SET fechabaja = CAST('NOW' AS DATE) WHERE cuit = (SELECT MIN(cuit) FROM clientes);"
+#38 consigna duplicada
+
+#39
+#"select * into clientes_baja from clientes where fecha_baja is not null;"
+'insert into clientes_baja select * from clientes where fecha_baja is not null;'
+
+#40
+#'SELECT * FROM facturas JOIN clientes on facturas.cuit=clientes.cuit JOIN localidades on clientes.codigo_postal = localidades.codigo_postal;' forma normal, pero pide con subselect
+"SELECT * FROM facturas JOIN clientes on facturas.cuit=clientes.cuit where clientes.codigo_postal = (SELECT codigo_postal FROM localidades where localidad ='PARANA');"
+
+#41
+"delete from facturas where numero=1050;" #mueren los items tamb
+
+#42
+"delete from clientes where cuit='20165851254'" #asi no me deja porque tiene una constraint de una foreing key
+
+#43
+"select * from facturas where exists (select * from facturas_items where facturas_items.numero_factura = facturas.numero and "

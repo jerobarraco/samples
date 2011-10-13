@@ -31,7 +31,7 @@ Las cosas sin documentacion no se supone que se usen fuera de la biblioteca.
 #######################
 def printTabbed(s, size=15):
 	print s.expandtabs(size)
-	
+
 def InteresSimple(Capital, Interes, Periodos=1, imprimir = True):
 	i = Capital*Interes
 	renta = i*Periodos
@@ -50,7 +50,7 @@ def InteresCompuesto(capital, Interes, periodos=1):
 		printTabbed("%s\t%s\t%s"%(capital, i, ci))
 		capital = ci
 	print "Renta %s" % renta
-	
+
 #######################
 # Sistema de representacion de datos #
 #######################
@@ -312,7 +312,7 @@ def a2proc(procarr, num = 0):
 		cpu = prio  = ini = fin = num = 0
 		q = 1
 		def __str__(self):
-			return "P%2d: %2d -> %3d" % (self.num , self.ini,  self.fin)
+			return "P%2d: Ini:%2d -> Fin:%3d" % (self.num , self.ini,  self.fin)
 
 	tp = p()
 	tp.cpu, tp.prio, tp.ini = procarr
@@ -380,7 +380,7 @@ class Plan:
 		#funcion que imprime datos si se requieren
 		if self.dbug:
 			p = self.p
-			print "T: %3d -> P%2d (%2d:%d/%d)" % (self.time,  p.num,  p.cpu,  p.prio,  p.q)
+			print "T:%3d -> P%2d CPU:Prio/Q(%2d:%d/%d)" % (self.time,  p.num,  p.cpu,  p.prio,  p.q)
 
 	def Quedan(self):
 		#devuelve verdadero si aun hay procesos por ejecutarse
