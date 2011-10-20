@@ -1,21 +1,5 @@
-
-import firebirdsql as fb
-con = fb.connect("localhost/3050:c:\\Svn\\pysnipps\\Java\\lab4\\Bd_guia1.FDB", 'sysdba', 'masterkey', charset="iso8859_1")
-def run (q):
-	try:
-		cur = con.cursor()
-		cur.execute(q)
-		try:
-			for i in cur.rows:
-				print i
-		except:
-			pass
-		cur.close()
-		con.commit()
-	except Exception , e:
-		print e
-		print "rollingback"
-		con.rollback()
+from firebirdcon import run, connect
+connect("localhost/3050:c:\\Svn\\pysnipps\\Java\\lab4\\Bd_guia1.FDB")
 
 #1
 run("select * from situaciones_iva")
@@ -33,7 +17,7 @@ run ("SELECT * from facturas_items where factura_tipo=1 and factura_numero=12")
 "select count(1) from facturas_items where factura_tipo=1 and factura_numero=12"
 
 #6
-"select AVG(precio) as prom_precio from facturas_item where factura_tipo = 1 and factura_numero=12"
+"select AVG(precio) as prom_precio from facturas_items where factura_tipo = 1 and factura_numero=12"
 
 #7
 "SELECT facturas_items.*, (cantidad*precio) as total_bruto_linea from facturas_items where factura_tipo=1 and factura_numero=12"
