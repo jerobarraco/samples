@@ -1,0 +1,77 @@
+from firebirdcon import run, connect
+connect("localhost/3050:C:\\Svn\\pysnipps\\Java\\lab4\\bd\\triggers.fdb")
+
+"create generator gen_idcargos;"
+
+"""Select * from Contactos"""
+
+"""
+SET TERM ^
+CREATE TRIGGER BI_IDCARGOS
+	FOR CARGOS
+	ACTIVE
+	BEFORE INSERT
+	Position 0
+	AS
+	Begin
+		if (new.cargo is null) then
+			ne.idcargo = GEN_ID(GEN_IDCARGOS, 1);
+	END ^
+SET TERM ; ^
+"""
+
+"""insert into cargos VALUES ('Socio Gerente')"""
+
+#ejercicio 8
+"""CREATE VIEW 'VLOCPCIA' (
+  'CODIGO_POSTAL',
+  'LOCALIDAD',
+  'PROVINCIA_ID',
+  'PROV_ID',
+  'PROV_NOMBRE'
+) AS
+SELECT
+ CODIGO_POSTAL,
+ LOCALIDAD,
+ PROVINCIA_ID,
+ ID     AS PROV_ID,
+ NOMBRE AS PROV_NOMBRE
+ FROM LOCALIDADES L
+ JOIN PROVINCIAS  P  ON P.ID = L.PROVINCIA_ID
+;
+
+
+
+
+CREATE OR ALTER TRIGGER TRG_VLOCPCIA_ACTU FOR VLOCPCIA
+ BEFORE INSERT OR UPDATE
+AS
+ DECLARE VARIABLE V_CANT INTEGER;
+ DECLARE VARIABLE V_PROV_ID INTEGER;
+ DECLARE VARIABLE V_PROV_NOMBRE VARCHAR(40);
+BEGIN
+    SELECT  ID, NOMBRE
+      FROM  PROVINCIAS P WHERE P.ID = NEW.PROV_ID
+      INTO  :V_PROV_ID,
+            :V_PROV_NOMBRE;
+
+    IF (V_PROV_ID IS NULL) THEN
+      BEGIN
+            INSERT INTO PROVINCIAS(id, nombre) VALUES ( new.prov_id, new.prov_nombre);
+      END
+    ELSE UPDATE PROVINCIAS SET NOMBRE = NEW.PROV_NOMBRE WHERE ID = new.prov_id;
+
+
+   NEW.PROV_ID     = OLD.PROV_ID;
+   NEW.PROV_NOMBRE = OLD.PROV_NOMBRE;
+END
+
+UPDATE VLOCPCIA
+  SET CODIGO_POSTAL = 3100,
+      LOCALIDAD     = 'PARANA',
+      PROVINCIA_ID  = 1,
+      PROV_ID       = 1,
+      PROV_NOMBRE   = 'E.RIOS'
+  WHERE CODIGO_POSTAL = 3100;
+"""
+
