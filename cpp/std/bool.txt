@@ -1,0 +1,44 @@
+#include "iostream"
+using namespace std;
+
+
+int main(int argc, char *argv[])
+{
+    int a;
+    cout << "a ";
+    cin >> a;
+
+    /*
+      operan sobre variables y devuelven un valor booleano (logico verdadero o falso)
+    < <=
+    > >=
+    <> !=
+    ==
+
+
+      operadores que actuan sobre valores booleanos y devuelven otro valor booleano
+    ||  or      conjuncion  V
+    &&  and     disyuncion  ^
+
+        este operador actua sobre un solo valor booleano
+    !   not     negacion    ¬
+
+
+
+    */
+
+
+    if ((a<5) && (a>2) )
+        cout << "Es menor a 5 y mayor a 2";
+
+    bool encontrado = false;
+
+    for (int i = 0; i<a || encontrado; i++){
+        cout << ".";
+        /*if (v[i]==3){
+          encontrado = true;
+         }*/
+
+     }
+
+} 

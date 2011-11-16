@@ -1,0 +1,15 @@
+nombre1;apellido9;1;2;1.500000
+nombre2;apellido8;1;2;1.500000
+nombre3;apellido7;1;2;1.500000
+nombre4;apellido6;1;2;1.500000
+nombre1;apellido9;1;2;1.500000
+nombre1;apellido8;1;2;1.500000
+nombre1;apellido7;1;2;1.500000
+nombre1;apellido6;1;2;1.500000
+nombre5;apellido5;1;2;1.500000
+nombre1;apellido5;1;2;1.500000
+nombre6;apellido4;1;2;1.500000
+nombre1;apellido4;1;2;1.500000
+nombre7;apellido3;1;2;1.500000
+nombre1;apellido2;1;2;1.500000
+nombre1;apellido1;1;2;1.500000
