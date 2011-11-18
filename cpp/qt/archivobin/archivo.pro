@@ -1,12 +1,12 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2011-11-16T11:50:43
+# Project created by QtCreator 2011-11-16T11:11:23
 #
 #-------------------------------------------------
 
 QT       += core gui
 
-TARGET = csv
+TARGET = archivo
 TEMPLATE = app
 
 

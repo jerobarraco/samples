@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Thu 17. Nov 11:49:18 2011
+** Created: Fri 18. Nov 11:12:08 2011
 **      by: Qt User Interface Compiler version 4.7.4
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -21,6 +21,7 @@
 #include <QtGui/QStatusBar>
 #include <QtGui/QTableWidget>
 #include <QtGui/QToolBar>
+#include <QtGui/QVBoxLayout>
 #include <QtGui/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -29,6 +30,7 @@ class Ui_MainWindow
 {
 public:
     QWidget *centralWidget;
+    QVBoxLayout *verticalLayout;
     QTableWidget *tableWidget;
     QPushButton *pushButton;
     QMenuBar *menuBar;
@@ -39,15 +41,23 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(686, 352);
+        MainWindow->resize(686, 294);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
+        verticalLayout = new QVBoxLayout(centralWidget);
+        verticalLayout->setSpacing(6);
+        verticalLayout->setContentsMargins(11, 11, 11, 11);
+        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         tableWidget = new QTableWidget(centralWidget);
         tableWidget->setObjectName(QString::fromUtf8("tableWidget"));
-        tableWidget->setGeometry(QRect(10, 10, 661, 191));
+
+        verticalLayout->addWidget(tableWidget);
+
         pushButton = new QPushButton(centralWidget);
         pushButton->setObjectName(QString::fromUtf8("pushButton"));
-        pushButton->setGeometry(QRect(10, 210, 93, 28));
+
+        verticalLayout->addWidget(pushButton);
+
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));

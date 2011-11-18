@@ -34,23 +34,34 @@ void MainWindow::on_pushButton_clicked()
         QTextStream txt(&archivo);
         ui->tableWidget->setRowCount(0);
         ui->tableWidget->setColumnCount(0);
+
         QString linea;
-        txt >> linea;//"Numero,Nombre,DNI,Direccion"
+        linea = txt.readLine();//"Numero,Nombre,DNI,Direccion"
         QStringList header = linea.split(","); //["numero", "nombre"...]
+
         ui->tableWidget->setColumnCount(header.count());
         ui->tableWidget->setHorizontalHeaderLabels(header);
 
+
         while (!txt.atEnd()){
             linea = txt.readLine();
+
+            //como usar un objeto que mantiene consistente su forma de escribir en un archivo
+            //Persona p(linea);
+
             QStringList items = linea.split(",");
+            //obtengo la cantidad de filas
             int row = ui->tableWidget->rowCount();
+            //agrego una fila
             ui->tableWidget->setRowCount(row+1);
+
+            //por cada elemento en el stringlist
             for (int i = 0; i<items.count(); i++){
                 ui->tableWidget->setItem(row, i, new QTableWidgetItem(items.at(i)));
             }
+
         }
         archivo.close();
-
     } else{
 
     }
