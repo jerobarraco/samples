@@ -7,21 +7,24 @@ Ext.require([
 Ext.define('MProvincias', {
     extend: 'Ext.data.Model',
     fields: [
-       {name: 'fid',			type: 'int'},
+       'fid',
        {name: 'nombre', type: 'string'}
     ],
     idProperty: 'fid'
 });
 
 var stProv = Ext.create('Ext.data.Store', {
-    id: 'store',
-    model: 'Ext.MProvincias',
+    model: 'MProvincias',
 		autoLoad:true,
     proxy: {
-       type: 'jsonp',
-			 root: 'datos',
-			 totalProperty: 'cuenta',
-       url: 'srvProvincias'
+			url: 'srvProvincias',
+			simpleSortMode:true,
+			type: 'ajax', // esto es extremadamente importante, porque sino, si ponemos jsonp necesitamos pasar el json de otra manera.. muy fea.
+			reader:{
+				type:'json',//esto tamb , extremadamente importante.
+				root: 'root',
+				totalProperty: 'totalCount'
+			}
 	}
 });
 // create the Grid
@@ -29,10 +32,14 @@ var stProv = Ext.create('Ext.data.Store', {
 			id:'migrid',
 			width: 700,
 		height: 500,
-		title: 'provincias',
+		title: 'Provincia',
         store: stProv,
         model:'MProvincias',
-				columns:[{text:'laskd', dataIndex:'nombre'}],
+				columns:[
+						{text:'id', dataIndex:'fid'},
+						{text:'Nombre', dataIndex:'nombre'}
+						
+				],
         renderTo: 'grid-example',
 				viewConfig: {
 					trackOver: false

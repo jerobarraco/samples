@@ -5,7 +5,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 /**
  *
  * @author Administrador
@@ -27,16 +26,16 @@ public class provincias extends HttpServlet {
 			
 			response.setContentType("text/javascript");
 			List<Provincia> provs = manager.nativeQueryList(Provincia.class, "Select * from Provincias;");
-			out.println("{"+
-							"cuenta:"+provs.size()+","+
-							"datos:[");
+			out.println("{\n"+
+							"totalCount:"+provs.size()+",\n"+
+							"root:[");
 							
 			boolean notfirst = false;
 			for (Provincia p: provs){
 				if (notfirst) {
 					out.println(",");
 				}
-				out.print(String.format("{pid:%s, nombre:'%s'}" , p.getId(), p.getNombre() ));
+				out.print(String.format("{fid:%s, nombre:\"%s\"}" , p.getId(), p.getNombre() ));
 				notfirst = true;
 			}
 			out.println("]}");
