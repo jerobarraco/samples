@@ -19,8 +19,8 @@ var stProv = Ext.create('Ext.data.Store', {
 		autoLoad:true,
     proxy: {
        type: 'jsonp',
-			 root: 'data',
-			 totalProperty: 'total',
+			 root: 'datos',
+			 totalProperty: 'cuenta',
        url: 'srvProvincias'
 	}
 });

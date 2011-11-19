@@ -11,11 +11,11 @@
     </servlet>
     <servlet>
         <servlet-name>srvProvincias</servlet-name>
-        <servlet-class>servlets.provincias</servlet-class>
+        <servlet-class>provincias</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>srvLocalidades</servlet-name>
-        <servlet-class>servlets.localidades</servlet-class>
+        <servlet-class>localidades</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
