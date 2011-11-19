@@ -10,7 +10,6 @@
   </head>
   <body class="viewclass">
 		
-<div id="grid-example"></div>
     <script> 
 			Ext.QuickTips.init();
       Ext.Loader.setConfig({
@@ -24,95 +23,26 @@
 			 // setup the state provider, all state information will be saved to a cookie
 			 Ext.state.Manager.setProvider(Ext.create('Ext.state.CookieProvider'));
         var oVP = null;
-				var g = Ext.create('Ext.grid.Panel', gProvinciasConf);
-				stProv.load();
-       /* var oViewportConfig = { 
-              "cls": "irm-mc",
-              "layout": {
-                  "type": "border",
-                  "padding": 5
-              },
-							items:[
-								new Ext.grid.GridPanel(Ext.apply(gProvinciasConf, {region:'center'}))
-							]
-				};*/
-              /*"items": [
-                 {
-                     "region": "north",
-                     "html": "header",
-                     "height": 50
-                 },
-                 { 
-                     "cls": "irm-left-column irm-mc-nav",
-                     // Can't use 'itemId' here because it does not work with the 'ViewPort'.
-                     "region": "west", 
-                     "collapsible": true,
-                     "split": true,
-                     "title": "column-left-title",
-                     "width": 200,         
-                     "layout": {
-                         "type": "vbox",
-                         "align": "stretch"             
-                     }
-                 }, 
-                 {
-                     "cls": "irm-column irm-center-column irm-master-detail",
-                     "region": "center",
-                     "title":  "center-title",
-                     "layout": "border",
-                     "border": false,
-                     "items": [ 
-                         {
-                             "itemId": "viewport-center-master",
-                             "cls": "irm-master",
-                             "region": "center",
-                             "html": "center-master-text"
-                         },
-                         {
-                             "itemId": "viewport-center-detail",
-                             "region": "south",
-                             "height": 100,
-                             "split": true,
-                             "collapsible": true,
-                             "title": "center-detail-title",
-                             "margins": "0 0 0 0",
-                             "html": "center-detail-text"
-                         }
-                     ]
-                 },
-                 {
-                     "region": "east",
-                     "collapsible": true,
-                     "width": 150,
-                     "title": "column-right-title",
-                     "layout": {
-                         "type": "vbox",
-                         "align": "stretch"
-                     },
-                     "split": true,
-                     "items": [{
-                         "xtype": "component",
-                         "html": "column-right-text"
-                         },new Ext.grid.GridPanel( gProvinciasConf )]    
-                 },
-                 {    
-                     "region": "south",
-                     "height": 30,
-                     "layout": {
-                         "type": "border",
-                         "padding": 5
-                     },
-                     "items": [{
-                         "region": "center",
-                         "html": "footer",
-                         "height": 50
-                     }, 
-									 ]         
-                 }                  
-             ]
-          };
-*/          
-        // oVP = Ext.create( "Ext.Viewport", oViewportConfig );
+				var Grid = Ext.create('Ext.grid.Panel', gProvinciasConf);
+				var Grid2 = Ext.create('Ext.grid.Panel', gProvinciasConf);
+					stProv.load();
+					new Ext.Viewport({
+						layout: 'border',
+						//style: 'background: #fff; text-align:left;',
+						renderTo: Ext.getBody() ,
+						items: [
+										Ext.create('Ext.tab.Panel',{
+											id : 'extabs',
+											region:'center',
+											activeTab : 0,
+											width : 350,
+											plain : true,
+											style : 'background:none',
+											items : [Grid, Grid2]
+										})
+								]
+					});
+              
        });
 		</script>
   </body>

@@ -40,7 +40,7 @@ var stProv = Ext.create('Ext.data.Store', {
 						{text:'Nombre', dataIndex:'nombre'}
 						
 				],
-        renderTo: 'grid-example',
+        //renderTo: 'grid-example',
 				viewConfig: {
 					trackOver: false
 		}
