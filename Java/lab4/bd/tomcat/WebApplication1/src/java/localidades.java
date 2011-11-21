@@ -4,32 +4,36 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
-/**
- *
- * @author Administrador
- */
 public class localidades extends HttpServlet {
 
-	/** 
-	 * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
-	 * @param request servlet request
-	 * @param response servlet response
-	 * @throws ServletException if a servlet-specific error occurs
-	 * @throws IOException if an I/O error occurs
-	 */
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 					throws ServletException, IOException {
-		response.setContentType("text/html;charset=UTF-8");
+		response.setContentType("text/javascript");
 		PrintWriter out = response.getWriter();
 		try {
+			
+			List<Localidad> locs = manager.nativeQueryList(Localidad.class, "Select * from Provincias;");
+			out.println("{\n"+
+							"totalCount:"+locs.size()+",\n"+
+							"root:[");
+							
+			boolean notfirst = false;
+			for (Localidad l: locs){
+				if (notfirst) {
+					out.println(",");
+				}
+				out.print(l.toJSON());
+				notfirst = true;
+			}
+			out.println("]}");
 			/* TODO output your page here
 			out.println("<html>");
 			out.println("<head>");

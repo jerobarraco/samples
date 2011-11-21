@@ -9,14 +9,9 @@
     <properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.FirebirdDialect"/>
       <property name="hibernate.connection.driver_class" value="org.firebirdsql.jdbc.FBDriver"/>
-      <property name="hibernate.hbm2ddl.auto" value="update"/>
       <property name="hibernate.connection.username" value="SYSDBA"/>
       <property name="hibernate.connection.password" value="masterkey"/>
       <property name="hibernate.connection.url" value="jdbc:firebirdsql:localhost:c:/Svn/pysnipps/Java/lab4/tp/tp.fdb"/>
-      <property name="hibernate.cache.provider_class" value="org.hibernate.cache.NoCacheProvider"/>
-      <property name="showSql" value="true"/>
-      <property name="generateDdl" value="true"/>
-      <property name="hibernate.dialect" value="org.hibernate.dialect.FirebirdDialect"/>
       <property name="hibernate.cache.provider_class" value="org.hibernate.cache.NoCacheProvider"/>
       <property name="showSql" value="true"/>
       <property name="generateDdl" value="true"/>

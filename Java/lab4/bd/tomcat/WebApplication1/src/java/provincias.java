@@ -11,20 +11,11 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class provincias extends HttpServlet {
 
-	/** 
-	 * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
-	 * @param request servlet request
-	 * @param response servlet response
-	 * @throws ServletException if a servlet-specific error occurs
-	 * @throws IOException if an I/O error occurs
-	 */
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 					throws ServletException, IOException {
-		response.setContentType("text/html;charset=UTF-8");
+		response.setContentType("text/javascript");
 		PrintWriter out = response.getWriter();
 		try {
-			
-			response.setContentType("text/javascript");
 			List<Provincia> provs = manager.nativeQueryList(Provincia.class, "Select * from Provincias;");
 			out.println("{\n"+
 							"totalCount:"+provs.size()+",\n"+
@@ -35,7 +26,7 @@ public class provincias extends HttpServlet {
 				if (notfirst) {
 					out.println(",");
 				}
-				out.print(String.format("{fid:%s, nombre:\"%s\"}" , p.getId(), p.getNombre() ));
+				out.print(p.toJSON());
 				notfirst = true;
 			}
 			out.println("]}");

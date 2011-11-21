@@ -7,6 +7,7 @@
           href="extjs/resources/css/ext-all.css" /> 
 		<script type="text/javascript" src="extjs/bootstrap.js"></script> 
 		<script type="text/javascript" src="js/provincias.js"></script> 
+		<script type="text/javascript" src="js/localidades.js"></script> 
   </head>
   <body class="viewclass">
 		
@@ -22,24 +23,24 @@
     
 			 // setup the state provider, all state information will be saved to a cookie
 			 Ext.state.Manager.setProvider(Ext.create('Ext.state.CookieProvider'));
-        var oVP = null;
 				var Grid = Ext.create('Ext.grid.Panel', gProvinciasConf);
-				var Grid2 = Ext.create('Ext.grid.Panel', gProvinciasConf);
-					stProv.load();
-					new Ext.Viewport({
+				var Grid2 = Ext.create('Ext.grid.Panel', confLocalidades);
+				var oVP = new Ext.Viewport({
 						layout: 'border',
 						//style: 'background: #fff; text-align:left;',
 						renderTo: Ext.getBody() ,
 						items: [
-										Ext.create('Ext.tab.Panel',{
+										//Ext.create('Ext.tab.Panel',{
+										{ xtype:'tabpanel',
 											id : 'extabs',
 											region:'center',
-											activeTab : 0,
-											width : 350,
+											//activeTab : 0,
+											//width : 350,
 											plain : true,
 											style : 'background:none',
-											items : [Grid, Grid2]
-										})
+											items : [Grid2,Grid ]
+										}
+									//)
 								]
 					});
               

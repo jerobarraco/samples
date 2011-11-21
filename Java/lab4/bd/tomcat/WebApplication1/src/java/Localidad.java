@@ -22,19 +22,20 @@ public class Localidad implements Serializable{
 
 	private String nombre;
 	
-	private String caracteristica;
+	private String caracts;
 	
-	@ManyToOne(targetEntity=Provincia.class)
+	/*@ManyToOne(targetEntity=Provincia.class)
 	@JoinColumn(name="PROV_ID", nullable=false)
-	private Provincia provincia;
+	private Provincia provincia;*/
 
-	public String getCaracteristica() {
-		return caracteristica;
+	public String getCaracts() {
+		return caracts;
 	}
 
-	public void setCaracteristica(String caracteristica) {
-		this.caracteristica = caracteristica;
+	public void setCaracts(String caracts) {
+		this.caracts = caracts;
 	}
+
 
 	public String getNombre() {
 		return nombre;
@@ -44,13 +45,13 @@ public class Localidad implements Serializable{
 		this.nombre = nombre;
 	}
 
-	public Provincia getProvincia() {
+	/*public Provincia getProvincia() {
 		return provincia;
 	}
 
 	public void setProvincia(Provincia provincia) {
 		this.provincia = provincia;
-	}
+	}*/
 	
 	public Long getId() {
 		return id;
@@ -58,5 +59,8 @@ public class Localidad implements Serializable{
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+	public String toJSON(){
+		return String.format("{fid:%s, nombre:\"%s\"}" , getId(), getNombre() );
 	}
 }

@@ -49,5 +49,7 @@ public class Provincia implements Serializable{
 		this.nombre = nombre;
 	}
 	
-	
+	public String toJSON(){
+		return String.format("{fid:%s, nombre:\"%s\"}" , getId(), getNombre() );
+	}
 }
