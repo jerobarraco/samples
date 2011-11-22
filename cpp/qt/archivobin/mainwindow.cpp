@@ -51,6 +51,7 @@ void MainWindow::on_pushButton_clicked()
         while (!data.atEnd()){
             int valor ;
             data >> valor;
+            //data.readRawData(&p, sizeof(p))
 
 
             ui->listWidget->addItem(QString::number(valor));
@@ -83,7 +84,7 @@ void MainWindow::on_pushButton_3_clicked()
 
     if (nombreAbrir == NULL ) return;
     archivo.setFileName(nombreAbrir);
-    if (archivo.open(QIODevice::Text | QIODevice::WriteOnly)){
+    if (archivo.open(QIODevice::WriteOnly)){
         QDataStream data(&archivo);
         for (int i = 0 ; i< ui->listWidget->count(); i++){
             QString linea = ui->listWidget->item(i)->text();
