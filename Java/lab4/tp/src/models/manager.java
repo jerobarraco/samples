@@ -8,7 +8,7 @@ import javax.persistence.Query;
 //TODO usar clase Query pelada para hacer los queries y usar JQL
 public class manager {
 	//private static emf = Persistence.createEntityManagerFactory("pu1");
-	private static EntityManager em = Persistence.createEntityManagerFactory("pu1").createEntityManager();
+	private static EntityManager em = Persistence.createEntityManagerFactory("pu1").createEntityManager(); //todo poner el entitymanager como estatico y devolver ems
 	public static void persist(Object o){
 		em.persist(o);
 	}
