@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "secuenciaa.h"
 #include "secuenciab.h"
+#include "secuenciac.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -9,7 +10,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     s = NULL;
-    tipo_sec = -1;
+    tipo_sec = 0;
     panel = 0;
     m=0;
     n=0;
@@ -30,16 +31,17 @@ void MainWindow::on_pushButton_3_clicked()
     ui->tableWidget->setRowCount(m);
     ui->tableWidget->setColumnCount(n);
 
-    if (s!= NULL){ delete s;}
+    if (s != NULL){ delete s;}
 
-    if (tipo_sec != 0){
+    if (tipo_sec == 0){
         s = new SecuenciaA(m, n);
-        tipo_sec = 0;
-
-    }else{
-
-        s = new SecuenciaB(m, n);
         tipo_sec = 1;
+    }else if (tipo_sec ==1){
+        s = new SecuenciaB(m, n);
+        tipo_sec = 2;
+    }else if (tipo_sec==2){
+        s = new secuenciac(m, n);
+        tipo_sec = 0;
     }
     ui->statusBar->showMessage(s->getNombre());
     mostrar();
@@ -69,9 +71,6 @@ void MainWindow::mostrar(){
 
 void MainWindow::on_pushButton_2_clicked()
 {
-    //no sirve
-    panel = ui->spinBox->value();
-    mostrar();
 }
 
 void MainWindow::on_pushButton_clicked()

@@ -15,18 +15,22 @@ SOURCES += main.cpp\
     panel.cpp \
     secuencia.cpp \
     secuenciaa.cpp \
-    secuenciab.cpp
+    secuenciab.cpp \
+    secuenciac.cpp
 
 HEADERS  += mainwindow.h \
     panel.h \
     secuencia.h \
     secuenciaa.h \
-    secuenciab.h
+    secuenciab.h \
+    secuenciac.h
 
 FORMS    += mainwindow.ui
 
 RESOURCES += \
     iconos.qrc
+
+
 
 
 

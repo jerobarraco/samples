@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Thu 1. Dec 20:13:25 2011
+** Created: Fri 2. Dec 12:30:43 2011
 **      by: Qt User Interface Compiler version 4.7.4
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -35,14 +35,11 @@ public:
     QVBoxLayout *verticalLayout;
     QTableWidget *tableWidget;
     QHBoxLayout *horizontalLayout;
-    QSpinBox *spinBox_4;
     QSpinBox *spinBox_2;
     QSpinBox *spinBox_3;
     QPushButton *pushButton_3;
     QHBoxLayout *horizontalLayout_2;
     QPushButton *pushButton;
-    QPushButton *pushButton_2;
-    QSpinBox *spinBox;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -66,12 +63,6 @@ public:
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setSpacing(6);
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
-        spinBox_4 = new QSpinBox(centralWidget);
-        spinBox_4->setObjectName(QString::fromUtf8("spinBox_4"));
-        spinBox_4->setValue(15);
-
-        horizontalLayout->addWidget(spinBox_4);
-
         spinBox_2 = new QSpinBox(centralWidget);
         spinBox_2->setObjectName(QString::fromUtf8("spinBox_2"));
         spinBox_2->setValue(5);
@@ -100,16 +91,6 @@ public:
 
         horizontalLayout_2->addWidget(pushButton);
 
-        pushButton_2 = new QPushButton(centralWidget);
-        pushButton_2->setObjectName(QString::fromUtf8("pushButton_2"));
-
-        horizontalLayout_2->addWidget(pushButton_2);
-
-        spinBox = new QSpinBox(centralWidget);
-        spinBox->setObjectName(QString::fromUtf8("spinBox"));
-
-        horizontalLayout_2->addWidget(spinBox);
-
 
         verticalLayout->addLayout(horizontalLayout_2);
 
@@ -135,7 +116,6 @@ public:
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0, QApplication::UnicodeUTF8));
         pushButton_3->setText(QApplication::translate("MainWindow", "Crear", 0, QApplication::UnicodeUTF8));
         pushButton->setText(QApplication::translate("MainWindow", "Secuencia", 0, QApplication::UnicodeUTF8));
-        pushButton_2->setText(QApplication::translate("MainWindow", "Panel", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };
