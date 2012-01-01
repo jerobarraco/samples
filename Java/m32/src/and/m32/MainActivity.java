@@ -142,13 +142,13 @@ public class MainActivity extends Activity
 			fb.clear(back);
 			level.onDrawFrame(fb);
 			fb.display();
-			long ctime = System.currentTimeMillis();
+			/*long ctime = System.currentTimeMillis();
 			if ( ctime- time >= 1000) {
 				Logger.log(fps + "fps");
 				fps = 0;
 				time = ctime;
 			}
-			fps++;
+			fps++;*/
 		}
 	}
 	public static FrameBuffer getFb(){

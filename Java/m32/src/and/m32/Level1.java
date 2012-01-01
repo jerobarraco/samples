@@ -15,7 +15,7 @@ public class Level1 extends Level{
 	Object3D cube;
 
 	Level1(){
-		super(6, 6);
+		super(5, 5);
 		
 		String tn = "cubo";
 		MainActivity.loadTexture(R.drawable.icon, 64, 64, tn);
@@ -42,23 +42,27 @@ public class Level1 extends Level{
 	
 	
 	private void setupGrid() {		
-		float x = -40;
-		float y = -40;
+		float min = -40;
+		float x = min;
+		float y = min;
+		
 		int cont = 0;//para evitar usar%
+		int t;
 		for (int i= 0; i<gSize; i++ ){
-			Gem g = new Gem(r.nextInt(Gem.maxType));
+			t = r.nextInt(Gem.maxType);
+			tgrid[i]=t;
+			Gem g = new Gem(t);
 			
 			g.setPos(x, y, 0);
 			grid[i] = g;
 			world.addObject(g.obj);
 			
-			x+=15;
+			x+=20;
 			cont ++;
-			
 			if (cont==gridw) {
 				cont = 0;
-				y += 15;
-				x = -40;
+				y += 20;
+				x = min;
 			}
 		}
 	}			

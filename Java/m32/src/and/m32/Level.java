@@ -8,6 +8,7 @@ import com.threed.jpct.Interact2D;
 import com.threed.jpct.Light;
 import com.threed.jpct.Logger;
 import com.threed.jpct.Object3D;
+import com.threed.jpct.RGBColor;
 import com.threed.jpct.SimpleVector;
 import com.threed.jpct.World;
 import java.util.Random;
@@ -17,6 +18,7 @@ public class Level {
 	protected Light sun;
 	protected Object3D selected;
 	public Gem grid[]; //do not modiy plz
+	public int tgrid[];
 	public int gridw;
 	public int gridh;
 	public int gSize;
@@ -34,6 +36,7 @@ public class Level {
 		gridh = gh;
 		gSize = gridw*gridh;
 		grid = new Gem[gSize];
+		tgrid = new int[gSize];
 		check = new Checker(this);		
 	}
 	public Object[] getObjectAt(float x, float y){
@@ -43,11 +46,11 @@ public class Level {
 	}
 	
 	public boolean onTouchEvent(MotionEvent me) { //especie de mainloop :D
-		float nx, ny;
-		nx = me.getX();
-		ny = me.getY();
+		float mx, my;
+		mx = me.getX();
+		my = me.getY();
 		if (me.getAction() == MotionEvent.ACTION_DOWN) {			
-			Object3D o = (Object3D) getObjectAt(nx, ny)[1];
+			Object3D o = (Object3D) getObjectAt(mx, my)[1];
 			if (o!=null){
 				//esto se puede optimizar poniendolo en el else del if de selected
 				Gem g=null;
@@ -73,29 +76,34 @@ public class Level {
 						//de-seleccionamos
 					
 						//tengo que conseguir la gema que contiene ste obj, trabajo dificl
-						o.setAdditionalColor(g.mycolor);
+						g.deselect();
 					//} else {
 						//obtenemos el tipo del que selecciono antes, y hacemos checkhit imaginando que esta 
 						//en la coord donde hizo el 2º click (entonces nos ahorramos de intercambiar 2veces en caso de error
 						Gem g1=null;
-						for (Gem gt: grid){
-							if (gt.obj == selected){
-								g1 = gt;
-								break;
-							}
+						int ni;
+						for (ni = 0 ; ni< gSize; ni++){
+							g1= grid[ni];
+							if (g1.obj==selected) break;
 						}
-						
-						int limits[] = new int[6];
-						checkHit(x, y, g1.type, limits);
-						if (limits[0]>1 || limits[1]>1 ){
-							Logger.log("WE HAVE A WINNER!");
+						g1.deselect();//deselecciona visualmente
+						//logica
+						selected = null;
+						int nx= ni%gridw;
+						int ny= ni/gridw;
+						if (swapable(x, y, nx, ny )){
+							Logger.log("WE HAVE A WINNER!");//todo check distancia
 							int typeaux = g.type;
 							g.reset(g1.type);
 							g1.reset(typeaux);
+							
+							tgrid[i] = tgrid[ni];
+							tgrid[ni]= typeaux;
 							check.restart();//dejamos que lo encuentre el checker para tener un feedback visual
+						}else{
+							Logger.log("Eso no se puede cambiar"); 
 						}
-						//logica deintercambio
-							selected = null;
+						
 					//}	
 				}
 			}
@@ -105,28 +113,29 @@ public class Level {
 	}
 	
 	public void onDrawFrame(FrameBuffer fb) {
-		if ( check.status == check.FOUND){
-			Log.d(tag, "Encontre uno! lo voy a matar");
-			handleHit(check.x, check.y, check.limits);
-			//killV(check.i, check.j, check.j);//esto es mas eficiente porque no reemplaza todas las linesa, pero hay que sacarlo para permitir eliminacion en cadena
-			check.restart();
-		}
-		/*if (stat==check.NOT_FOUND)
-			Log.d("level", "no se encontro nada, lo dejamos pausado");*/
-		
 		world.renderScene(fb);
 		world.draw(fb);
-		if (check.status == check.STOPPED)
-			check.start(); //esperamos luego del 1º render para checkear porque sino hace cualquier cosa...
+		
+		synchronized(check){
+			//no se si el sycnh este sirve pa  algo o alerda las cosas nomas
+			//pero mejor porque el kilmatches cambia los grids. igual no importaria porque el estado no es working
+			int status = check.status;
+			if (status == check.STOPPED)
+				check.start();
+			else
+				if (check.matchFound){
+					Log.d(tag, "Hay matches! A matarlos!");
+					killMatches();
+				}  //esperamos luego del 1º render para checkear porque sino hace cualquier cosa...
+		}
 		return;
 	}
-	public boolean checkChange(int x1, int y1, int x2, int y2){
-		return true;
-	}
+	@Deprecated
 	public void killH(int x1, int x2, int y){
 		for (int i= x1; i<=x2; i++)
 			killV(i, y, y);
 	}
+	@Deprecated
 	public void killV(int x, int y1, int y2){
 		int nj = y1- (y2-y1)-1;//truco copiar para arriba salteandose los que si o si mueren
 		int ntipo;
@@ -142,6 +151,7 @@ public class Level {
 			nj--;
 		}
 	}
+	@Deprecated
 	public void handleHit(int x, int y, int limits[]){
 		//mata todas las gemas que coincidan
 		//x, y, donde se da la coincidencia, limits los limits que da el checkhit
@@ -155,29 +165,58 @@ public class Level {
 			killV(x, limits[4], limits[5] );
 		}
 	}
-	public void checkHit(int x , int y, int type, int limits[]){
-		//todo recibir tipo por parametro
+	public boolean swapable(int x1, int y1, int x2, int y2){
+		//devuelve true si los items al intercambiarlos da exito
+		int lim[] = new int[6];
+		boolean hit = false;
+		//esto es peligroso , sobretodo para el checker, hay que cambiar temporalmente la matriz de tipos porque sino nos pisamos solos
+		int i1, i2, taux;
+		i1 = x1+(y1*gridw);
+		i2 = x2+(y2*gridw);
+		
+		taux = tgrid[i1];
+		tgrid[i1]= tgrid[i2];
+		tgrid[i2]= taux;
+		
+		checkHit(x1, y1, lim);
+		if ((lim[0]>1) || (lim[1]>1)){
+			Log.d(tag, String.format("Swapable A (%s,%s)<->(%s,%s)", x1, y1, x2, y2));
+			//Log.d(tag, String.format("Hit (%s,%s), (%s,%s) (%s,%s)", lim[0], lim[1], lim[2], lim[3], lim[4], lim[5] ));
+			hit= true;
+		}
+		
+		if (!hit){
+			checkHit(x2, y2, lim);
+			if ((lim[0]>1) || (lim[1]>1)){
+				Log.d(tag, String.format("Swapable B (%s,%s)<->(%s,%s)", x1, y1, x2, y2));
+				//Log.d(tag, String.format("Hit (%s,%s), (%s,%s) (%s,%s)", lim[0], lim[1], lim[2], lim[3], lim[4], lim[5] ));
+				hit= true;
+			}
+		}
+		//swap back
+		taux = tgrid[i1];
+		tgrid[i1]= tgrid[i2];
+		tgrid[i2]= taux;
+		
+		
+		return hit;
+		
+	}
+	public void checkHit(int x , int y, int limits[]){
+		//actua sobre la grid de tipos asi que no le puedo pasar un tipo fake o se pisa
 		//todo manejar nulls para grids amorfas
 			//devuelve en limits : canthoriz, cantvert, x1, x2, y1, y2, en caso de error solo esta definidas las cants 
-			int j, pyi, pyf, pxi, pxf;
+			int j, pyi, pyf, pxi, pxf, type;
 			int off  = (y*gridw);//lo ponemos aca para no multiplicar tanto
-			
-			int i = x +off;
-			
+			type = tgrid[x+off];
 			limits[0]=0;
 			limits[1]=0;
-			
-			if (i>=grid.length) return;
-			
-			Gem g = grid[i];
-			
+						
 			//now well check horizontally
 			//to the left
-			Gem g2; //temp
 			pxi = x;
 			for (j=x-1; j>=0; j--){
-				g2 = grid [j + off];
-				if (g2.type != type) {
+				if (tgrid [j + off] != type) {
 					break;
 				}
 				pxi = j;
@@ -186,8 +225,7 @@ public class Level {
 			//right
 			pxf = x;
 			for (j=x+1; j<gridw; j++){
-				g2 = grid [j +off];
-				if (g2.type != type) {
+				if (tgrid [j +off] != type) {
 					break;
 				}
 				pxf = j;
@@ -196,8 +234,7 @@ public class Level {
 			//top
 			pyi=y;
 			for (j=y-1; j>=0; j--){
-				g2 = grid [x +(j*gridw)];
-				if (g2.type != type) {
+				if (tgrid[x +(j*gridw)] != type) {
 					break;
 				}
 				pyi=j;
@@ -206,8 +243,7 @@ public class Level {
 			//down
 			pyf=y;
 			for (j=y+1; j<gridh; j++){
-				g2 = grid [x +(j*gridw)];
-				if (g2.type != type) {
+				if (tgrid[x +(j*gridw)] != type) {
 					break;
 				}
 				pyf=j;
@@ -224,5 +260,27 @@ public class Level {
 			limits[5] = pyf;
 			return;
 		}
+
+	private void killMatches() {
+		check.cancel();//frozamos check y evitamos que nos vuelva a dar un matchfound positivo
+		int matchs[] = check.matchs;
+		int nj, ntipo;
+		//este conviene recorrerlo bien, sino nos pisamos
 		
+		for (int i = 0;i<gSize; i++){
+			if (matchs[i]==1){
+				Logger.log(String.format("Matando %s (%s)", i, tgrid[i]));
+				for (int j = i; j>=0; j-=gridw){
+					nj = j - gridw;//-1*w o sea la fila superior
+					if(nj<0)
+						ntipo = r.nextInt(Gem.maxType);
+					else
+						ntipo =  tgrid[nj];
+					tgrid[j] = ntipo;
+					grid[j].reset(ntipo);
+				}
+			}
+		}
+		check.restart();
+	}
 }
