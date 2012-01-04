@@ -10,7 +10,7 @@
 			<property name="hibernate.hbm2ddl.auto" value="update"/>
 			<property name="hibernate.connection.username" value="SYSDBA"/>
 			<property name="hibernate.connection.password" value="masterkey"/>
-			<property name="hibernate.connection.url" value="jdbc:firebirdsql:localhost:c:/Svn/pysnipps/Java/lab4/dos/db.fdb"/>
+			<property name="hibernate.connection.url" value="jdbc:firebirdsql:localhost:c:/Svn/snipps/Java/lab4/dos/db.fdb"/>
 			<property name="hibernate.cache.provider_class" value="org.hibernate.cache.NoCacheProvider"/>
 			<property name="showSql" value="true"/>
 			<property name="generateDdl" value="true"/>
