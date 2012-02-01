@@ -64,11 +64,11 @@ class MyZODB(object):
 
 def initDb(root):
 	if not root.has_key('articulos'):
-			root['articulos'] = Obt()
+		root['articulos'] = Obt()
 	if not root.has_key('sequences'):
 		root['sequences'] = Obt()
 	if not root['sequences'].has_key('articulos'):
-			root['sequences']['articulos'] = 0
+		root['sequences']['articulos'] = 0
 
 def main():
 	mzdb = MyZODB('data.fs')
@@ -89,4 +89,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+	main()
