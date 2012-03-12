@@ -1,0 +1,100 @@
+/* 
+    Document   : estilo
+    Created on : 15/12/2011, 18:49:19
+    Author     : Ale
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+		display: block;
+}
+body
+ {
+		background-color:#000000;		
+	color: #cccccc;
+}
+h1
+{	
+	color: dodgerblue;
+	text-align: center;
+}
+th
+{	
+	color: #990000;
+}
+tr
+{	
+	border-right-color: #3333ff;
+	border-left-color: #3333ff;
+	border-bottom-color: #3333ff;
+	border-top-color: #3333ff;
+}
+
+td
+{
+	
+	border-right-color: #cccccc;
+	border-left-color: #666666;
+	border-bottom-color: #cccccc;
+	border-top-color: #666666;
+	border-top-style:ridge;
+	border-left-style: ridge;
+	border-right-style: ridge;
+	border-bottom-style: ridge;
+}
+.ini{
+	
+	border-right-style: none;
+	border-left-style: none;
+	border-bottom-style: none;
+	border-top-style: none;
+}
+table{
+	color: #9999ff;
+	border-right-color: #3300cc;
+	border-left-color: #330099;
+	border-bottom-color: #3300cc;
+	border-top-color: #330099;
+	text-align: center;
+	border-right-style: solid;
+	border-left-style: solid;
+	border-bottom-style: solid;
+	border-top-style: solid;
+	border-right-width: 1px;
+	border-left-width: 1px;
+	border-bottom-width: 1px;
+	border-top-width: 1px;
+	margin: auto;
+}
+button
+{
+	font: 100;
+	color:lightgreen;
+}
+form
+{
+	border: lightblue;	
+	
+}
+a.suelto{
+	text-align: center;
+	display:block;
+}
+a:link{color:deepskyblue;}
+a:visited{color:mediumorchid}
+a:hover{color:gold;}
+a:active{color:mediumpurple;}
+div{text-align: center;}
+
+iframe { 	
+	border: none;
+	width: 100%; 
+	height: 100%;
+	position: absolute;
+}
+img {
+ display: block;
+ margin: auto;
+ }
+ 

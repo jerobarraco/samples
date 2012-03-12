@@ -1,0 +1,44 @@
+Hacer un programa que permita administrar una radio: programas, propagandas, personal, temas.
+Un programa tiene un director, uno o mas locutores, un horario de emisión y una duraci�n determinada.
+Un programa consta de una lista de 'periodos', algunos de los cuales son ocupadas
+por temas musicales (titulo, autor, duracion) y otros por propagandas (empresa, duracion)
+El sistema debe permitir la administracion (altas, bajas, modificaciones) de todos estos datos,
+y ademas consultar la lista de programas de un dia determinado, mostrando el titulo de cada
+programa, su director y locutor, horario y duracion.
+Tambien debe permitir consultar la lista de todos los programas de un locutor: permitir 
+seleccionar el locutor y mostrar la lista de sus programas.
+
+El programa se debe escribir usando JSP y JPA, para correr sobre Tomcat.
+
+IMPORTANTE: se puede usar JSF y/o JBoss, previa autorizacion (me mandan el porque 
+y como lo piensan hacer, y yo les digo si pueden o no). 
+NO se puede usar EJB ni GWT ni Struts ni ningun otro framework para aplicacionaes.
+
+
+
+TODO:
+ok		Arreglar mapeos
+ok		Cambiar int a Long (ojo mayuscula)
+ok		cambiar tambla personal a personales
+		arreglar los ids en el mapeo de programa_personal
+ok			cambiar el sql por jpql en el manager y en los getalls, capaz es mas seguro
+ok			botones input submit
+
+ok		implementar tostring en la propaganada
+		agregar "Tema" y "Propaganda" en toString de elementos
+ok		que el periodo tome la duracion de la suma de sus elementos
+ok		que prorgama tome la duracion de la suma de sus periodos
+ok		Arreglar herencia
+		
+ok		"nuevO propaganda"
+ok		"eliminar" programa
+ok		arreglar orden columnas editar y eliminar programa
+ok		arreglar programa para que muestre solo el tiempo no toda la fecha
+ok		mover lo de timestamp y string a otro lado
+ok		buscar una alternativa a timestamp
+		checkear que item no agregue espacios en los hiddens
+		agregar label a los select	
+ok		agregar selected al select
+ok		cambiar todos los forms para que pongan el submit a "" donde dice null
+ok		falta eliminar de propaganda
+ok		horario y duracion en lista programa
