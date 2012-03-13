@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" >
+  <persistence-unit name="pu1">
+    <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    <class>model.Direccion</class>
+    <properties>
+      <property name="hibernate.dialect" value="model.SQLiteDialect" />
+      <property name="hibernate.connection.driver_class" value="org.sqlite.JDBC" />
+      <property name="hibernate.hbm2ddl.auto" value="update" />
+     <!-- <property name="hibernate.connection.username" value="SYSDBA"/>
+      <property name="hibernate.connection.password" value="masterkey"/>-->
+      <property name="hibernate.connection.url" value="jdbc:sqlite:archivo.db" />
+      <property name="hibernate.cache.provider_class" value="org.hibernate.cache.NoCacheProvider" />
+      <property name="showSql" value="true" />
+      <property name="generateDdl" value="true" />
+      <!-- ojo que esto no es compatible con jpa1-->
+      <property name="hibernate.id.new_generator_mappings" value="true" />
+			<property name="connection.username"></property>
+			<property name="connection.password"></property>
+    </properties>
+  </persistence-unit>
+</persistence>
+
