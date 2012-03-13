@@ -1,0 +1,80 @@
+﻿$def with (content)
+<!--
+
+Design by NodeThirtyThree <http://www.nodethirtythree.com>
+Published by Free CSS Templates <http://www.freecsstemplates.org/>
+Released for free under a Creative Commons Attribution 2.5 License
+
+Title      : stylized
+Version    : 1.1
+Released   : 20070716
+Description: A two-column fixed width template for 1024x768 resolutions.
+
+-->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	$if "title" in content:
+		<title>$content.title</title>
+	<link rel="stylesheet" href="/static/style.css" type="text/css" media="screen" charset="utf-8" />
+	<link rel="shorcut icon" href="/static/kafx.ico" />
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+</head>
+<body>
+	<div id="logo">
+		<h1><a href="#">Hello $currentUser().name</a></h1>
+		<h2>Last connected: $:', '.join(lastConnected())</h2>
+	</div>
+	<div id="menu"></div>
+	<div id="bg">
+		<div id="page">
+			<div id="content">
+				$:content
+			</div>
+			<div id="sidebar">
+			  <div id="menu-links" class="box">
+				<h2 class="title">Main Menu</h2>
+				<div class="content">
+				  <ul>
+					<li><a href="/thread/list/">Forum</a></li>
+					<li><a href="/user/edit/">Profile edit</a></li>
+					<li><a href="/project/list/published/">Finished Projects</a></li>
+					<li><a href="/project/list/">My Projects</a></li>
+					<li><a href="/user/list/">User List</a></li>
+					<li><a href="/logout/">Logout</a></li>
+				  </ul>
+				</div>
+			  </div>
+			  <!-- end #useful-links -->
+				$if 'links' in content:
+					<div id="action-menu-links" class="box">
+						<h2 class="title">$content.linksname</h2>
+						<div class="content">
+							<ul>
+								$for link, title in content.links:
+									<li><a href="$link">$title</a></li>
+							</ul>
+						</div>
+					</div>
+			<!--end links-->
+			</div>
+			<!-- end sidebar -->
+			<div style="clear: both; height: 20px;"> </div>
+		</div>
+	</div>
+	<div id="footer">
+		  <hr>
+		  <p>Code Copyright (c) 2012 All rights reserved. <a href="http://nande.com.ar">Nande!</a>
+				Style Copyright (c) 2007 Stylized. All rights reserved. Designed by
+			<a href="http://www.nodethirtythree.com/">NodeThirtyThree</a>
+			 for
+			<a href="http://www.freecsstemplates.org/">Free CSS Templates</a>
+			.
+		  </p>
+	</div>
+</body>
+	<div style="background-attachment: scroll; background-repeat: repeat; background-image: none; background-position: 0% 0%; background-size: auto; background-origin: padding-box; background-clip: border-box; background-color: gray; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; visibility: hidden; z-index: 65534; top: 0px; left: 0px; position: absolute; border-top-color: currentColor; border-left-color: currentColor; border-right-color: currentColor; border-bottom-color: currentColor; border-top-width: medium; border-left-width: medium; border-right-width: medium; border-bottom-width: medium; border-top-style: none; border-left-style: none; border-right-style: none; border-bottom-style: none; box-shadow: 0px 0px 1px black, 5px 5px 5px rgba(0, 0, 0, 0.5059); text-align: left; text-overflow: ellipsis; opacity: 1">
+	  <object data="data:image/png;base64,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" style="vertical-align: middle"></object>
+	  <span style="display: none; background-color: transparent; color: rgb(255, 255, 255); text-shadow: 0px 0px 10px rgb(0, 0, 0), 0px 0px 4px rgb(0, 0, 0), 0px 0px 1px rgb(255, 0, 0); font-size: 10px; text-indent: 0px; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; white-space: pre"></span>
+	  <span style="top: 0px; left: 0px; right: 0px; z-index: 10; background-color: transparent; color: rgb(255, 255, 255); text-shadow: 0px 0px 10px rgb(0, 0, 0), 0px 0px 4px rgb(0, 0, 0), 0px 0px 1px rgb(255, 0, 0); font-size: 10px; text-indent: 0px; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; white-space: pre; overflow-x: hidden; overflow-y: hidden; text-overflow: ellipsis; display: block"></span>
+	</div>
+</html>

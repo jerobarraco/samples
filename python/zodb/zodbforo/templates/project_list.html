@@ -1,0 +1,44 @@
+$def with(projects, user, editable = False)
+$var title = "Project list for " + user.name
+$if user.admin:
+	$var linksname = "Actions"
+	$var links = (("/project/edit/", "Add new"),)
+	
+$for p in projects:
+	<div class="post">
+		<h2 class="title"> $p.name (${int(p.done*100)}%) </h2>
+		<div class="entry">
+			<table>
+				<tr><td>Team:</td>
+				<td>
+					Manager: $:p.manager.getViewLink()
+					| Karaokes: $:{p.karaoke and p.karaoke.getViewLink()} 
+					| Translation: $:{p.translation and p.translation.getViewLink()}
+					| Effects: $:{p.effect and p.effect.getViewLink()} 
+					| Encoding: $:{p.encode and p.encode.getViewLink()}
+					| Editor: $:{p.edition and p.edition.getViewLink()}
+				</td></tr>
+				$if editable:
+					<tr><td>Done:</td><td>
+						$for t, d in (('Karaoke', p.d_karaoke), ('Translation', p.d_translation), ('Effect', p.d_effect), ('Encode', p.d_encode),  ('Edition', p.d_edition)):
+							$(d and u"\u2714" or u"\u2718") 
+							$t 
+							<br />
+					</td></tr>
+				<tr>	<td>Size:</td><td>$p.width x $p.height</td></tr>
+				<tr>	<td>Script Size:</td><td>$p.script_size KB</td></tr>
+				<tr>	<td>Duration:</td><td>$p.duration secs</td></tr>
+				<tr>	<td>Karaoke:</td><td>$p.klines lines</td></tr>
+				<tr>	<td>Translation:</td><td>$p.tlines lines</td></tr>
+				<tr>	<td>Codecs:</td><td>$p.vcodec (video), $p.acodec (audio)</td></tr>
+			</table>
+			$if editable:
+				<p class="links">
+					<a href="/project/edit/?i=${p.key}">Edit</a>
+					$if (p.manager==user):
+						<a href="/project/delete/?i=${p.key}">Delete</a>
+						$if (p.done==1.0):
+							<a href="/project/publish/?i=${p.key}">Publish (can't undo this)</a>
+				</p>
+		</div>
+	</div>

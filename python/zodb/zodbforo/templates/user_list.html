@@ -1,0 +1,32 @@
+$def with(users, admin=False)
+$var title="User list"
+	$for u in users.values():
+		<div class="post">
+			<h2 class="title">
+				$:{u.getViewLink()}
+			</h2>
+			<p class="date">
+				Last login: $u.last_login.ctime()
+			</p>
+			<div class="entry">
+				<table>
+					<tr>
+						<td > $:{u.getImage()}</td>
+						<td> Posts: $len(u.posts)<br />
+						Open Projects: $len(u.projects)<br />
+						Closed Projects: $u.closed_projects<br />
+						Class: $u.job <br />
+						Level: ${u.level}<br />
+						XP: ${u.xp}</td>
+					</tr>
+				</table>
+				<p class="links">
+					$if (admin):
+						$if (u.banned):
+							<a class="permalink" href="/user/ban?ban=0&name=${u.name}">Unban</a>
+						$else:
+							<a href="/user/ban?ban=1&name=${u.name}">Ban!</a>
+				</p>
+			</div>
+		</div>
+		

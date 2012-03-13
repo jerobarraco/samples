@@ -1,0 +1,18 @@
+$def with (isAdmin=False, threads=[], sections=[])
+$for i, t in enumerate(threads):
+	<div class="post">
+		<h2 class="title">
+			<a href="/thread/?number=${i}">${t.name}</a> (${len(t.posts)})
+		</h2>
+		<div class="entry">
+			$if (isAdmin):
+				<p class="links">
+					<a href="/thread/edit/?number=${i}">Edit</a>
+					<a href="/thread/delete/?number=${i}">Delete</a>
+				</p>
+		</div>
+	</div>
+		
+$if (isAdmin):
+	$var links = (('/thread/edit/', 'Create Thread'),)
+	$var linksname = "Actions"

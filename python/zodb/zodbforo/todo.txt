@@ -1,0 +1,23 @@
+achievements
+notificaciones
+	level up
+
+skills
+publicar proyectos
+	editar projectos
+	mejorar puntos
+usar el otro not_allowed
+
+
+
+agregar cosas al profile view
+poner screenshot en proyecto
+no usar seeother /
+pagina de errors
+
+done
+asignar projectos segun clase
+combos de personas segun clase
+set titles
+kick from project
+que cada persona pueda editar su parte del proyecto

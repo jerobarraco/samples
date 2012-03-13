@@ -1,0 +1,9 @@
+$def with (form)
+<p>You are not logged in.</p>
+<p>
+  <form name="test" method="POST">
+		$:form.render()
+		<input type="submit" name="button" value="Login" />
+  </form>
+</p>
+<p><a href="./register/">Register</a></p>

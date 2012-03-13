@@ -1,0 +1,19 @@
+$def with (user, usernames=[])
+<div id="wrapper">
+	<div id="header">
+		<div id="menu">
+			<ul>
+				<li><a href="/thread/list/" target="content">Forum</a></li>
+				<li><a href="/user/edit/" target="content">Profile edit</a></li>
+				<li><a href="/project/list/published/" target="content">Finished Projects</a></li>
+				<li><a href="/project/list/" target="content">My Projects</a></li>
+				<li><a href="/user/list/" target="content">User List</a></li>
+				<li><a href="/logout/">Logout</a></li>
+			</ul>
+		</div>
+	<div id="logo">
+		<h1>Hello $user</h1>
+		<p>Last connected: $:', '.join(usernames)</p>
+	</div>
+	<hr />
+</div>

@@ -1,0 +1,25 @@
+$def with (number, name, posts, user)
+$var title = "%s (%s)" %(name, len(posts) )
+$for i, post in enumerate(posts):
+	<div class="post">
+		<h2 class="title">$:{post.user.getViewLink()} : ${post.title}</h2>
+		<div class="entry" id="${i}">
+			<table>
+			<tr > 
+				<td rowspan=2> $:{post.user.getImage()}</td>
+				<td height="90%">${post.text}</td>
+			</tr>
+			<tr>	
+				<td height="10%">${post.user.signature}</td>
+			</tr>
+			</table>
+			<!-- links-->
+			<p class=links">
+				$if user == post.user or user.admin:
+					<a href="/post/edit/?thread=${number}&post=${i}">Edit</a>
+			</p>
+		</div>
+	</div>
+
+$var linksname="Actions"
+$var links =(("/post/edit/?thread="+number, "Reply"), )

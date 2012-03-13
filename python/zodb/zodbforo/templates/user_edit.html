@@ -1,0 +1,8 @@
+$def with (name, form)
+$var title="Edit user: " + name
+<img src="/user/avatar/?name=${name}" />
+<form name="edit" enctype="multipart/form-data" method="POST">
+	$:form.render()
+	<br />
+	<input type="submit" value="submit" />
+</form>

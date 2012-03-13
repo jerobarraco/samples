@@ -1,0 +1,26 @@
+$def with (user, uposts)
+$var title="User: "+ user.name
+<table>
+<tr><td>
+	<img src="/user/avatar/?name=${user.name}" />
+</td><td width="100%">
+	<table>
+		<tr><td>Name:</td><td>${user.name}</td></tr>
+		<tr><td>Country:</td><td>${user.country}</td></tr>
+		<tr><td>Age:</td><td>${user.age}</td> </tr>
+		<tr><td>Gender:</td><td>${user.gender}</td> </tr>
+		<tr><td>Class:</td><td>${user.job}</td> </tr>
+		<tr><td>Posts:</td><td>${len(user.posts)}</td> </tr>
+		<tr><td>Open Projects:</td><td>$len(user.projects)</td> </tr>
+		<tr><td>Closed Projects:</td><td>${user.closed_projects}</td> </tr>
+		<tr><td>Level:</td><td>${user.level}</td> </tr>
+		<tr><td>Experience:</td><td>${user.xp}</td> </tr>
+		<tr><td>Signature:</td><td>${user.signature}</td> </tr>
+		<tr><td>Youtube</td><td><a href="$:{user.channel}">Channel</a></td> </tr>
+		<tr><td>Web</td><td><a href="$:{user.web}">${user.web}</a></td> </tr>
+	</table>
+</td>
+</tr>
+</table>
+$var linksname = "Some Posts"
+$var links = [ ["/thread/?number=%s#%s"%(p[0], p[1]), p[2].title] for p in uposts]
