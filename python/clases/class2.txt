@@ -1,0 +1,6 @@
+class Cliente:
+	nombre = ""
+	apellido = ""
+	cuit = ""
+	deudor = False
+	

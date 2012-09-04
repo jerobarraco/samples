@@ -1,0 +1,19 @@
+class Auto(): #Esto es molde
+	velocidad = 0
+	pos_x = 0
+	#direccion = 0
+	def avanzar(self):
+		#desp_y = sin(self.direccion)*self.velocidad
+		#desp_x = cos(..)
+		self.pos_x += self.velocidad
+		
+	def frenar(self):
+		self.velocidad = self.velocidad/2.0
+		
+#Instancia
+fiat = Auto()
+fiat.velocidad = 10
+
+#Otra instancia
+ford = Auto()
+ford.velocidad = 20
