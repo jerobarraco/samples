@@ -4,4 +4,4 @@ http://python.org.ar/pyar/
 http://python.org/download/
 http://www.moongate.com.ar/
 
-mail @ moongate.com.ar
+learning (at/arroba) moongate.com.ar
