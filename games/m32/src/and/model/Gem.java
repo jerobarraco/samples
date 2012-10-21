@@ -23,7 +23,7 @@ public class Gem{
 		RGBColor.BLUE, RGBColor.GREEN, RGBColor.RED
 	};
 	public static final RGBColor selColor= new RGBColor(255	,127,	80	); //en honor a mi bb//new RGBColor(245,	222,	179);no se cual es
-	public static final int maxType = 2;
+	public static final int maxType = 4;
 	public static Object3D molde = null;
 	
 	public RGBColor mycolor = null;
