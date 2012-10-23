@@ -1,3 +1,7 @@
+"""
+Clase 03
+Tema Ifs y elifs
+"""
 import pygame
 from pygame.locals import *
 

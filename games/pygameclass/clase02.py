@@ -1,3 +1,7 @@
+"""
+Clase 02
+while y for loop
+"""
 import pygame
 from pygame.locals import *
 
