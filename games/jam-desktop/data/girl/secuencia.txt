@@ -1,0 +1,17 @@
+centro
+izquierda
+centro 
+derecha
+parpadeos del 1 al 5
+izquierda
+centro
+derecha
+centro 
+izquierda
+centro
+derecha
+
+-cuando pasa el chico- deja de bambolearse y queda con una cara-
+Emosionada
+Disgustada
+Enamorada

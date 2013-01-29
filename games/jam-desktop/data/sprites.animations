@@ -1,0 +1,154 @@
+0-parada
+{
+  looping: True
+  frame: centro, 0, 0, 100
+  frame: izquierda, 0, 0, 100
+  frame: centro, 0, 0, 100
+  frame: derecha, 0, 0, 100
+  frame: parpadeo1, 0, 0, 100
+  frame: parpadeo2, 0, 0, 100
+  frame: parpadeo3, 0, 0, 100
+  frame: parpadeo4, 0, 0, 100
+  frame: parpadeo5, 0, 0, 100
+  frame: izquierda, 0, 0, 100
+  frame: centro, 0, 0, 100
+  frame: derecha, 0, 0, 100
+  frame: centro, 0, 0, 100
+  frame: izquierda, 0, 0, 100
+  frame: centro, 0, 0, 100
+  frame: derecha, 0, 0, 100
+}
+0-neutral
+{
+  looping: True
+  frame: emocionada, 0, 0, 100
+}
+0-likes
+{
+  looping: True
+  frame: enamorada, 0, 0, 100
+}
+0-dislikes
+{
+  looping: True
+  frame: disgustada, 0, 0, 100
+}
+go
+{
+  looping: True
+  frame: BOTON2, 0, 0, 1000
+  frame: BOTON1, 0, 0, 1000
+}
+1-parada
+{
+  looping: True
+  frame: centro (1), 0, 0, 100
+  frame: izquierda (1), 0, 0, 100
+  frame: centro (1), 0, 0, 100
+  frame: derecha (1), 0, 0, 100
+  frame: parpadeo1 (1), 0, 0, 100
+  frame: parpadeo2 (1), 0, 0, 100
+  frame: parpadeo3 (1), 0, 0, 100
+  frame: parpadeo4 (1), 0, 0, 100
+  frame: parpadeo5 (1), 0, 0, 100
+  frame: izquierda (1), 0, 0, 100
+  frame: centro (1), 0, 0, 100
+  frame: derecha (1), 0, 0, 100
+  frame: centro (1), 0, 0, 100
+  frame: izquierda (1), 0, 0, 100
+  frame: centro (1), 0, 0, 100
+  frame: derecha (1), 0, 0, 100
+}
+1-neutral
+{
+  looping: True
+  frame: emocionada (1), 0, 0, 100
+}
+1-likes
+{
+  looping: True
+  frame: enamorada (1), 0, 0, 100
+}
+1-dislikes
+{
+  looping: True
+  frame: disgustada (1), 0, 0, 100
+}
+2-parada
+{
+  looping: True
+  frame: centro (2), 0, 0, 100
+  frame: izquierda (2), 0, 0, 100
+  frame: centro (2), 0, 0, 100
+  frame: derecha (2), 0, 0, 100
+  frame: parpadeo1 (2), 0, 0, 100
+  frame: parpadeo2 (2), 0, 0, 100
+  frame: parpadeo3 (2), 0, 0, 100
+  frame: parpadeo4 (2), 0, 0, 100
+  frame: parpadeo5 (2), 0, 0, 100
+  frame: izquierda (2), 0, 0, 100
+  frame: centro (2), 0, 0, 100
+  frame: derecha (2), 0, 0, 100
+  frame: centro (2), 0, 0, 100
+  frame: izquierda (2), 0, 0, 100
+  frame: centro (2), 0, 0, 100
+  frame: derecha (2), 0, 0, 100
+}
+2-neutral
+{
+  looping: True
+  frame: emocionada (2), 0, 0, 100
+}
+2-likes
+{
+  looping: True
+  frame: enamorada (2), 0, 0, 100
+}
+2-dislikes
+{
+  looping: True
+  frame: disgustada (2), 0, 0, 100
+}
+3-parada
+{
+  looping: True
+  frame: centro (3), 0, 0, 100
+  frame: izquierda (3), 0, 0, 100
+  frame: centro (3), 0, 0, 100
+  frame: derecha (3), 0, 0, 100
+  frame: parpadeo1 (3), 0, 0, 100
+  frame: parpadeo2 (3), 0, 0, 100
+  frame: parpadeo3 (3), 0, 0, 100
+  frame: parpadeo4 (3), 0, 0, 100
+  frame: parpadeo5 (3), 0, 0, 100
+  frame: izquierda (3), 0, 0, 100
+  frame: centro (3), 0, 0, 100
+  frame: derecha (3), 0, 0, 100
+  frame: centro (3), 0, 0, 100
+  frame: izquierda (3), 0, 0, 100
+  frame: centro (3), 0, 0, 100
+  frame: derecha (3), 0, 0, 100
+}
+3-neutral
+{
+  looping: True
+  frame: emocionada (3), 0, 0, 100
+}
+3-likes
+{
+  looping: True
+  frame: enamorada (3), 0, 0, 100
+}
+3-dislikes
+{
+  looping: True
+  frame: disgustada (3), 0, 0, 100
+}
+ball
+{
+  looping: True
+  frame: esfera1, 0, 0, 100
+  frame: esfera2, 0, 0, 100
+  frame: esfera3, 0, 0, 100
+  frame: esfera4, 0, 0, 100
+}

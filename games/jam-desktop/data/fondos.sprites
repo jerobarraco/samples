@@ -1,0 +1,32 @@
+fondos.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+cuarto
+  rotate: false
+  xy: 0, 350
+  size: 552, 345
+  orig: 0, 350
+  offset: 0, 0
+  index: -1
+disco
+  rotate: false
+  xy: 0, 0
+  size: 875, 350
+  orig: 0, 0
+  offset: 0, 0
+  index: -1
+credits
+  rotate: false
+  xy: 0, 695
+  size: 492, 320
+  orig: 0, 695
+  offset: 0, 0
+  index: -1
+start
+  rotate: false
+  xy: 492, 695
+  size: 480, 320
+  orig: 492, 695
+  offset: 0, 0
+  index: -1
