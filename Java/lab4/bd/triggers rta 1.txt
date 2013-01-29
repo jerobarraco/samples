@@ -1,0 +1,3 @@
+a) create trigger t_val_alq for Alquila BEFORE insert or update
+b) create trigger t_devol for Devuelve AFTER insert or update
+c) create trigget t_devol_desp for Devuelve BEFORE insert or update
