@@ -1,6 +1,6 @@
 #include <Python.h>
 
-int main(int, char **) {
+int main(int, char **){
   Py_Initialize();
 
   PyRun_SimpleString("import hello");
