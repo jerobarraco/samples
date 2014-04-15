@@ -4,8 +4,6 @@
 #include <iostream>
 using namespace std;
 typedef void (*Callback)(void *self, void *sender, void *param);
-//typedef fnc callback;
-//typedef function<void(int param)> callback;
 
 struct Subscriber{
     Callback cb;
@@ -37,40 +35,33 @@ public:
         s->self = self;
         subs.push_back(s);
     }
-
     void fire(void * sender, void* param) {
         Subscriber *s;
         std::vector<Subscriber* >::iterator it;
         for (it = subs.begin(); it != subs.end(); it++){
-            //for (int i = 0 ; i<subs.size(); i++){
-            //Subscriber *s = subs[i];
             s = *it;
             s->cb(s->self, sender, param);
-            /*Callback cb = s->cb;
-            cb(s->self, sender, param);*/
         }
     }
     void clear(){
         std::vector<Subscriber* >::iterator it;
         Subscriber *s;
         for (it = subs.begin(); it != subs.end(); it++){
-            //for (int i = 0 ; i<subs.size(); i++){
             s = *it;
             delete s;
         };
         subs.clear();
     }
-    friend bool operator<(const Event& a, const Event& b)//for crappy map
-    {
+    friend bool operator<(const Event& a, const Event& b){
+        //for crappy map
          return !! (int)(&a<&b);//i dont really care on sorting, why should i?
-     }
+    }
     Event(){
         name="";
     }
     ~Event() {
         clear();
     }
-
 };
 
 
@@ -110,7 +101,7 @@ void PlayerDied(void* self, void* sender, void* p){
 }
 
 int main(){
-    static std::string evname = "PlayerDied";
+  static std::string evname = "PlayerDied";
   Event* ev = EM.get(evname);
   int a = 60;
   char *c = "c";
