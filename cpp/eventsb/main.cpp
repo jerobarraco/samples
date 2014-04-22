@@ -2,116 +2,46 @@
 #include <map>
 #include <string>
 #include <iostream>
+#include "event.h"
 using namespace std;
-typedef void (*Callback)(void *self, void *sender, void *param);
 
-struct Subscriber{
-    Callback cb;
-    void* self;
-};
+static EventManager EM;//you can have as many events managers as you want, even one per thread
+static std::string evname = "PlayerDied";
 
-class Event {
-public:
-    std::vector<Subscriber* > subs;//criptions
-    std::string name;
-    Event(std::string name){
-        this->name = name;
-    }
-    Event(const Event &other){//for map
-        *this=other;
-    }
-    Event& operator=(const Event &other){//for crappy map
-        clear();
-        for (unsigned int i = 0 ; i<other.subs.size(); i++){
-            Subscriber *s = other.subs[i];
-            subscribe(s->self, s->cb);
-        };
-        name = other.name;
-        return *this;
-    }
-    void subscribe(void* self, Callback cb) {
-        Subscriber *s = new Subscriber;
-        s->cb = cb;
-        s->self = self;
-        subs.push_back(s);
-    }
-    void fire(void * sender, void* param) {
-        Subscriber *s;
-        std::vector<Subscriber* >::iterator it;
-        for (it = subs.begin(); it != subs.end(); it++){
-            s = *it;
-            s->cb(s->self, sender, param);
-        }
-    }
-    void clear(){
-        std::vector<Subscriber* >::iterator it;
-        Subscriber *s;
-        for (it = subs.begin(); it != subs.end(); it++){
-            s = *it;
-            delete s;
-        };
-        subs.clear();
-    }
-    friend bool operator<(const Event& a, const Event& b){
-        //for crappy map
-         return !! (int)(&a<&b);//i dont really care on sorting, why should i?
-    }
-    Event(){
-        name="";
-    }
-    ~Event() {
-        clear();
-    }
-};
-
-
-class EventManager{
-    std::map<std::string, Event*> events;
-public:
-    Event *get(std::string name){
-        Event * ev = NULL;
-        try{
-            ev = events.at(name);
-        }catch(...){
-         //like i care
-        }
-        if(!ev){//handles error
-            ev = new Event(name);
-            events.insert(std::pair<std::string, Event*> (name, ev));
-        }
-        return ev;
-    }
-    void clear(){
-        Event * e;
-        std::map<std::string, Event*>::iterator it;
-        for (it=events.begin(); it!=events.end(); ++it){
-            e = it->second;
-            delete e;
-        }
-        events.clear();
-    }
-    ~EventManager(){
-        clear();
-    }
-};
-
-static EventManager EM;
-void PlayerDied(void* self, void* sender, void* p){
+void PlayerDied(void* self, void* sender, void* p){//static func
     cout << "self " << (long)self << " sender " << sender << " p " << (char*)p << endl;
 }
 
+class SomeClass{
+    Event *ev;
+
+    int i;
+public:
+    SomeClass(int i){
+        if((ev = EM.get(evname))){
+            ev->subscribe(this, SomeClass::onPlayerDied);//can be used with classes :)
+        }
+        this->i = i;
+    }
+    static void onPlayerDied(void* self, void* sender, void* param){
+        cout <<"PLayer just died!! i am " << ((SomeClass*)self)->i << " param is " << (char*)param << endl;
+    }
+    ~SomeClass(){
+        if(ev){
+            this->ev->unsubscribe(this);
+        }
+    }
+};
+
 int main(){
-  static std::string evname = "PlayerDied";
-  Event* ev = EM.get(evname);
-  int a = 60;
-  char *c = "c";
-  EM.get(evname)->subscribe(NULL, PlayerDied);
+    SomeClass a(1), b(2), c(3);
+
+  char *str = "holiwi";
+  EM.get(evname)->subscribe(NULL, PlayerDied);//can use with fully static methods
   EM.get(evname)->subscribe((void*)1, PlayerDied);
-  EM.get(evname)->subscribe((void*)2, PlayerDied);
-  EM.get(evname)->subscribe((void*)3, PlayerDied);
   cout <<" probando"<< endl;
   //"dios ayudanos plz.jpg"
-  EM.get(evname)->fire((void*)1, c);
+  EM.get(evname)->fire((void*)1,str);
 }
 
 

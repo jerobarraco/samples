@@ -20,7 +20,7 @@ int main()
         a +=1;
     );
     clock_t t2=clock();
-    cout << ((t2-t1)/(double)CLOCKS_PER_SEC)*1000 << " milliseconds of processing fakefor\n";
+    cout << ((t2-t1))*1000 << " milliseconds of processing fakefor\n";
 
 
     t1=clock();
@@ -29,7 +29,7 @@ int main()
         a +=1;
     };
     t2=clock();
-    cout << ((t2-t1)/(double)CLOCKS_PER_SEC)*1000 << " milliseconds of processing for\n";
+    cout << ((t2-t1))*1000 << " milliseconds of processing for\n";
     return 0;
 }
 
