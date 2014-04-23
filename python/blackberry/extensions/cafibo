@@ -1,0 +1,10 @@
+#!/bin/bash
+source /home/nande/BB/ndk/bbndk-env_10_0_10_822.sh
+rm fib.so
+rm fib.o
+#qcc -Vgcc_ntoarmv7le -shared -fPIC -c -I/home/nande/dev/moongate/Python/Python-3.2.3/Include fib.c
+#qcc -Vgcc_ntoarmv7le -shared -l/home/nande/dev/moongate/Python/libs/arm/libpython3.2m.so -lbb -lbbsystem -lbps -Wl -o fib.so fib.o
+
+
+qcc -Vgcc_ntox86 -shared -fPIC -c -I/home/nande/dev/moongate/Python/Python-3.2.3/Include fib.c
+qcc -Vgcc_ntox86 -shared -o fib.so fib.o

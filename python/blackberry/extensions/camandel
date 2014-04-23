@@ -1,0 +1,6 @@
+#!/bin/bash
+source /home/nande/BB/ndk/bbndk-env_10_0_10_822.sh
+rm mandelbrot.so
+rm mandelbrot.o
+qcc -Vgcc_ntox86 -shared -fPIC -c -I/home/nande/dev/moongate/Python/Python-3.2.3/Include mandelbrot.c
+qcc -Vgcc_ntox86 -shared -l/home/nande/dev/moongate/Python/libs/x86/libpython3.2m.so.1.0 -lbb -lbbsystem -lbps -Wl -o mandelbrot.so mandelbrot.o

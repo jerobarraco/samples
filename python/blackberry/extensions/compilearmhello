@@ -1,0 +1,6 @@
+#!/bin/bash
+source /home/nande/BB/ndk/bbndk-env_10_2_0_1155.sh
+rm hello.so
+rm hello.o
+qcc -Vgcc_ntoarmv7le -shared -fPIC -c -I/home/nande/dev/moongate/Python/Python-3.2.3/Include hello.c
+qcc -Vgcc_ntoarmv7le -shared -l/home/nande/dev/moongate/Python/libs/arm/libpython3.2m.so -lbb -lbbsystem -lbps -Wl -o hello.so hello.o

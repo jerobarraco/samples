@@ -1,0 +1,1 @@
+cc -Vgcc_ntox86 hello.c -I/home/nande/dev/moongate/Python/Python-3.2.3/Include -l/home/nande/dev/moongate/Python/libs/x86/libpython3.2m.so.1.0 -o keywdarg

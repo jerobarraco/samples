@@ -1,0 +1,6 @@
+<qnx>
+  <id>com.moongate.eventexample</id>
+  <versionNumber>1</versionNumber>
+  <name>Events</name>
+  <asset path="events" entry="true">events</asset>
+</qnx>

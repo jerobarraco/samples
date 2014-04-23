@@ -1,0 +1,5 @@
+#!/bin/bash
+source /home/nande/BB/ndk/bbndk-env_10_2_0_1155.sh
+qcc -Vgcc_ntox86 -shared -fPIC -c -I/home/nande/dev/moongate/Python/Python-3.2.3/Include hello.c
+qcc -Vgcc_ntox86 -shared -l/home/nande/dev/moongate/Python/libs/x86/libpython3.2m.so.1.0 -lbb -lbbsystem -lbps -Wl -o hello.so hello.o
+
