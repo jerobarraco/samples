@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>"Hello Triangle" - Anton's OpenGL 4 Notes</title>
+<link rel="stylesheet" type="text/css" href="greysans.css">
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-38287357-1']);
+  _gaq.push(['_setDomainName', 'antongerdelan.net']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</head>
+
+<body>
+<a href="index.html">[index]</a>
+<h1>"Hello Triangle" - OpenGL 4 Up and Running</h1>
+
+<p>
+The idea of this article is to give a brief <b>overview</b> of all of the keys parts of an OpenGL 4
+programme, without looking at each part in any detail. If you have used another graphics API (or an
+older version of OpenGL) before, and you want an at-a-glance look at the differences, then this
+article is for you. If you have never done graphics programming before then this is also a nice way
+of getting started with something that "works", and can be modified. The following articles will step
+back and explain each part in more detail.
+</p>
+
+<h2>Install Libraries</h2>
+
+<h3>Get Main OpenGL Libraries</h3>
+
+<!-- ANTON UPDATE START -->
+
+<p>
+The main libraries that you need is <b>libGL</b>. There is also a set of utility
+functions in a library called <b>libGLU</b>, but you more than likely won't need
+it. <a href="http://www.opengl.org/">OpenGL</a> is a bit weird in that you
+don't download a library from the website. The
+<a href="http://www.khronos.org/">Khronos</a> group that control the
+specification only provides the interface. The actual implementations are done
+by video hardware manufacturers or other developers. You need to have a very
+modern graphics processor to support OpenGL version 4.x, and even so you might
+be limited to an earlier implementation if the drivers don't exist yet.
+</p>
+
+<p>To get the latest <tt>libgl</tt> and <tt>libglu</tt>:</p>
+
+<ul>
+<li><b>Windows</b> - Just upgrade the video drivers (Nvidia, AMD, or Intel).</li>
+<li><b>Linux</b> -
+By default <a href="http://www.mesa3d.org/">MESA</A> is used, but typically it is a bit slow, and is
+currently only supporting OpenGL 3.0. To get OpenGL 4 support, switch to proprietary hardware drivers
+(Nvidia, AMD, or Intel) or download from manufacturer website.
+</li>
+<li>
+<b>Mac</b> - Apple has its own GL implementation. Check if your video card can
+support OpenGL 3 or 4 first. Wikipedia
+articles on AMD and Nvidia cards have a good list. If it should, then you can
+try to upgrade to the newest operating system - this will grab Apple's latest GL
+libraries. If you can get OpenGL 3.2 or newer (check by running this article's
+demo code) then you can do most things from OpenGL 4. Unfortunately, older Macs
+are still stuck with OpenGL 2.1, which is not compatible. In the next sections
+we will look at using 3.2 instead - this should work; otherwise dual boot or
+live disc boot to Linux!
+</li>
+</ul>
+
+<h3>Starting the GL Context With GLFW and GLEW</h3>
+
+<p>
+<a href="http://www.glfw.org">GLFW</a> is a helper library that will start
+the OpenGL "context" for us so that it talks to (almost) any operating system in
+the same way. The context is a running copy of OpenGL, tied to a window on the
+operating system. <b>Note:</b> I've updated this tutorial to use GLFW version
+3.0. The interface differs slightly from the previous versions.
+</p>
+
+<p>
+The compiled libraries that I downloaded from the website didn't work for me, so
+I built them myself from the source code. You might need to do this.
+</p>
+
+<p>The
+documentation tells us that we need to add a <tt>#define</tt> before including
+the header if we are going to use the dynamic version of the library:
+</p>
+
+<textarea rows=2>
+#define GLFW_DLL
+#include <GLFW/glfw3.h></textarea>
+
+<p>
+There's a library called <a href="http://glew.sourceforge.net/">GLEW </a>
+that makes sure that we include that latest version of GL, and not a default
+[ancient] version on the system path. It also handles GL extensions. On Windows
+if you try to compile without GLEW you will see a list of unrecognised GL
+functions and constants - that means you're using the '90s Microsoft GL. If you
+are using MinGW then you'll need to compile the library yourself. Much the same
+as with GLFW, the binaries on the webpage aren't entirely reliable - rebuild
+locally for best results.
+</p>
+
+<p>Include GLEW <u>before</u> GLFW to use the latest GL libraries:</p>
+
+<textarea rows=3>
+#include <GL/glew.h>
+#define GLFW_DLL
+#include <GLFW/glfw3.h></textarea>
+
+<p>
+I've uploaded my Windows builds of both for MinGW's GCC compilers here:
+</p>
+
+<ul>
+<li>GLFW3 <a href="libs/glfw_mingw_win64.zip">Win32 MinGW .dll</a></li>
+<li>GLEW <a href="libs/glew_mingw_win64.zip">Win32 MinGW .dll</a></li>
+</ul>
+
+
+<!-- ANTON UPDATE END -->
+
+<h2>Initialisation Code</h2>
+
+<p>
+Okay, we can code up a minimal shell that will start the GL context, print the version, and quit.
+You might like to compile and run this in a terminal to make sure that everything is working so
+far, and that your video drivers can support OpenGL 4.
+</p>
+
+<textarea rows=45>
+#include <GL/glew.h> // include GLEW and new version of GL on Windows
+#include <GLFW/glfw3.h> // GLFW helper library
+#include <stdio.h>
+
+int main () {
+  // start GL context and O/S window using the GLFW helper library
+  if (!glfwInit ()) {
+    fprintf (stderr, "ERROR: could not start GLFW3\n");
+    return 1;
+  } 
+
+	// uncomment these lines if on Apple OS X
+  /*glfwWindowHint (GLFW_CONTEXT_VERSION_MAJOR, 3);
+  glfwWindowHint (GLFW_CONTEXT_VERSION_MINOR, 2);
+  glfwWindowHint (GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+  glfwWindowHint (GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);*/
+
+  GLFWwindow* window = glfwCreateWindow (640, 480, "Hello Triangle", NULL, NULL);
+  if (!window) {
+    fprintf (stderr, "ERROR: could not open window with GLFW3\n");
+    glfwTerminate();
+    return 1;
+  }
+  glfwMakeContextCurrent (window);
+                                  
+  // start GLEW extension handler
+  glewExperimental = GL_TRUE;
+  glewInit ();
+
+  // get version info
+  const GLubyte* renderer = glGetString (GL_RENDERER); // get renderer string
+  const GLubyte* version = glGetString (GL_VERSION); // version as a string
+  printf ("Renderer: %s\n", renderer);
+  printf ("OpenGL version supported %s\n", version);
+
+  // tell GL to only draw onto a pixel if the shape is closer to the viewer
+  glEnable (GL_DEPTH_TEST); // enable depth-testing
+  glDepthFunc (GL_LESS); // depth-testing interprets a smaller value as "closer"
+
+  /* OTHER STUFF GOES HERE NEXT */
+  
+  // close GL context and any other GLFW resources
+  glfwTerminate();
+  return 0;
+}</textarea>
+
+<p>
+There are 4 lines in the above code that you should uncomment if you're on
+Apple OS X. We will talk about this in the next tutorial. The short explanation
+is that it will get the newest available version of OpenGL on Apple, which will
+be 4.1 or 3.3 on Mavericks, and 3.2 on pre-Mavericks systems. On other systems
+it will tend to pick 3.2 instead of the newest version, which is unhelpful. To
+improve support for newer OpenGL releases, we can put the flag
+<tt>glewExperimental = GL_TRUE;</tt> before starting GLEW.
+</p>
+
+<p>
+Make sure that your library paths to GLFW and GLEW are correct. I copied the
+<tt>include</tt> folders from GLEW and GLFW into the same folder as my project,
+so my <tt>include</tt> folder contains a folder called <tt>GLFW</tt>, and a
+folder called <tt>GL</tt>. I am using MinGW and compile with this line:
+</p>
+
+<p>
+<tt>
+g++ -o hellot.exe main.cpp glfw3dll.a libglew32.dll.a -I include -L./ -lglew32 -lglfw3 -lopengl32
+</tt>
+</p>
+
+<p>
+I put the GLFW and GLEW library files in my local folder, and told it to look
+there for the dynamic libraries with <tt>-L ./</tt>. It should find the opengl32
+library on the system path. On Linux you'll most likely install <i>via</i>
+repositories, and you won't need the <tt>-I</tt> or <tt>-L</tt> path bits. You
+also won't need the <tt>glfw3dll.a</tT> and <tt>libglew32.dll.a</tt> files. The
+OpenGL library will be called <tt>libGL</tt>. On Linux I have this command:
+</p>
+
+<tt>
+g++ -o hellot main.cpp -lglfw -lGL -lGLEW
+</tt>
+
+<p>
+Of course, you can compile this as pure C with gcc or another C compiler as
+well. I tend to sneak in a few C++ short-cuts like <tt>bool</tt> as a personal
+preference; I tend to use what they call "C++--".
+</p>
+
+<p>
+If you're having trouble linking the libraries, then I suggest building
+the samples that come with the libraries first, and having a read through
+their install instructions for your operating system. Do you have the correct
+version of the library for your compiler? Are you building a debug or release
+version - if so are the libraries in the corresponding place in the IDE menu?
+Are you building a 32-bit or 64-bit programme - if so does the library match?
+If it still isn't working, try building your own copy of the libraries from
+source code - I had to do this for both GLFW3 and GLEW.
+</p>
+
+<p>If I run <tt>hellot.exe</tt> in the command line I get this:</p>
+
+<div class="centre">
+<img src="images/mingwwin64.png" />
+</div>
+
+<p>
+This tells me that my Windows driver can run up to OpenGL version 4.3.
+On Mac it might say version 3.2 or 3.3. That's okay, we can make a few small
+changes and it will run almost all of the stuff from version 4. I'll point
+these out.
+</p>
+
+<h2>Define a Triangle in a Vertex Buffer</h2>
+
+<p>Okay, let's define a triangle from 3 points. Later, we can look at doing transformations and perspective,
+but for now let's draw it flat onto the final screen area; x between -1 and 1, y between -1 and 1, and z = 0.
+</p>
+
+<div class="centre">
+<img src="images/vertex_buffer.png" width=512/><br />
+<small><i>It always helps to draw your problem on paper first. Here I want to
+define a triangle, with the points given in clock-wise order, that fits
+into the screen area of -1:1 on x and y axes.</i></small>
+</div>
+
+<p>
+We will pack all of these points into a big array of floating-point numbers; 9 in total. We will start with
+the top point, and proceed clock-wise in order: xyzxyzxyz. The order should always be in the same winding
+direction, so that we can later determine which side is the front, and which side is the back. We can
+start writing this under the "<tt>/* OTHER STUFF GOES HERE NEXT */</tt>" comment, from above.
+</p>
+
+<textarea rows=5>
+float points[] = {
+   0.0f,  0.5f,  0.0f,
+   0.5f, -0.5f,  0.0f,
+  -0.5f, -0.5f,  0.0f
+};</textarea>
+
+<p>
+We will copy this chunk of memory onto the graphics cards in a unit called a <b>vertex buffer object</b>
+(VBO). To do this we "generate" an empty buffer, set it as the current buffer in OpenGL's state machine
+by "binding", then copy the points into the currently bound buffer:
+</p>
+
+<textarea rows=4>
+GLuint vbo = 0;
+glGenBuffers (1, &vbo);
+glBindBuffer (GL_ARRAY_BUFFER, vbo);
+glBufferData (GL_ARRAY_BUFFER, 9 * sizeof (float), points, GL_STATIC_DRAW);</textarea>
+
+<p>
+The last line tells GL that the buffer is the size of 9 floating point numbers, and gives it the address of
+the first value.
+</p>
+
+<p>
+Now an unusual step. Most meshes will use a collection of vertex buffers; one for
+vertex points, one for texture-coordinates, one for vertex normals, etc. In
+older GL implementations we would have to bind each one, and define their memory
+layout, <b>every time that we draw the mesh</b>. To simplify that, we have new
+thing called the <b>vertex attribute object</b> (VAO), which remembers all of
+the vertex buffers that you want to use, and the memory layout of each one. We
+set up the vertex array object once per mesh. When we want to draw, all we do
+then is bind the VAO and draw.
+</p>
+
+<textarea rows="6">
+GLuint vao = 0;
+glGenVertexArrays (1, &vao);
+glBindVertexArray (vao);
+glEnableVertexAttribArray (0);
+glBindBuffer (GL_ARRAY_BUFFER, vbo);
+glVertexAttribPointer (0, 3, GL_FLOAT, GL_FALSE, 0, NULL);</textarea>
+
+<p>
+Here we tell GL to generate a new VAO for us. It sets an unsigned integer to
+identify it with later. We bind it, to bring it in to focus in the state
+machine. This lets us enable the first attribute; 0. We are only using a single
+vertex buffer, so we know that it will be attribute location 0. The
+<tt>glVertexAttribPointer</tt> function defines the layout of our first vertex
+buffer; "0" means define the layout for attribute number 0. "3" means that the
+variables are <tt>vec3</tt> made from every 3 floats (<tt>GL_FLOAT</tt>) in the
+buffer.
+</p>
+
+<p>
+You might try compiling at this point to make sure that there were no mistakes.
+</p>
+
+<h2>Shaders</h2>
+
+<p>
+We need to use a shader programme, written in OpenGL Shader Language (GLSL), to define <b>how to draw</b>
+our shape from the vertex attribute object. You will see that the attribute pointer from the VAO will match
+up to our input variables in the shader.
+</p>
+
+<p>
+This shader programme is made from the minimum 2 parts; a <b>vertex shader</b>, which describes where the
+3d points should end up on the display, and a <b>fragment shader</b> which colours the surfaces. Both are
+be written in plain text, and look a lot like C programmes. Loading these from plain-text files would be
+nicer; I just wanted to save a bit of web real-estate by hard-coding them here.</p>
+
+<textarea rows="6">
+const char* vertex_shader =
+"#version 400\n"
+"in vec3 vp;"
+"void main () {"
+"  gl_Position = vec4 (vp, 1.0);"
+"}";</textarea>
+
+<p>
+The first line says which version of the shading language to use; in this case
+4.0.0. <b>If you're limited to OpenGL 3</b>, change the first line from "400" to
+"150"; the version of the shading language compatible with OpenGL 3.2, or "330",
+for OpenGL 3.3.
+My vertex shader has 1 input variable; a <tt>vec3</tt> (vector made from 3 floats), which matches up to
+our VAO's attribute pointer. This means that each vertex shader gets 3 of the 9 floats from our buffer -
+therefore 3 vertex shaders will run concurrently; each one positioning 1 of the vertices. The output has
+a reserved name <tt>gl_Position</tt> and expects a 4d float. You can see that I haven't modified this at
+all, just added a 1 to the 4th component. The 1 at the end just means "don't calculate any perspective".
+</p>
+
+<textarea rows="6">
+const char* fragment_shader =
+"#version 400\n"
+"out vec4 frag_colour;"
+"void main () {"
+"  frag_colour = vec4 (0.5, 0.0, 0.5, 1.0);"
+"}";</textarea>
+
+<p>
+Again, you may need to change the first line of the fragment shader if you are
+on OpenGL 3.2 or 3.3.
+My fragment shader will run once per pixel-sized <b>fragment</b> that the surface of the shape covers.
+We still haven't told GL that it will be a triangle (it could be 2 lines). You can guess that for a triangle,
+we will have lots more fragment shaders running than vertex shaders for this shape. The fragment shader
+has one job - setting the colour of each fragment. It therefore has 1 output - a 4d vector representing
+a colour made from red, blue, green, and alpha components - each component has a value between 0 and 1.
+We aren't using the alpha component. Can you guess what colour this is?
+</p>
+
+<p>
+Before using the shaders we have to load the strings into a GL shader, and compile them.
+</p>
+
+<textarea rows="6">
+GLuint vs = glCreateShader (GL_VERTEX_SHADER);
+glShaderSource (vs, 1, &vertex_shader, NULL);
+glCompileShader (vs);
+GLuint fs = glCreateShader (GL_FRAGMENT_SHADER);
+glShaderSource (fs, 1, &fragment_shader, NULL);
+glCompileShader (fs);</textarea>
+
+<p>
+Now, these compiled shaders must be combined into a single, executable GPU shader programme. We create an empty
+"program", attach the shaders, then link them together.
+</p>
+
+<textarea rows="4">
+GLuint shader_programme = glCreateProgram ();
+glAttachShader (shader_programme, fs);
+glAttachShader (shader_programme, vs);
+glLinkProgram (shader_programme);</textarea>
+
+<h2>Drawing</h2>
+
+<p>
+We draw in a loop. Each iteration draws the screen once; a "frame" of rendering. The loop
+finishes if the window is closed. Later we can also ask GLFW is the escape key has been
+pressed.
+</p>
+
+<textarea rows="12">
+while (!glfwWindowShouldClose (window)) {
+  // wipe the drawing surface clear
+  glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glUseProgram (shader_programme);
+  glBindVertexArray (vao);
+  // draw points 0-3 from the currently bound VAO with current in-use shader
+  glDrawArrays (GL_TRIANGLES, 0, 3);
+  // update other events like input handling 
+  glfwPollEvents ();
+  // put the stuff we've been drawing onto the display
+  glfwSwapBuffers (window);
+}</textarea>
+
+<p>
+First we clear the drawing surface, then set the shader programme that should
+be "in use" for all further drawing. We set our VAO (not the VBO) as the
+input variables that should be used for all further drawing (in our case just
+some vertex points). Then we can draw, and we want to draw in triangles mode
+(1 triangle for every 3 points), and draw from point number 0, for 3 points.
+GLFW3 requires that we manually call <tt>glfwPollEvents()</tt> to update things
+non-graphical events like key-presses.
+Finally, we flip the swap surface onto the screen, and the screen onto the next
+drawing surface (we have 2 drawing buffers). Done!
+</p>
+
+<div class="centre">
+<img src="images/hellotriangle.png" />
+</div>
+
+<h2>Experimenting</h2>
+
+<ul>
+<li>
+Load the shader strings from text files called <tt>test_vs.glsl</tt> and <tt>test_fs.glsl</tt> (a naming
+convention is handy).
+</li>
+<li>
+Change the colour of the triangle in the fragment shader.
+</li>
+<li>
+Try to move the shape in the vertex shader e.g. <tt>vec4 (vp.x, vp.y + 1.0, vp.z, 1.0);</tt>
+</li>
+<li>
+<b>Be Square!</b> Try to add another triangle to the list of points and make a square shape. You will have to change
+several variables when setting up the buffer and drawing the shape. Which variables do you need to keep
+track of for each triangle (hint: not much...).
+</li>
+<li>
+Try drawing with <tt>GL_LINE_STRIP</tt> or <tt>GL_LINES</tt> or <tt>GL_POINTS</tt> instead of triangles.
+Does it put the lines where you expect? How big are the points by default?
+</li>
+<li>
+Try changing the background colour by using <tt>glClearColor ()</tt> before the rendering loop. Something
+grey-ish is usually fairly neutral; 0.6f, 0.6f, 0.8f, 1.0f.
+</li>
+<li>
+<b>Now I Want to See Two Dragons!</b>
+Try creating a second VAO, and drawing 2 shapes (remember to bind the second VAO before drawing again).
+</li>
+<li>
+Try creating a second shader programme, and draw the second shape a different colour (remember to "use"
+the second shader programme before drawing again).
+</li>
+</ul>
+
+<h2>Common Mistakes</h2>
+
+<p>
+Firstly, if you get a crash executing <tt>glGenVertexArrays()</tt>, try adding
+the <tt>glewExperimental = GL_TRUE;</tt> line before initialising GLEW. If
+you're on an Apple machine, try uncommenting the code where we "hint" the
+version to use.
+</p>
+
+<h3>GLSL Mistakes</h3>
+
+<p>
+In OpenGL, your mistakes are mostly from mis-using the interface (it's not the most intuitive API ever...
+to put it kindly).
+These mistakes often happen in the shaders. In the next article we will look at printing out any mistakes
+that are found when the shaders compile, and print any problems with matching the vertex shader to the
+fragment shader found during the linking process. This is going to catch almost all of your errors, so
+this should be your first port-of-call when diagnosing a problem.
+</p>
+
+<h3>GL Function Parameter Mistakes</h3>
+
+<p>
+You can also easily make small mistakes in the C interface. GL uses a lot of [unsigned] <b>integers</b>
+(aka "<tt>GLuint</tt>") to identify handles to variables i.e. the vertex buffer, the vertex array, the shaders, the shader programme, and so on. GL
+also uses a lot of enumerated types like <tt>GL_TRIANGLES</tt> which also resolve to <b>integers</b>. This means
+that if you mix these up (by putting function parameters in the wrong order, for example), GL will think
+that you have given it valid inputs, and won't complain. In other words, <b>the GL interface is very poor
+at using strong typing</b> for picking up errors. These mistakes often result in a black screen, or
+"no effect", and can be very frustrating. The only way to find them is often to pick through, and check
+every GL function against its prototype to make sure that you have given it the correct parameters. My
+most common error of this type is <u>mixing up location numbers with other indices</u> (happens often
+when setting up textures, for example) - which can be very hard to spot.
+</p>
+
+<h3>GL State Machine Mistakes</h3>
+
+<p>
+Another, very tricky to spot, source of error is knowing which states to set in the state machine before
+calling certain functions. I will try to point all of these out as they appear. An example from our code,
+above, is the <tt>glDrawArrays</tt> function. It will use the <b>most recently bound</b> vertex array,
+and the <b>most recently used</b> shader programme to draw. If we want to draw a different set of buffers,
+then we need to bind that before drawing again. If no valid buffer or shader has been set in the state
+machine then it will crash.
+</p>
+
+<h2>Next Steps</h2>
+
+<p>
+We will look at initialisation in more detail - particularly logging helpful debugging information.
+We will discuss the functionality of shaders and the hardware architecture.
+We will create more complex objects with more than 1 vertex buffer, and look at loading geometry from a file.
+</p>
+
+</body>
+</html>
