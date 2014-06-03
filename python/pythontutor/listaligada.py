@@ -1,4 +1,4 @@
-
+#copyright moongate GPLv3 (moongate.com.ar)
 class Celda:
     def __init__(self):
         self.dato = 0
