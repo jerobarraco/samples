@@ -4,7 +4,14 @@
 #define unlikely(x)     __builtin_expect(!!(x), 0)
  //#include "linux/include/linux/compiler.h"
 using namespace std;
-#define FAKEFOR(__init, __cond, __inc, __code)                                                                         \
+#define WHILE(__cond, __code)\
+	ini:\
+		if(!__cond) goto end;\
+		__code;\
+		goto ini;\
+	end:;//lol
+
+#define FAKEFOR(__init, __cond, __inc, __code)\
     __init;\
     while((__cond)){  \
         __code;\
@@ -30,6 +37,12 @@ int main()
     };
     t2=clock();
     cout << ((t2-t1))*1000 << " milliseconds of processing for\n";
+
+		int b = 0;
+		WHILE(b<10,
+			cout << "b "<<b<<endl;
+			b++;
+		)
     return 0;
 }
 
