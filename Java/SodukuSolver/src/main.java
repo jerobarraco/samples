@@ -8,7 +8,7 @@ import javax.swing.JOptionPane;
  * just for fun
  * no academic code is to be found here (or if it is, it is an accident)
  * (c) Jeronimo Barraco Marmol 2014 GPL/v3
- * Done in 1hour
+ * Done in 1hour, optimized and documented in like 3
  */
 /*The trick in this approach is how the matrix is handled and set.
  * this is what the matrix looks like:
