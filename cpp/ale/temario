@@ -1,0 +1,36 @@
+compilar
+for
+while 
+if
+operadores
+expresiones
+bloques
+funciones
+	sobreescribir
+	parametros opcionales
+bloques
+vector estático
+---------------------------------
+struct
+typedef
+[ hasta aca llegamos ]
+
+clases
+.h y .cpp
+excepciones (try catch)
+excepciones (lanzar)
+
+parametros por referencia
+	pasaje de vectores
+vectores dinámicos
+	new/delete
+punteros
+listas enlazadas
+archivos texto, binarios
+
+templates
+stl
+    string
+    vector
+    iteradores
+    map
