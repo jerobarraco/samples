@@ -51,6 +51,9 @@ import javax.swing.JOptionPane;
  */
  
 public class main {
+	public static class Pos {
+		int value, x, y, subm;//x and y are cell relative.
+	}
 	static List<Integer> matrix[][];
 	static List<Pos> stack;
 	static boolean dbug = false;//use debug info
