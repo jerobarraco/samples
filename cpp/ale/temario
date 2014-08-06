@@ -1,0 +1,31 @@
+compilar
+for
+while 
+if
+operadores
+expresiones
+bloques
+funciones
+	sobreescribir
+	parametros opcionales
+bloques
+vector estático
+[ hasta aca llegamos ]
+
+struct
+typedef
+clases
+excepciones (try catch)
+excepciones (lanzar)
+
+parametros por referencia
+	pasaje de vectores
+vectores dinámicos
+	new/delete
+punteros
+listas enlazadas
+templates
+stl
+	vector
+	iteradores
+	map
