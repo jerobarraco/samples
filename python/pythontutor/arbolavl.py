@@ -1,0 +1,162 @@
+#!/bin/python
+#coding:utf-8
+#Implementacion de arboles AVL en python para visualizar con pythontutor.com
+""" Basado en el libro 
+Árboles AVL
+Sebastián Gurin (Cancerbero)
+Copyright © 2004 by Sebastián Gurin
+Copyright (c) 2004 Sebastián Gurin. Permission is granted to copy,
+distribute and/or modify this document under the terms of the GNU Free
+Documentation License, Version 1.2 or any later version published by the
+Free Software Foundation; with no Invariant Sections, no Front-Cover Texts,
+and no Back-Cover Texts. A copy of the license is included in the section
+entitled "GNU Free Documentation License".
+"""
+#(c) 2014 Jeronimo Barraco Marmol (GPLv3 o v2 o la que sea compatible con la de sebastian)
+"""no lo planteo en forma orientada a objeto porque agregaría una complejidad extra completamente innecesaria
+ademas que por respeto al autor es mejor que quede lo mas similar posible
+"""
+
+class Nodo :
+	def __init__(self, dato, izq=None, der=None):
+		self.dato = dato
+		self.altura = 0
+		self.izq = izq
+		self.der = der
+
+#la altura se declara como propiedad del nodo y no se calcula recursivamente segun explicaciones del libro para evitar problemas de velocidad
+#"Important: Debemos tener mucho cuidado en actualizar el campo altura de cada nodo siempre que modifiquemos de alguna manera el árbol AVL."
+def altura(nodo): 
+	if(nodo):
+		return nodo.altura
+	else:
+		return -1
+
+def actualizarAltura(nodo):
+	if (not nodo): return
+	nodo.altura = max(altura(nodo.izq), altura(nodo.der)) +1
+
+#rotaciones
+def rotarS(nodo, a_izq):
+	#Rotar simple
+	"""/* realiza una rotación simple del árbol t el cual se
+	pasa por referencia. La rotación será izquierda
+	sii. (izq==true) o será derecha
+	sii. (izq==false).
+	Nota: las alturas de t y sus subárboles serán actualizadas
+	dentro de esta función!
+	Precondición:
+	si (izq==true) ==> !es_vacio(izquierdo(t))
+	si (izq==false) ==> !es_vacio(derecho(t))
+	*/
+	"""
+	n2 = None
+	if (a_izq):#rotacion izquierda
+		n2 = nodo.izq
+		nodo.izq = n2.der
+		n2.der = nodo
+	else:#rotacion derecha
+		n2 = nodo.der
+		nodo.der = n2.izq
+		n2.izq = nodo
+	actualizarAltura(nodo)
+	actualizarAltura(n2)
+	return n2 #no hay pasaje por referencia en python (de manera limpia)
+
+def rotarD(nodo, a_izq):
+	if(a_izq):
+		nodo.izq = rotarS(nodo.izq, False)
+		nodo = rotarS(nodo, True)
+	else:
+		nodo.der = rotarS(nodo.der, True)
+		nodo = rotarS(nodo, False)
+	#/* la actualización de las alturas se realiza en las rotaciones simples */
+	return nodo
+	
+def balancear(nodo):
+	if (not nodo): return
+	if altura(nodo.izq) - altura(nodo.der) == 2:#podria almacenar el resultado de la diferencia pero asi se entiende mas
+		#desequilibrio hacia la izquierda
+		if altura(nodo.izq.izq) >= altura(nodo.izq.der):
+			#desequilibrio simple a la izq
+			nodo = rotarS(nodo, True)
+		else:
+			#desequilibrio doble a la izquierda
+			nodo = rotarD(nodo, True)
+	elif altura(nodo.der) - altura(nodo.izq) == 2:
+		#desequilibrio hacia la derecha
+		if altura(nodo.der.der) >= altura(nodo.der.izq): 
+			#desequilibrio simple hacia la derecha
+			nodo = rotarS(nodo, False)
+		else:
+			#desequilibrio doble hacia la derecha
+			nodo = rotarD(nodo, False)
+	return nodo
+
+def insertar(nodo, dato):
+	if (not nodo) :
+		nodo = Nodo(dato, None, None)
+	else:
+		#la magia de la recursividad hace todo aca
+		if (dato < nodo.dato):
+			nodo.izq = insertar(nodo.izq, dato)
+		else:
+			nodo.der = insertar(nodo.der, dato)
+		nodo = balancear(nodo)
+		actualizarAltura(nodo)
+	return nodo
+
+raiz = None
+def sins(dato): #simple insertar
+	global raiz
+	raiz = insertar(raiz, dato)
+	
+for i in (2, 3, 4 , 10, 15 ,22, 16, 7 , 5, 8, 1, 6, 23, 9, 11, 12, 13, 14, 75):
+	sins(i)
+	
+#http://pythontutor.com/visualize.html#code=%23!/bin/python%0A%23coding%3Autf-8%0A%23Implementacion+de+arboles+AVL+en+python+para+visualizar+con+pythontutor.com%0A%22%22%22+Basado+en+el+libro+%0A%C3%81rboles+AVL%0ASebasti%C3%A1n+Gurin+(Cancerbero)%0ACopyright+%C2%A9+2004+by+Sebasti%C3%A1n+Gurin%0ACopyright+(c)+2004+Sebasti%C3%A1n+Gurin.+Permission+is+granted+to+copy,%0Adistribute+and/or+modify+this+document+under+the+terms+of+the+GNU+Free%0ADocumentation+License,+Version+1.2+or+any+later+version+published+by+the%0AFree+Software+Foundation%3B+with+no+Invariant+Sections,+no+Front-Cover+Texts,%0Aand+no+Back-Cover+Texts.+A+copy+of+the+license+is+included+in+the+section%0Aentitled+%22GNU+Free+Documentation+License%22.%0A%22%22%22%0A%23(c)+2014+Jeronimo+Barraco+Marmol+(GPLv3+o+v2+o+la+que+sea+compatible+con+la+de+sebastian)%0A%22%22%22no+lo+planteo+en+forma+orientada+a+objeto+porque+agregar%C3%ADa+una+complejidad+extra+completamente+innecesaria%0Aademas+que+por+respeto+al+autor+es+mejor+que+quede+lo+mas+similar+posible%0A%22%22%22%0A%0Aclass+Nodo+%3A%0A%09def+__init__(self,+dato,+izq%3DNone,+der%3DNone)%3A%0A%09%09self.dato+%3D+dato%0A%09%09self.altura+%3D+0%0A%09%09self.izq+%3D+izq%0A%09%09self.der+%3D+der%0A%0A%23la+altura+se+declara+como+propiedad+del+nodo+y+no+se+calcula+recursivamente+segun+explicaciones+del+libro+para+evitar+problemas+de+velocidad%0A%23%22Important%3A+Debemos+tener+mucho+cuidado+en+actualizar+el+campo+altura+de+cada+nodo+siempre+que+modifiquemos+de+alguna+manera+el+%C3%A1rbol+AVL.%22%0Adef+altura(nodo)%3A+%0A%09if(nodo)%3A%0A%09%09return+nodo.altura%0A%09else%3A%0A%09%09return+-1%0A%0Adef+actualizarAltura(nodo)%3A%0A%09if+(not+nodo)%3A+return%0A%09nodo.altura+%3D+max(altura(nodo.izq),+altura(nodo.der))+%2B1%0A%0A%23rotaciones%0Adef+rotarS(nodo,+a_izq)%3A%0A%09%23Rotar+simple%0A%09%22%22%22/*+realiza+una+rotaci%C3%B3n+simple+del+%C3%A1rbol+t+el+cual+se%0A%09pasa+por+referencia.+La+rotaci%C3%B3n+ser%C3%A1+izquierda%0A%09sii.+(izq%3D%3Dtrue)+o+ser%C3%A1+derecha%0A%09sii.+(izq%3D%3Dfalse).%0A%09Nota%3A+las+alturas+de+t+y+sus+sub%C3%A1rboles+ser%C3%A1n+actualizadas%0A%09dentro+de+esta+funci%C3%B3n!%0A%09Precondici%C3%B3n%3A%0A%09si+(izq%3D%3Dtrue)+%3D%3D%3E+!es_vacio(izquierdo(t))%0A%09si+(izq%3D%3Dfalse)+%3D%3D%3E+!es_vacio(derecho(t))%0A%09*/%0A%09%22%22%22%0A%09n2+%3D+None%0A%09if+(a_izq)%3A%23rotacion+izquierda%0A%09%09n2+%3D+nodo.izq%0A%09%09nodo.izq+%3D+n2.der%0A%09%09n2.der+%3D+nodo%0A%09else%3A%23rotacion+derecha%0A%09%09n2+%3D+nodo.der%0A%09%09nodo.der+%3D+n2.izq%0A%09%09n2.izq+%3D+nodo%0A%09actualizarAltura(nodo)%0A%09actualizarAltura(n2)%0A%09return+n2+%23no+hay+pasaje+por+referencia+en+python+(de+manera+limpia)%0A%0Adef+rotarD(nodo,+a_izq)%3A%0A%09if(a_izq)%3A%0A%09%09nodo.izq+%3D+rotarS(nodo.izq,+False)%0A%09%09nodo+%3D+rotarS(nodo,+True)%0A%09else%3A%0A%09%09nodo.der+%3D+rotarS(nodo.der,+True)%0A%09%09nodo+%3D+rotarS(nodo,+False)%0A%09%23/*+la+actualizaci%C3%B3n+de+las+alturas+se+realiza+en+las+rotaciones+simples+*/%0A%09return+nodo%0A%09%0Adef+balancear(nodo)%3A%0A%09if+(not+nodo)%3A+return%0A%09if+altura(nodo.izq)+-+altura(nodo.der)+%3D%3D+2%3A%23podria+almacenar+el+resultado+de+la+diferencia+pero+asi+se+entiende+mas%0A%09%09%23desequilibrio+hacia+la+izquierda%0A%09%09if+altura(nodo.izq.izq)+%3E%3D+altura(nodo.izq.der)%3A%0A%09%09%09%23desequilibrio+simple+a+la+izq%0A%09%09%09nodo+%3D+rotarS(nodo,+True)%0A%09%09else%3A%0A%09%09%09%23desequilibrio+doble+a+la+izquierda%0A%09%09%09nodo+%3D+rotarD(nodo,+True)%0A%09elif+altura(nodo.der)+-+altura(nodo.izq)+%3D%3D+2%3A%0A%09%09%23desequilibrio+hacia+la+derecha%0A%09%09if+altura(nodo.der.der)+%3E%3D+altura(nodo.der.izq)%3A+%0A%09%09%09%23desequilibrio+simple+hacia+la+derecha%0A%09%09%09nodo+%3D+rotarS(nodo,+False)%0A%09%09else%3A%0A%09%09%09%23desequilibrio+doble+hacia+la+derecha%0A%09%09%09nodo+%3D+rotarD(nodo,+False)%0A%09return+nodo%0A%0Adef+insertar(nodo,+dato)%3A%0A%09if+(not+nodo)+%3A%0A%09%09nodo+%3D+Nodo(dato,+None,+None)%0A%09else%3A%0A%09%09%23la+magia+de+la+recursividad+hace+todo+aca%0A%09%09if+(dato+%3C+nodo.dato)%3A%0A%09%09%09nodo.izq+%3D+insertar(nodo.izq,+dato)%0A%09%09else%3A%0A%09%09%09nodo.der+%3D+insertar(nodo.der,+dato)%0A%09%09nodo+%3D+balancear(nodo)%0A%09%09actualizarAltura(nodo)%0A%09return+nodo%0A%0Araiz+%3D+None%0Adef+sins(dato)%3A+%23simple+insertar%0A%09global+raiz%0A%09raiz+%3D+insertar(raiz,+dato)%0A%09%0Afor+i+in+(2,+3,+4+,+10,+15+,22,+16,+7+,+5)%3A%0A%09sins(i)&mode=edit&origin=opt-frontend.js&cumulative=false&heapPrimitives=false&drawParentPointers=false&textReferences=false&showOnlyOutputs=false&py=3&rawInputLstJSON=%5B%5D
+
+
+space = 5
+v_space = 1
+
+def mostrar(nodo, lvl=0):
+	if (not nodo):
+		print ""
+		return
+	
+	nlvl = lvl+ 1
+	mostrar(nodo.der, nlvl)
+	print((" "*space*lvl) + str(nodo.dato))
+
+	mostrar(nodo.izq, nlvl)
+
+def lvlnode(nodo, dlvl, lvl =0):
+	if (lvl == dlvl): 
+		return [nodo]#if nodo is None will return None (important)
+	#return empty only if is not the level im looking 4
+	if (lvl < dlvl):
+		nodes = []
+		izq = nodo and nodo.izq #this forces to add a None when the node doesnt exists and there is another level
+		der = nodo and nodo.der
+		nodes += lvlnode(izq, dlvl, lvl+1)
+		nodes += lvlnode(der, dlvl, lvl+1)
+		return nodes 
+	
+def mostrar2(raiz):
+	import sys
+	p = sys.stdout.write
+	width = (2**(raiz.altura))*space
+	for i in range(raiz.altura+1):
+		cnodes = 2**i
+		spaces = (width/cnodes)
+		for n in lvlnode(raiz, i):
+			t = str(n and n.dato or "")#returns "" if n is None
+			tspaces = (spaces -len(t))/2
+			p(" " *tspaces)
+			p(t)
+			p(" " *tspaces)
+		p("\n")
+		
+#mostrar(raiz)
+mostrar2(raiz)
