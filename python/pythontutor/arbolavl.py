@@ -130,7 +130,7 @@ v_space = 1
 
 def mostrar(nodo, lvl=0):
 	if (not nodo):
-		print ""
+		print ("")
 		return
 	
 	nlvl = lvl+ 1
@@ -160,7 +160,7 @@ def mostrar2(raiz):
 		spaces = (width/cnodes)
 		for n in lvlnode(raiz, i):
 			t = str(n and n.dato or "")#returns "" if n is None
-			tspaces = (spaces -len(t))/2
+			tspaces = int((spaces -len(t))/2)
 			p(" " *tspaces)
 			p(t)
 			p(" " *tspaces)
@@ -168,3 +168,100 @@ def mostrar2(raiz):
 		
 #mostrar(raiz)
 mostrar2(raiz)
+""">>> r = None
+>>> r = insertar(r, 31)
+>>> r = insertar(r, 30)
+>>> r = insertar(r, 28)
+>>> r = insertar(r, 21)
+>>> r = insertar(r, 18)
+>>> r = insertar(r, 4)
+>>> r = insertar(r, 2)
+>>> r = insertar(r, 13)
+>>> r = insertar(r, 16)
+>>> r = insertar(r, 22)
+>>> mostrar2(r)
+                   21
+         4                  30
+    2        16        28        31
+         13  18  22
+>>> r = insertar(r, 20)
+>>> r = insertar(r, 9)
+"""
+space = 10
+rp = None
+for palabra in ("arbol", "barco", "casa", "perro"):
+        rp = insertar(rp, palabra)#duck typing ftw!
+mostrar2(rp)
+
+
+s = []
+def ird(raiz, i=1):
+        s.insert(0, (raiz, 1))
+        while s:
+                p, i = s.pop(0)
+                if i==1:
+                        s.insert(0, (p, 2))
+                        if p.izq:
+                                s.insert(0, (p.izq, 1))
+                else:
+                        print(p.dato)
+                        if p.der:
+                                s.insert(0, (p.der, 1))
+
+def preorden(raiz):
+        s = [raiz,]
+        while s:
+                p = s.pop(0)
+                print(p.dato)
+                if p.izq:
+                        s.insert(0, p.izq)
+                if p.der:
+                        s.insert(0, p.der)
+def hojas(raiz):
+        s = [raiz,]
+        while s:
+                p = s.pop(0)
+                if (not p.izq ) and (not p.der):
+                        print(p.dato)
+                if p.izq:
+                        s.insert(0, p.izq)
+                if p.der:
+                        s.insert(0, p.der)
+
+def borrarSiHoja(nodo, dato):
+        if (nodo == None): return
+        print("visitando nodo"+str(nodo.dato))
+        if (nodo.izq):
+                print ("tengo izq")
+                nodo.izq = borrarSiHoja(nodo.izq, dato)
+        if (nodo.der):
+                print("tengo der")
+                nodo.der = borrarSiHoja(nodo.der, dato)
+                
+        if (nodo.dato == dato):
+                print("soy el nodo que buscas")
+                if (nodo.izq == None and nodo.der == None):
+                        print("no tengo hijos asi que muero")
+                        return None
+                else:
+                        print ("tengo algun hijo asi que no muero")
+        return nodo
+
+def copiar(nodo):
+        s = [(nodo, None, None), ]
+        otro = None
+        while s:
+                p, padre, izq = s.pop(0)
+                nn = Nodo(p.dato)
+                if not padre:
+                        otro = nn
+                else:
+                        if  izq :
+                                padre.izq = nn
+                        else:
+                                padre.der = nn
+                                
+                if (p.izq) : s.insert(0, (p.izq, nn, True))
+                if (p.der) : s.insert(0, (p.der, nn, False))
+                
+        return otro
