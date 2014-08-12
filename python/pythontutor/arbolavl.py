@@ -21,11 +21,13 @@
 
 class Nodo :
 	altura = 0
+	izq = None
+	der = None
 	def __init__(self, dato, izq=None, der=None):
 		self.dato = dato
 		#self.altura = 0#*1
-		self.izq = izq
-		self.der = der
+		#self.izq = izq
+		#self.der = der
 
 #la altura se declara como propiedad del nodo y no se calcula recursivamente segun explicaciones del libro para evitar problemas de velocidad
 #"Important: Debemos tener mucho cuidado en actualizar el campo altura de cada nodo siempre que modifiquemos de alguna manera el árbol AVL."
@@ -118,9 +120,9 @@ def insertar(nodo, dato):
 		actualizarAltura(nodo)
 	return nodo
 
-raiz = None
-for i in (2, 3, 4 , 10, 15 ,22, 16, 7 , 5, 8, 1, 6, 23, 9, 11, 12, 13, 14, 75):
-	raiz = insertar(raiz, i)
+#raiz = None
+#for i in (2, 3, 4 , 10, 15 ,22, 16, 7 , 5, 8, 1, 6, 23, 9, 11, 12, 13, 14, 75):#
+#	raiz = insertar(raiz, i)
 	
 #Link is http://pythontutor.com/visualize.html#code=%23Implementacion+de+arboles+AVL+en+python+para+visualizar+con+pythontutor.com%0A%23BASADO+en+el+libro+%0A%23%C3%81rboles+AVL%0A%23Sebasti%C3%A1n+Gurin+(Cancerbero)%0A%23Copyright+%C2%A9+2004+by+Sebasti%C3%A1n+Gurin%0A%23Copyright+(c)+2004+Sebasti%C3%A1n+Gurin.+Permission+is+granted+to+copy,%0A%23distribute+and/or+modify+this+document+under+the+terms+of+the+GNU+Free%0A%23Documentation+License,+Version+1.2+or+any+later+version+published+by+the%0A%23Free+Software+Foundation%3B+with+no+Invariant+Sections,+no+Front-Cover+Texts,%0A%23and+no+Back-Cover+Texts.+A+copy+of+the+license+is+included+in+the+section%0A%23entitled+%22GNU+Free+Documentation+License%22.%0A%23----------------------------------------------%0A%23(c)+2014+Jeronimo+Barraco+Marmol+(GPLv3+o+v2+o+la+que+sea+compatible+con+la+de+sebastian)%0A%23no+lo+planteo+en+forma+orientada+a+objeto+porque+agregar%C3%ADa+una+complejidad+extra+completamente+innecesaria%0A%23ademas+que+por+respeto+al+autor+es+mejor+que+quede+lo+mas+similar+posible%0A%0A%0Aclass+Nodo+%3A%0A%09altura+%3D+0%0A%09def+__init__(self,+dato,+izq%3DNone,+der%3DNone)%3A%0A%09%09self.dato+%3D+dato%0A%09%09%23self.altura+%3D+0%23*1%0A%09%09self.izq+%3D+izq%0A%09%09self.der+%3D+der%0A%0A%23la+altura+se+declara+como+propiedad+del+nodo+y+no+se+calcula+recursivamente+segun+explicaciones+del+libro+para+evitar+problemas+de+velocidad%0A%23%22Important%3A+Debemos+tener+mucho+cuidado+en+actualizar+el+campo+altura+de+cada+nodo+siempre+que+modifiquemos+de+alguna+manera+el+%C3%A1rbol+AVL.%22%0A%23*1+PythonTutor+has+a+limit+of+300+execution+frames,+for+that+some+code+will+be+%22optimized%22+to+not+stole+frames+with+uninportant+actions+%0A%23%09still+i'll+leave+the+original+form+so+it+can+be+easy+to+understand+(and+port)%0A%0A%23*1%0A%23def+altura(nodo)%3A+%0A%09%23if(nodo)%3A%0A%09%09%23return+nodo.altura%0A%09%23else%3A%0A%09%09%23return+-1%0A%0Aaltura+%3D+lambda+nodo%3DNone%3A+nodo.altura+if+nodo+else+-1%0A%0Adef+actualizarAltura(nodo)%3A%0A%09if+(not+nodo)%3A+return%0A%09nodo.altura+%3D+max(altura(nodo.izq),+altura(nodo.der))+%2B1%0A%0A%23rotaciones%0Adef+rotarS(nodo,+a_izq)%3A%0A%09%23Rotar+simple%0A%09%23/*+realiza+una+rotaci%C3%B3n+simple+del+%C3%A1rbol+t+el+cual+se%0A%09%23pasa+por+referencia.+La+rotaci%C3%B3n+ser%C3%A1+izquierda%0A%09%23sii.+(izq%3D%3Dtrue)+o+ser%C3%A1+derecha%0A%09%23sii.+(izq%3D%3Dfalse).%0A%09%23Nota%3A+las+alturas+de+t+y+sus+sub%C3%A1rboles+ser%C3%A1n+actualizadas%0A%09%23dentro+de+esta+funci%C3%B3n!%0A%09%23Precondici%C3%B3n%3A%0A%09%23si+(izq%3D%3Dtrue)+%3D%3D%3E+!es_vacio(izquierdo(t))%0A%09%23si+(izq%3D%3Dfalse)+%3D%3D%3E+!es_vacio(derecho(t))%0A%09%23*/%0A%09%0A%09%23n2+%3D+None+%23*1%0A%09if+(a_izq)%3A%23rotacion+izquierda%0A%09%09n2+%3D+nodo.izq%0A%09%09nodo.izq+%3D+n2.der%0A%09%09n2.der+%3D+nodo%0A%09else%3A%23rotacion+derecha%0A%09%09n2+%3D+nodo.der%0A%09%09nodo.der+%3D+n2.izq%0A%09%09n2.izq+%3D+nodo%0A%09actualizarAltura(nodo)%0A%09actualizarAltura(n2)%0A%09return+n2+%23no+hay+pasaje+por+referencia+en+python+(de+manera+limpia)%0A%0Adef+rotarD(nodo,+a_izq)%3A%0A%09if(a_izq)%3A%0A%09%09nodo.izq+%3D+rotarS(nodo.izq,+False)%0A%09%09nodo+%3D+rotarS(nodo,+True)%0A%09else%3A%0A%09%09nodo.der+%3D+rotarS(nodo.der,+True)%0A%09%09nodo+%3D+rotarS(nodo,+False)%0A%09%23/*+la+actualizaci%C3%B3n+de+las+alturas+se+realiza+en+las+rotaciones+simples+*/%0A%09return+nodo%0A%09%0Adef+balancear(nodo)%3A%0A%09if+(not+nodo)%3A+return%0A%09al_dif+%3D+altura(nodo.izq)+-+altura(nodo.der)+%23*1%0A%09%23*1+%23if+altura(nodo.izq)+-+altura(nodo.der)+%3D%3D+2%3A%23podria+almacenar+el+resultado+de+la+diferencia+pero+asi+se+entiende+mas%0A%09if+al_dif+%3D%3D+2%3A%0A%09%09%23desequilibrio+hacia+la+izquierda%0A%09%09if+altura(nodo.izq.izq)+%3E%3D+altura(nodo.izq.der)%3A%0A%09%09%09%23desequilibrio+simple+a+la+izq%0A%09%09%09nodo+%3D+rotarS(nodo,+True)%0A%09%09else%3A%0A%09%09%09%23desequilibrio+doble+a+la+izquierda%0A%09%09%09nodo+%3D+rotarD(nodo,+True)%0A%09%23*1+elif+altura(nodo.der)+-+altura(nodo.izq)+%3D%3D+2%3A%0A%09elif+al_dif+%3D%3D+-2%3A%0A%09%09%23desequilibrio+hacia+la+derecha%0A%09%09if+altura(nodo.der.der)+%3E%3D+altura(nodo.der.izq)%3A+%0A%09%09%09%23desequilibrio+simple+hacia+la+derecha%0A%09%09%09nodo+%3D+rotarS(nodo,+False)%0A%09%09else%3A%0A%09%09%09%23desequilibrio+doble+hacia+la+derecha%0A%09%09%09nodo+%3D+rotarD(nodo,+False)%0A%09return+nodo%0A%0Adef+insertar(nodo,+dato)%3A%0A%09if+(not+nodo)%3A%0A%09%09nodo+%3D+Nodo(dato,+None,+None)%0A%09else%3A%0A%09%09%23la+magia+de+la+recursividad+hace+todo+aca%0A%09%09if+(dato+%3C+nodo.dato)%3A%0A%09%09%09nodo.izq+%3D+insertar(nodo.izq,+dato)%0A%09%09else%3A%0A%09%09%09nodo.der+%3D+insertar(nodo.der,+dato)%0A%09%09nodo+%3D+balancear(nodo)%0A%09%09actualizarAltura(nodo)%0A%09return+nodo%0A%0Araiz+%3D+None%0Afor+i+in+(2,+3,+4+,+10,+15+,22,+16,+7+,+5,+8,+1,+6,+23,+9,+11,+12,+13,+14,+75)%3A%0A%09raiz+%3D+insertar(raiz,+i)&mode=edit&origin=opt-frontend.js&cumulative=false&heapPrimitives=false&drawParentPointers=false&textReferences=false&showOnlyOutputs=false&py=3&rawInputLstJSON=%5B%5D
 
@@ -167,7 +169,8 @@ def mostrar2(raiz):
 		p("\n")
 		
 #mostrar(raiz)
-mostrar2(raiz)
+#mostrar2(raiz)
+
 """>>> r = None
 >>> r = insertar(r, 31)
 >>> r = insertar(r, 30)
@@ -187,6 +190,11 @@ mostrar2(raiz)
 >>> r = insertar(r, 20)
 >>> r = insertar(r, 9)
 """
+raiz = None
+for i in (31, 30, 28, 21, 18, 4, 2, 13, 16, 22, 20, 9):
+	raiz = insertar(raiz, i)
+mostrar2(raiz)
+
 space = 10
 rp = None
 for palabra in ("arbol", "barco", "casa", "perro"):
@@ -248,20 +256,82 @@ def borrarSiHoja(nodo, dato):
         return nodo
 
 def copiar(nodo):
-        s = [(nodo, None, None), ]
-        otro = None
-        while s:
-                p, padre, izq = s.pop(0)
-                nn = Nodo(p.dato)
-                if not padre:
-                        otro = nn
-                else:
-                        if  izq :
-                                padre.izq = nn
-                        else:
-                                padre.der = nn
-                                
-                if (p.izq) : s.insert(0, (p.izq, nn, True))
-                if (p.der) : s.insert(0, (p.der, nn, False))
-                
-        return otro
+	#copia de un arbol a otro usando pilas (no recursividad)
+	#no importa el tipo de arbol
+	s = [(nodo, None, None), ]
+	otro = None
+	while s:
+			p, padre, izq = s.pop(0)
+			nn = Nodo(p.dato)
+			if not padre:
+					otro = nn
+			else:
+					if  izq :
+							padre.izq = nn
+					else:
+							padre.der = nn
+							
+			if (p.izq) : s.insert(0, (p.izq, nn, True))
+			if (p.der) : s.insert(0, (p.der, nn, False))
+			
+	return otro
+
+def tomarPre(nodo):
+	#toma un nodo de un arbol en preorden,
+	#intenta devolver el nodo mas positivo (mas a la derecha) incluyendo este nodo,
+	#lo quita del padre y lo devuelve
+	borrado, obj = False, None
+	#podria evitar usar obj y usar directamente nodo, pero tendria que usar un truco que haga el codigo aun menos entendible
+	if nodo:
+		if nodo.der:
+			nodo.der, obj, borrado = tomarPre(nodo.der)
+			if borrado:
+				actualizarAltura(nodo)
+		else:
+			#*1
+			#obj = nodo #el objetivo es el nodo
+			#izq = nodo.izq#el nodo que tomara su lugar es su rama izq (subarbol izq) (que es menor que este)
+			#nodo.izq = None #que hay que quitar del nodo objetivo
+			#nodo = izq
+			obj, nodo, borrado = nodo, nodo.izq, True #el nodo pasa a ser el obj, la izq pasa a ser el nodo
+			obj.izq = None#y quitamos la izq del nodo original
+	return nodo, obj, borrado#borrado indica si se borro algo en esta rama, obj es el nodo que va a subir,
+	#nodo es el nodo que debe ir
+	#necesario en caso de que el nodo tenga que quitarse del nodo padre
+
+def borrar(nodo, dato):
+	"""
+	We first do the normal BST deletion:
+	– 0 children: just delete it
+	– 1 child: delete it, connect child to parent
+	– 2 children: put successor in your place,
+	
+	Which nodes’ heights may have changed:
+	– 0 children: path from deleted node to root
+	– 1 child: path from deleted node to root
+	– 2 children: path from deleted successor leaf to root
+	Will rebalance as we return along the “path in question” to the root
+	"""
+	borrado = False
+	if nodo:
+		if nodo.dato == dato : #si es el nodo a borrar lo borramos
+			if nodo.izq and nodo.der: #si tiene dos hijos, estamos al horno.. empieza el proceso raro
+				nodo.izq, nodo, borrado = tomarPre(nodo.izq), True #tomarpre nos va a devolver:
+				#el nodo que reemplazara el nodo original (nodo.izq) (que puede cambiar o volverse None si el nodo.izq es hoja)
+				#el nodo objetivo, que es el que tomara el lugar de este nodo y la bandera de borrado
+			elif nodo.der:#si tiene solo el nodo derecho o izq
+				nodo, borrado = nodo.der, True#true indica que se encontró y borro el nodo
+				#al devolver el nodo.der lo que hacemos es que el padre (que llamo a borrar(....) reemplace este nodo con el nodo.der
+				#con eso nos basta para borrar este nodo
+			elif nodo.izq:
+				nodo, borrado = nodo.izq, True#true indica que se encontró y borro el nodo
+			else: #en caso que no tenga hijos, lo borramos y ya
+				nodo, borrado = None, True
+		else:
+			nodo.izq, borrado = borrar (nodo.izq, dato)#buscamos en preorden
+			nodo.der, borrado = borrar (nodo.der, dato)
+		#el borrado pasa antes que esto, llegando acá estamos de vuelta
+		if borrado :
+			actualizarAltura(nodo)#si se produjo la eliminacion por esta rama, la actualiza
+	return nodo, borrado #devuelve el nodo (que puede ser none, o puede ser el que vino por parametro, u otro si fue borrado
+#si no hicimos nada devuelve el mismo nodo (que puede ser none) y el estado
