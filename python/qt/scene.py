@@ -1,3 +1,6 @@
+#coding:utf-8
+# CopyRight 2014 Jeronimo Barraco Mármol (moongate.com.ar) GPL v3
+
 import sys
 #imports
 import PySide
@@ -54,16 +57,5 @@ view.show()
 #rectangulo de 100x200 en 0,0 borde negro relleno verde
 scene.addRect(QRectF(0, 0, 100, 200), QPen(Qt.black), QBrush(Qt.green))
 
-#ejecuta la app 
-app.exec_()
-
-""" QGraphicsScene scene;
- scene.addRect(QRectF(0, 0, 100, 200), QPen(Qt::black), QBrush(Qt::green));
-
- QPixmap pixmap;
- QPainter painter(&pixmap);
- painter.setRenderHint(QPainter::Antialiasing);
- scene.render(&painter);
- painter.end();
-
- pixmap.save("scene.png");"""
+#ejecuta la app
+sys.exit(app.exec_())
