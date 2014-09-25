@@ -1,0 +1,24 @@
+Ejercicios básicos:
+temas:
+	- Scanner
+	- Tipos básicos: int, float, String
+	- System.out.print y System.out.println
+	- Condicionales (If)
+
+1) Realizar un programa que:
+	A) Permita ingresar por consola el lado de un cuadrado.
+	B) Calcule su área (lado * lado)
+	C) Informe el resultado.
+
+2) Crear un programa que permita:
+	A) Ingresar el año de nacimiento del usuario
+	B) Ingresar el año actual
+	C) Calcule la edad del usuario (año actual - año de nacimiento)
+	D) imprima el resultado en la consola.
+	
+	
+3) Modificar el programa 1, para que:
+	Si el lado es igual a 0 imprima: "Dimension incorrecta"
+	Sino, que realice el cálculo normalmente y lo imprima.
+
+4) Modificar el programa 2 para que en caso de ingresar un año actual mayor al año de nacimiento imprima un mensaje de error en vez de el resultado.

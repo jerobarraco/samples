@@ -103,7 +103,7 @@ def balancear(nodo):
 			#desequilibrio simple hacia la derecha
 			nodo = rotarS(nodo, False)
 		else:
-			#desequilibrio doble hacia la derecha 
+			#desequilibrio doble hacia la derecha
 			nodo = rotarD(nodo, False)
 	return nodo
 
@@ -190,18 +190,19 @@ def mostrar2(raiz):
 >>> r = insertar(r, 20)
 >>> r = insertar(r, 9)
 """
-raiz = None
+"""raiz = None
 for i in (31, 30, 28, 21, 18, 4, 2, 13, 16, 22, 20, 9):
 	raiz = insertar(raiz, i)
-mostrar2(raiz)
+mostrar2(raiz)"""
 
-space = 10
+space = 4
 rp = None
-for palabra in ("arbol", "barco", "casa", "perro"):
-        rp = insertar(rp, palabra)#duck typing ftw!
+#for palabra in ("arbol", "barco", "casa", "perro"):
+for palabra in ("t", "r", "a", "x", "v", "z", "y", "b", "s"):
+	rp = insertar(rp, palabra)#duck typing ftw!
 mostrar2(rp)
 
-
+"""
 s = []
 def ird(raiz, i=1):
         s.insert(0, (raiz, 1))
@@ -275,27 +276,28 @@ def copiar(nodo):
 			if (p.der) : s.insert(0, (p.der, nn, False))
 			
 	return otro
+"""
 
 def tomarPre(nodo):
 	#toma un nodo de un arbol en preorden,
 	#intenta devolver el nodo mas positivo (mas a la derecha) incluyendo este nodo,
 	#lo quita del padre y lo devuelve
-	borrado, obj = False, None
+	obj = False
 	#podria evitar usar obj y usar directamente nodo, pero tendria que usar un truco que haga el codigo aun menos entendible
 	if nodo:
 		if nodo.der:
-			nodo.der, obj, borrado = tomarPre(nodo.der)
-			if borrado:
-				actualizarAltura(nodo)
+			nodo.der, obj = tomarPre(nodo.der)
 		else:
 			#*1
 			#obj = nodo #el objetivo es el nodo
 			#izq = nodo.izq#el nodo que tomara su lugar es su rama izq (subarbol izq) (que es menor que este)
 			#nodo.izq = None #que hay que quitar del nodo objetivo
 			#nodo = izq
-			obj, nodo, borrado = nodo, nodo.izq, True #el nodo pasa a ser el obj, la izq pasa a ser el nodo
+			obj, nodo = nodo, nodo.izq #el nodo pasa a ser el obj, la izq pasa a ser el nodo
 			obj.izq = None#y quitamos la izq del nodo original
-	return nodo, obj, borrado#borrado indica si se borro algo en esta rama, obj es el nodo que va a subir,
+		nodo = balancear(nodo)
+		actualizarAltura(nodo)
+	return nodo, obj#borrado indica si se borro algo en esta rama, obj es el nodo que va a subir,
 	#nodo es el nodo que debe ir
 	#necesario en caso de que el nodo tenga que quitarse del nodo padre
 
@@ -312,26 +314,54 @@ def borrar(nodo, dato):
 	– 2 children: path from deleted successor leaf to root
 	Will rebalance as we return along the “path in question” to the root
 	"""
-	borrado = False
 	if nodo:
 		if nodo.dato == dato : #si es el nodo a borrar lo borramos
 			if nodo.izq and nodo.der: #si tiene dos hijos, estamos al horno.. empieza el proceso raro
-				nodo.izq, nodo, borrado = tomarPre(nodo.izq), True #tomarpre nos va a devolver:
+				izq, nuevo = tomarPre(nodo.izq) #tomarpre nos va a devolver:
+				nuevo.izq = izq
+				nuevo.der = nodo.der
+				nodo = nuevo
 				#el nodo que reemplazara el nodo original (nodo.izq) (que puede cambiar o volverse None si el nodo.izq es hoja)
 				#el nodo objetivo, que es el que tomara el lugar de este nodo y la bandera de borrado
 			elif nodo.der:#si tiene solo el nodo derecho o izq
-				nodo, borrado = nodo.der, True#true indica que se encontró y borro el nodo
+				nodo = nodo.der#true indica que se encontró y borro el nodo
 				#al devolver el nodo.der lo que hacemos es que el padre (que llamo a borrar(....) reemplace este nodo con el nodo.der
 				#con eso nos basta para borrar este nodo
 			elif nodo.izq:
-				nodo, borrado = nodo.izq, True#true indica que se encontró y borro el nodo
+				nodo = nodo.izq
 			else: #en caso que no tenga hijos, lo borramos y ya
-				nodo, borrado = None, True
-		else:
-			nodo.izq, borrado = borrar (nodo.izq, dato)#buscamos en preorden
-			nodo.der, borrado = borrar (nodo.der, dato)
+				nodo = None
+		elif dato < nodo.dato:
+			nodo.izq = borrar (nodo.izq, dato)#buscamos en preorden
+		else:#nodo.dato > dato
+			nodo.der = borrar (nodo.der, dato)
 		#el borrado pasa antes que esto, llegando acá estamos de vuelta
-		if borrado :
-			actualizarAltura(nodo)#si se produjo la eliminacion por esta rama, la actualiza
-	return nodo, borrado #devuelve el nodo (que puede ser none, o puede ser el que vino por parametro, u otro si fue borrado
+		actualizarAltura(nodo)#si se produjo la eliminacion por esta rama, la actualiza
+		nodo = balancear(nodo)
+	return nodo
+#devuelve el nodo (que puede ser none, o puede ser el que vino por parametro, u otro si fue borrado
 #si no hicimos nada devuelve el mismo nodo (que puede ser none) y el estado
+
+#rp = borrar(rp, "perro")
+#mostrar2(rp)
+#rp = borrar(rp, "asd")
+#mostrar2(rp)
+#rp = borrar(rp, "arbol")
+#mostrar2(rp)
+#print("\n\n")
+#rp = borrar(rp, "t")
+#mostrar2(rp)
+#print("\n\n")
+#rp = borrar(rp, "a")
+#mostrar2(rp)
+
+#print("\n\n")
+#rp = borrar(rp, "v")
+#mostrar2(rp)
+
+aborrar = ["y", "x", 'r']
+for i in aborrar:
+	print("\n\n")
+	rp = borrar(rp, i)
+	mostrar2(rp)
+	
