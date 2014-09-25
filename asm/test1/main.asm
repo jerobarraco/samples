@@ -7,6 +7,7 @@
 ; output is:	Hello World
 ; windows:
 ; assemble: nasm -f win32 main.asm
+; elf32 elf64
 ; link gcc -nostartfiles -nodefaultlibs -nostdlib -o debug/test1  main.o
 ; gcc -Wl,-subsystem,console 1.S -nostdlib
 ; ld -s -o debug/test1.exe main.obj
@@ -18,7 +19,9 @@ len:	equ $-msg		; "$" means "here"
 
 SECTION .text		; code section
 global main		; make label available to linker
+global _start
 
+_start:
 main:				; standard  gcc  entry point
     mov	edx,len		; arg3, length of string to print
     mov	ecx,msg		; arg2, pointer to string
