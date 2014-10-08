@@ -1,0 +1,3 @@
+#!/bin/bash
+runzeo -C zeo.conf&
+python __main__.py

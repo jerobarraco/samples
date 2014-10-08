@@ -13,7 +13,7 @@ class MiZODB(object):
 		#por defecto se conectara a localhost en el puerto 8090
 		#es importante asignar el blob_dir para poder contar con soporte de blobs
 		#de manera correcta
-		self.storage =  ClientStorage((server,port), blob_dir="./blobcache")
+		self.storage =  ClientStorage((server, port), blob_dir="./blobcache")
 		self.db = DB(self.storage)
 		self.cnx = self.db.open()
 		self.raiz = self.cnx.root()
