@@ -1,0 +1,17 @@
+ 
+1) Ingrese un numero y determine la cantidad de digitos y determinar si es capicua (que la primer mitad esta espejada a la segunda) http://es.wikipedia.org/wiki/Capicúa
+Tips: str(), len(), y slices [::] 
+
+2) ingrese una oracion y cuente cuantas veces aparece cada vocal en dicha oracion
+Tips: usar una lista de vocales, count()
+
+3) Ingresar numeros hasta que se ingrese enter (string vacio).
+	Contar la cantidad de números ingresado, y calcular la sumatoria y el promedio.
+
+4) Escriba un programa que permita crear una lista con Nombres y Generos, hasta que se ingrese un nombre vacio.
+ e imprima por cada nombre  "Vote por mi, querido <Nombre>" o "querida" si el genero es femenino.
+
+ver:
+	x in lista
+	max, min, sum, range, enumerate, zip, map
+	operador in
