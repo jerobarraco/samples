@@ -190,10 +190,12 @@ def mostrar2(raiz):
 >>> r = insertar(r, 20)
 >>> r = insertar(r, 9)
 """
-"""raiz = None
-for i in (31, 30, 28, 21, 18, 4, 2, 13, 16, 22, 20, 9):
+raiz = None
+for i in (3, 21, 30, 11, 13, 22,15, 8, 24, 16, 32, 25):
 	raiz = insertar(raiz, i)
-mostrar2(raiz)"""
+	print ("-----------------------------------")
+	mostrar2(raiz)
+#mostrar2(raiz)
 
 space = 4
 rp = None
