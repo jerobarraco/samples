@@ -1,0 +1,42 @@
+enumerate:
+	ingrese una lista de nombres, ordenela e imprima (en cada linea) la posición y el nombre.
+	pej:
+		>>> Juan
+		>>> Pedro
+		>>> Luis
+		
+	imprima:
+		1º Juan
+		2º Pedro
+		3º Luis
+	Tip: usar enumerate y sorted, los indices de enumerate comienzan en 0, sumarle 1
+
+map:
+	Ingrese una lista de nombres.
+	A partir de dicha lista, cree una lista con las longitudes de cada nombre*1.
+	Imprima la secuencia de cada con su longitud, pej:*2
+		Juan - 4
+		Pedro - 5
+		Martin - 6
+		
+	Tip: 1)map y len. 2) use zip
+	
+	Extra:
+		Si quiere hacerlo más pro, no utilice un for para imprimir. 
+		(Tip: print es una funcion, Tip2: en python3 hay que pasar el map por list para forzarlo a ejecutar en todos los items)
+
+max, min, sum:
+	Con el ejercicio anterior, modifiquelo para imprimir (por separado):
+		La palabra con mayor longitud (tip: max y index)
+		La palabra con menor longitud
+		La suma de la longitud de todas las palabras
+		
+Extra extra:
+	investigar como funciona el operador "in" para una lista.
+	Tip: "Juan" in nombres
+	
+Recursos:
+	https://drive.google.com/folderview?id=0Byy7aUl9u4fBazVObHpyRjZzQUk&usp=sharing#list
+	http://www.diveintopython3.net
+	https://cloud.github.com/downloads/diveintomark/diveintopython3/dive-into-python3.pdf
+	http://pythontutor.com
