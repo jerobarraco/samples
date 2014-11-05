@@ -2,6 +2,7 @@ http://mundogeek.net/tutorial-python/
 https://code.google.com/p/spyderlib/downloads/list
 http://python.org.ar/pyar/
 http://python.org/download/
+http://codingame.com
 http://www.moongate.com.ar/
 
 learning (at/arroba) moongate.com.ar
