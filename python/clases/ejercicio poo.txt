@@ -1,0 +1,32 @@
+A) Crear una clase "Alumno" que contenga los siguientes _atributos_: Nombre, edad, notas (lista de 3 notas)
+1) Crear un método "darDatos" que reciba el Nombre y la edad y lo almacene (en la instancia), además que cree (inicialice) el vector de notas en vacío.
+2) Crear un método "darNotas" que reciba las 3 notas y las almacene (en la instancia)
+3) Crear un método "promedio" que devuelva el promedio de dicho alumno (instancia).
+4) Crear un método "aprobado" que devuelva True en caso que el alumno haya aprobado, False en caso contrario.
+	Para aprobar se require que las 3 notas sean mayor o igual a 4, y que el promedio sea mayor o igual a 6.
+5) Crear un método "imprimir" que imprima los datos de la instancia.
+
+-1) (Extra) Utilizar el método especial __init__ en vez de darDatos para inicializar los datos de la instancia, recibiendo el Nombre y la Edad de manera _opcional_.
+	Tip: puedo utilizar darDatos desde __init__
+
+B) Crear una clase "Clase" que contenga los siguientes atributos: 
+	Nombre del profesor, Nombre de la asignatura, Año (curso), alumnos (lista de "alumnos" (instancias del tipo Alumno)).
+1) Crear un método "darDatos" para asignar el Profesor, Asignatura y Año, así como inicializar la lista de alumnos. (Puede utilizar __init__ si lo desea).
+2) Crear un método "nuevoAlumno" para asignar un nuevo alumno a la clase. Tip: puede pasar una instancia de "Alumno" como parámetro, o el nombre y edad de un alumno (como más prefiera).
+3) Crear un método "obtenerAlumno", el cual reciba como parámetro el nombre del alumno, y devuelva la instancia de tipo "Alumno" que le corresponda.
+4) Crear un método "cantAlumnos" que devuelva la cantidad de alumnos.
+5) Crear un método "cantAprobados" que devuelva la cantidad de alumnos aprobados.
+6) Crear un método "imprimir" que imprima los datos del curso, incluyendo los datos de los alumnos.
+
+Para ambos ejercicios implemente un código de prueba. pej:
+
+juan = Alumno()
+juan.darDatos("Juan", 23)
+pedro = Alumno()
+pedro.darDatos("Pedro", 25)
+
+historia = Clase()
+clase.darDatos("Pablo Profesor", "Historia 1", "7mo")
+clase.nuevoAlumno(pedro)
+clase.nuevoAlumno(juan)
+clase.imprimir()
