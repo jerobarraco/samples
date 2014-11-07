@@ -97,47 +97,5 @@ def borrarhojas(raiz):
 		#finsi
 	#finmientras
 	return raiz
-	
-def borrarhojas2(raiz):
-	pila = []
-	#los datos son:
-	#nodo : nodo actual que queremos analizar
-	#padre : el padre de este nodo
-	#izq : Verdadero si esta a la izq del padre
-	#recorrer: Verdadero si solo queremos recorrerlo, o falso si intentar eliminarlo
-	pila.insert(0, (raiz, None, False, True))
-	
-	while pila:# pila != Null
-		nodo, padre, izq, recorrer = pila.pop(0)
-		if (recorrer):
-			pila.insert(0, (nodo, padre, izq, False))
-			if(nodo.izq != None):
-				pila.insert(0, (nodo.izq, nodo, True, True))
-			#finsi
-			if(nodo.der != None):
-				pila.insert(0, (nodo.der, nodo, False, True))
-		else:
-			if(nodo.izq == None and nodo.der == None):
-				if (nodo.dato == 0):
-					if (padre == None):
-						raiz = None
-					else:
-						#LCelda (padre, dato, linkder, linkizq
-						linkder = padre.der
-						linkizq = padre.izq
-						if(izq):
-							linkizq = None
-						else:
-							linkder = None
-						#GCelda
-						padre.der = linkder
-						padre.izq = linkizq
-					#finsi	
-					nodo = None #libcelda
-				#finsi
-			#finsi
-		#finsi
-	#finmientras
-	return raiz
 
 r = borrarhojas(r)
