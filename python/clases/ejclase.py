@@ -58,3 +58,56 @@ print (hora3 == hora2)
 res = hora1 + Tiempo(9, 10, 30)
 print(res)
 print(hora1)
+
+
+#Ej2
+
+import math
+class Circulo:
+	rad = 0
+	def __init__(self, rad=0):
+		print("circulo ini")
+		self.rad = rad
+	def area(self):
+		print("area circulo")
+		return (self.rad**2)*math.pi
+	def per(self):
+		print("perimetro circulo")
+		return self.rad*2*math.pi
+
+class Esfera(Circulo):
+	def area(self):
+		print("area esfera")
+		return 4*super().area()
+	
+	def volumen(self):
+		print("volumen esfera")
+		return 4*self.area()
+		#return ((self.rad**3)*math.pi*4)/3.0#4188.790204786391
+
+class Cilindro(Circulo):
+	altura = 0
+	def __init__(self, radio =0, altura=0):
+		super(Cilindro, self).__init__(radio)
+		self.altura = altura
+		
+	def area(self):
+		print("area cilindro")
+		ac = super().area()
+		return (2*ac)+(self.per()*self.altura)
+	
+	def volumen(self):
+		print("volumen cilindro")
+		return self.altura*super().area()
+	
+c = Circulo(10)
+print(c.area())
+print(c.per())
+
+es = Esfera(10)
+print(es.area())
+print(es.volumen())
+
+ci = Cilindro(10, 10)
+print(ci.area())
+print(ci.volumen())
