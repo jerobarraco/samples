@@ -1,0 +1,61 @@
+ 
+Desarrollar una clase "Tiempo" que permita manejar una hora (hora minutos y segundos (y milisegundos si lo desea)).
+Tip: Los datos pueden estar almacenados en milisegundos o por separado (horas, minutos y segundos), utilice el que piense es más fácil. Si se traba con uno pruebe con el otro método.
+Tip: si cuenta con el tiempo pruebe a ver los errores que se devuelven cuando no están implementadas las funciones necesarias.
+
+Implemente lo necesario para que:
+1)Se pueda instanciar la clase y asignar los datos. Si no se asignan datos, debe iniciarse en 00:00:00.000
+
+Ej:
+	hora1 = Tiempo(10, 30, 42)
+	hora2 = Tiempo() # 0 horas, 0 minutos, 0 segundos (0 milisegundos)
+	hora3 = Tiempo(0, 0, 0)
+	
+2) se pueda imprimir los datos diréctamente, o poder utilizar "str" para obtener una representación de texto. (Tip __str__)
+PEj:
+	
+>>> text = str(hora1)
+>>> print ("Son las "+text)
+Son las 10 horas 30 minutos 42 segundos
+
+>>> print(hora2)
+0 horas 0 minutos 0 segundos
+
+3) pueda convertir el objeto a entero, representado como el total de milisegundos.
+PEj:
+
+>>> print(int(hora1))
+37842000
+
+4) pueda comparar dos horas y decir si una es menor o mayor que la otra. pej.
+Tip: puede reutilizar la conversión a int para simplificar la comparación.
+Tip: __lt__
+
+>>> print(hora2 < hora1)
+True
+>>> print(hora1>hora2)
+True
+>>> print(hora2>hora1)
+False
+
+5) Pueda decir si dos horas son equivalentes.
+(no si son la misma instancia, sino si representan la misma hora).
+Nota: note que pasa si no implementa ningún método e intenta comparar
+Tip: __eq__
+Ej:
+>>> hora1 == hora2
+False
+>> hora3 == hora2
+True
+
+Extra 1)
+Si se siente con confianza intente implementar un método que permita sumar o restar 2 horas.
+Nota: evaluar que pasa si se intenta hacer la suma sin realizar ningún cambio.
+Tip: __add__
+Tip: puede que usar la conversión a entero haga más fácil la suma.
+Tip: requerde que una operación de suma devuelve un NUEVO resultado sin modificar los operandos
+
+ej:
+res = hora1+Tiempo(9, 10, 30)
+print(res)
+print(hora1)
