@@ -113,3 +113,20 @@ Ej:
 >>> print(ci.volumen())
 3141.5926535897934
 
+Ejercicio Extra B++)
+Crear un programa que utilice las 3 clases anteriores (cilindro, circulo y esfera) y permita al usuario cargar cualquier cantidad de elementos.
+Deberá mostrar un menu como el siguiente:
+"""
+Que desea Hacer:
+	1- Ingresar Círculo
+	2- Ingresar Efera
+	3- Ingresar Cilindro
+	
+	0- Sumar y salir
+"""
+
+Según la opción ingresada deberá llamar a una funcion (una para cada opción (excepto salir)).
+Cada función deberá pedir al usuario los datos necesarios para instanciar la clase correspondiente, y luego devolverla.
+Todas las clases creadas deberán ser almacenadas.
+
+Al finalizar la carga (menu "0") se deberá calcular la suma de todas las areas e informarla.
