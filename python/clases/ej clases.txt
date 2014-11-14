@@ -125,8 +125,8 @@ Que desea Hacer:
 	0- Sumar y salir
 """
 
-Según la opción ingresada deberá llamar a una funcion (una para cada opción (excepto salir)).
-Cada función deberá pedir al usuario los datos necesarios para instanciar la clase correspondiente, y luego devolverla.
+Según la opción ingresada deberá llamar a una función (una para cada opción (excepto salir)).
+Cada función deberá pedir al usuario los datos necesarios para instanciar la clase correspondiente, y luego devolverla como resultado.
 Todas las clases creadas deberán ser almacenadas.
 
 Al finalizar la carga (menu "0") se deberá calcular la suma de todas las areas e informarla.
