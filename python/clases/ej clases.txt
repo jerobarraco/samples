@@ -1,0 +1,132 @@
+Ejercicio A) (son dos ;) ) 
+Desarrollar una clase "Tiempo" que permita manejar una hora (hora minutos y segundos (y milisegundos si lo desea)).
+Tip: Los datos pueden estar almacenados en milisegundos o por separado (horas, minutos y segundos), utilice el que piense es más fácil. Si se traba con uno pruebe con el otro método.
+Tip: si cuenta con el tiempo pruebe a ver los errores que se devuelven cuando no están implementadas las funciones necesarias.
+
+Implemente lo necesario para que:
+1)Se pueda instanciar la clase y asignar los datos. Si no se asignan datos, debe iniciarse en 00:00:00.000
+
+Ej:
+	hora1 = Tiempo(10, 30, 42)
+	hora2 = Tiempo() # 0 horas, 0 minutos, 0 segundos (0 milisegundos)
+	hora3 = Tiempo(0, 0, 0)
+	
+2) se pueda imprimir los datos diréctamente, o poder utilizar "str" para obtener una representación de texto. (Tip __str__)
+PEj:
+	
+>>> text = str(hora1)
+>>> print ("Son las "+text)
+Son las 10 horas 30 minutos 42 segundos
+
+>>> print(hora2)
+0 horas 0 minutos 0 segundos
+
+3) pueda convertir el objeto a entero, representado como el total de milisegundos.
+PEj:
+
+>>> print(int(hora1))
+37842000
+
+4) pueda comparar dos horas y decir si una es menor o mayor que la otra. pej.
+Tip: puede reutilizar la conversión a int para simplificar la comparación.
+Tip: __lt__
+
+>>> print(hora2 < hora1)
+True
+>>> print(hora1>hora2)
+True
+>>> print(hora2>hora1)
+False
+
+5) Pueda decir si dos horas son equivalentes.
+(no si son la misma instancia, sino si representan la misma hora).
+Nota: note que pasa si no implementa ningún método e intenta comparar
+Tip: __eq__
+Ej:
+>>> hora1 == hora2
+False
+>> hora3 == hora2
+True
+
+Extra 1)
+Si se siente con confianza intente implementar un método que permita sumar o restar 2 horas.
+Nota: evaluar que pasa si se intenta hacer la suma sin realizar ningún cambio.
+Tip: __add__
+Tip: puede que usar la conversión a entero haga más fácil la suma.
+Tip: requerde que una operación de suma devuelve un NUEVO resultado sin modificar los operandos
+
+ej:
+>>> res = hora1+Tiempo(9, 10, 30)
+>>> print(res)
+19 horas 41 minutos 12 segundos
+
+>>> print(hora1)
+10 horas 30 minutos 42 segundos
+
+Extra 2) Intente modificar el constructor para que acepte un String de la forma "HH:MM:SS" para inicializar la instancia.
+Tip: Utilice un parámetro opcional extra para identificar con que datos se crea la instancia.
+Pej
+>>> hora4 = Tiempo(texto="5:24:32")
+
+
+Ejercicio B)
+1) Cree una clase "Círculo", que posea los atributos "radio" y permita calcular el área y perímetro. Debe permitir también asignar el radio al crear la instancia.
+Ej: c = Circulo(3.2)
+tip: pi está en math (math.pi)
+tip: area = pi*(rad**2)
+tip: perimetro = 2*pi*rad
+
+2) Cree una clase "Esfera" que herede de Circulo.
+	Deberá crear una nueva versión del método área, y agregar uno para el volúmen.
+	
+tip: area = 4*pi*(rad**2) http://es.wikipedia.org/wiki/Esfera#.C3.81rea
+Tip (notar que es el área del círculo que lo representa multiplicado por 4) Tip:super()
+tip: volumen = rad*area_esfera
+o sino (4*pi*(rad**3))/3.0 http://es.wikipedia.org/wiki/Esfera#Volumen
+o expresado segun el area del circulo que lo representa: 4*r*area_circulo, o r*su_propio_area (sale de la relación de arquímedes V= 2/3(pi*(r**2)*2*r)
+
+3) Cree una clase "Cilindro" que herede de Círculo. Deberá ademas poseer un atributo "altura" el cual debe poder indicarse al momento de instaciación (junto con el radio) asi como también omitirse.
+
+* Implemetar una forma de calcular el area y el volúmen.
+tip volumen = altura*area del circulo que representa su base (tip:super) http://es.wikipedia.org/wiki/Cilindro#Volumen_del_cilindro
+tip area = (2*(area_circulo_base)) + (perimetro_circulo_base*altura) http://es.wikipedia.org/wiki/Cilindro#.C3.81rea_de_la_superficie_cil.C3.ADndrica
+
+Notar que pasa con la función "perimetro" en las clases Cilindro y Esfera. Si bien la esfera y cilindro son cuerpos (3d) y no figuras (2d) sigue teniendo cierta lógica hablar de su perímetro aunque no se suele denominar como tal. estaría representado como "superficie", lo que es devuelto por los métodos "area" en dichos cuerpos.
+
+
+Ej:
+>>> c = Circulo(10)
+>>> print(c.area())
+314.1592653589793
+>>> print(c.per())
+62.83185307179586
+
+>>> es = Esfera(10)
+>>> print(es.area())
+1256.6370614359173
+>>> print(es.volumen())
+5026.548245743669
+
+>>> ci = Cilindro(10, 10)
+>>> print(ci.area())
+1256.6370614359173
+>>> print(ci.volumen())
+3141.5926535897934
+
+Ejercicio Extra B++)
+Crear un programa que utilice las 3 clases anteriores (cilindro, circulo y esfera) y permita al usuario cargar cualquier cantidad de elementos.
+Deberá mostrar un menu como el siguiente:
+"""
+Que desea Hacer:
+	1- Ingresar Círculo
+	2- Ingresar Efera
+	3- Ingresar Cilindro
+	
+	0- Sumar y salir
+"""
+
+Según la opción ingresada deberá llamar a una función (una para cada opción (excepto salir)).
+Cada función deberá pedir al usuario los datos necesarios para instanciar la clase correspondiente, y luego devolverla como resultado.
+Todas las clases creadas deberán ser almacenadas.
+
+Al finalizar la carga (menu "0") se deberá calcular la suma de todas las areas e informarla.

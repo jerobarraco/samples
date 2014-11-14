@@ -1,0 +1,28 @@
+1- Ingresar una frase y contar cuantas veces aparece cada letra usando diccionarios.
+Tip: usar "in" o "get"
+Pej "uno dos tres" -> {'n': 1, 's': 2, 'e': 1, 't': 1, ' ': 2, 'r': 1, 'u': 1, 'o': 2, 'd': 1}
+
+
+2- Crear un calendario con diccionarios, donde cada mes tenga sus respectivos días.
+Todo esto usando diccionarios y vectores.
+Ej
+anio = {
+	'enero': [1,2,3,4,5,6.....31],
+	'febrero':[1,2,3,4...28],
+	etc}
+Tip: usar un vector con tuplas de meses y cantidades de dias, y usar range para generar cada mes
+
+3- Generar un programa que permita ingresar los datos de cada cliente (Nombre, telefono y cuit) y luego imprimirlos. Cuando se ingrese un nombre vacio la carga finaliza.
+Crear una lista con cada cliente, almacenar cada cliente en un diccionario.
+
+4- Modificar el anterior. Crear una funcion que permita recibir la lista anterior y la copie, y la modifique para que por cada cliente, tome el cuit y lo grabe como "CUIT" (en mayusculas) y elimine la clave "cuit" (en minusculas). y que devuelva la nueva lista
+
+Extra - 
+Si quieren ver algo mas, pueden ver :
+has_key, get, setdefault, update. values y keys
+
+
+id
+format numberFormat = 'Count in Spanish: {one}, {two}, {three}, ...'
+withSubstitutions = numberFormat.format(one='uno', two='dos', three='tres')
+print(withSubstitutions)
