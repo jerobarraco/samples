@@ -1,0 +1,1 @@
+yasm-1.3.0-win32.exe -f win32 -g cv8 main.asm
