@@ -3,8 +3,8 @@ org 100h
 ; como no puedo poner cualquier direccion uso las variables
 ; son casi lo mismo
 ; datos falsos
-nums DB "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!$%&/()=?¿-_<>#,;.:*º\{}[]"
-; la direccion de nums en tu ejercicio seria 50
+nums DB "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!$%&/()=?¿-_<>#,;.:*º\{}[]"; aca deberian haber 100 elementos
+; la direccion de nums en el ejercicio seria 500
 ; la de pares 600, e impares 601
 pares DB 0
 impares DB 0  
@@ -52,7 +52,6 @@ loop L;decrementa CX _Y_ salta a el label (L) si CX NO es zero
 
 ;L:      do 
 ;loop L  while( --i != 0)
-
 
 ret
 
