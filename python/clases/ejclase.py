@@ -111,3 +111,32 @@ print(es.volumen())
 ci = Cilindro(10, 10)
 print(ci.area())
 print(ci.volumen())
+
+
+
+class Circulo2:
+	__area = 0
+	__rad = 0
+	__per = 0
+	def __init__(self, r=0):
+		self.radio = r
+	def __setRad(self, r):
+		self.__rad = r
+		self.__per = 6.28*r
+		self.__area = 3.14*r*r
+		
+	def __getRad(self):
+		return self.__rad
+	
+	radio = property(__getRad, __setRad)
+	
+	def __getPer(self):
+		return self.__per
+	perimetro = property(__getPer)
+	
+	def __getArea(self):
+		return self.__area
+	area = property(fget=__getArea)
+	
+	
+	
