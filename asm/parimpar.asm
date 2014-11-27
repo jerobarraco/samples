@@ -1,9 +1,4 @@
-org 100h
-.data
-; como no puedo poner cualquier direccion uso las variables
-; son casi lo mismo
-; datos falsos
-nums DB "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!$%&/()=?¿-_<>#,;.:*º\{}[]"; aca deberian haber 100 elementos
+ï»¿nums DB "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!$%&/()=?Â¿-_<>#,;.:*Âº\{}[]"; aca deberian haber 100 elementos
 ; la direccion de nums en el ejercicio seria 500
 ; la de pares 600, e impares 601
 pares DB 0
@@ -27,11 +22,13 @@ L:;por cada elemento
     ; al hacer un shift, como la base es 2, estamos dividiendo por dos
     ; el bit que sobra se mete en CF (carry flag)
     ; si ese bit es 1, el numero era impar
-    shr ax, 1
+    shr al, 1
+    ;AND al, 1
 	
-	; si el carry es 1 entonces era impar, y saltamos ahi
-	; if (ax%2==0){}
+    ; si el carry es 1 entonces era impar, y saltamos ahi
+    ; if (ax%2==0){}
     JC impar; 
+    ;JNZ impar;si uso el AND uso este jump
     ; Si el carry era 0 se ejecuta esto. e sea, par
     PAR:        
     	; en el ejercicio seria inc [601]
@@ -46,7 +43,7 @@ L:;por cada elemento
     ; como dx tiene la direccion, al incrementarlo nos queda
     ; apuntando al siguiente elemento (siempre que el elemento sean bytes)
     inc bx
-loop L;decrementa CX _Y_ salta a el label (L) si CX NO es zero
+    loop L;decrementa CX _Y_ salta a el label (L) si CX NO es zero
 ;dec cx;decrementar (i--)
 ;jnz ini; while (i!=0)
 
@@ -54,5 +51,4 @@ loop L;decrementa CX _Y_ salta a el label (L) si CX NO es zero
 ;loop L  while( --i != 0)
 
 ret
-
 
