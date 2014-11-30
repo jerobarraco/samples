@@ -142,18 +142,10 @@ class Client(User):
 	def __gPhone(self): return self.__phone
 	phone = property(__gPhone, __sPhone)
 	
-	
-	
-	
 e = Employee("asdfasdf", "clave123", "clave123", "askdfls@lks.com", "M", 33)
 e.salary = 2500.0
 e2 = Employee("asdf123", "clave123", "clave123", "askdfls@lks.com", "M", 33)
 print (e.salary)
 c = Client("lklklk", "pppppp", "pppppp", "laksl@qqq", "F", 30)
 print (c.phone)
-"""
-3) Implemente una clase Client que implemente el atributo "phone".
-	El cual debe solo contener numeros o alguno de los simbolos "+- "
-	
-4) Implemente un menu para cargar los datos que permita cargar o Empleados o Clientes, con sus respectivos datos. O un código de ejemplo. 
-	Atrape y maneje las excepciones en este código."""
+#la implementación se las debo
