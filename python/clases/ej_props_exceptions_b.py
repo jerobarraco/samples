@@ -48,13 +48,14 @@ class UserPasswordTooSmall(InvalidUser): pass
 class UserEmailInvalid(InvalidUser): pass
 class UserGenderInvalid(InvalidUser): pass
 class UserAgeTooYoung(InvalidUser): pass
+class UserPasswordNeedsDigit(InvalidUser): pass
+class UserPasswordNeedsLower(InvalidUser): pass
+class UserPasswordNeedsUpper(InvalidUser): pass
 
 class EmployeeInvalidArea(InvalidUser): pass
 class EmployeeSalaryNotSet(InvalidUser): pass
 
-
 class ClientInvalidPhone(InvalidUser): pass
-
 
 
 class User:
@@ -76,6 +77,14 @@ class User:
 		pa, pb = ps
 		if (pa != pb): raise UserPasswordDoesntMatch()
 		if (len(pa)<6): raise UserPasswordTooSmall()
+		has_digit = has_upper = has_lower = False
+		for c in pa:
+			if (c.isdigit()): has_digit = True
+			elif (c.islower()): has_lower = True
+			elif (c.isupper()): has_upper  = True
+		if not has_digit: raise UserPasswordNeedsDigit()
+		if not has_lower: raise UserPasswordNeedsLower()
+		if not has_upper: raise UserPasswordNeedsUpper()
 		self.__pwd = hashlib.sha512(pa.encode("utf-8")).hexdigest()
 		
 	def __gPwd(self, p): return self.pwd
@@ -145,10 +154,10 @@ class Client(User):
 	def __gPhone(self): return self.__phone
 	phone = property(__gPhone, __sPhone)
 	
-e = Employee("asdfasdf", "clave123", "clave123", "askdfls@lks.com", "M", 33)
+e = Employee("asdfasdf", "clavE123", "clavE123", "askdfls@lks.com", "M", 33)
 e.salary = 2500.0
-e2 = Employee("asdf123", "clave123", "clave123", "askdfls@lks.com", "M", 33)
+e2 = Employee("asdf123", "cLave123", "cLave123", "askdfls@lks.com", "M", 33)
 print (e.salary)
-c = Client("lklklk", "pppppp", "pppppp", "laksl@qqq", "F", 30)
+c = Client("lklklk", "PPpP123", "PPpP123", "laksl@qqq", "F", 30)
 print (c.phone)
 #la implementación se las debo
