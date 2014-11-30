@@ -82,6 +82,9 @@ class User:
 	
 	pwd = property(__gPwd, __sPwd)
 	
+	def login(self, p):
+		return self.__pwd == hashlib.sha512(p.encode("utf-8")).hexdigest()
+	
 	def __sEmail(self, e):
 		if not "@" in e: raise UserEmailInvalid()
 		self.__email = e
