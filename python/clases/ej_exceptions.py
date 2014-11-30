@@ -57,7 +57,7 @@ class Tiempo:
 	
 	def __add__(self, other):
 		if not isinstance(other, Tiempo):
-			raise Excetion ("Can add Tiempo to "+str(type(other)))
+			raise Exception ("Can add Tiempo to "+str(type(other)))
 		res = Tiempo()
 		ms = int(self)+int(other)
 		s, res.ms = divmod(ms, 1000)
@@ -65,7 +65,7 @@ class Tiempo:
 		h, res.m = divmod(m, 60)
 		d, res.h = divmod(h, 24)
 		if(d>0): 
-			raise Excetpion ("There has been an overflow!")
+			raise Exception ("There has been an overflow!")
 		return res
 	
 hora1 = Tiempo(10, 30, 42)

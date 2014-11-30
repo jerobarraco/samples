@@ -43,6 +43,8 @@ class Tiempo:
 	def __str__(self):
 		return "{} horas {} minutos {} segundos".format(self.h, self.m, self.s, self.ms)
 	
+	#el __int__ termina siendo muy importante, al implementarlo me permite usar int(x) en __lt__ y __eq__
+	#y de esa manera poder comparar con cualquier tipo de dato convertible a entero
 	def __int__(self):
 		minutos = (self.h *60)  + self.m
 		segundos = (minutos *60) + self.s
@@ -146,15 +148,18 @@ ci = Cilindro(10, 10)
 print(ci.area())
 print(ci.volumen())
 
-
-
 class Circulo2:
 	__area = 0
 	__rad = 0
 	__per = 0
 	def __init__(self, r=0):
-		self.radio = r
+		self.radio = r 
+		#al utilizar el property para asignar el valor pasan cosas muy interesantes
+		#1) se "hereda el comportamiento" de __setRad (incluyendo verificaciones y excepciones)
+		
 	def __setRad(self, r):
+		print("soy el setRad de Circulo2")
+		if r<=0 : raise Exception("El radio debe ser mayor a 0")
 		self.__rad = r
 		self.__per = 6.28*r
 		self.__area = 3.14*r*r
@@ -166,8 +171,50 @@ class Circulo2:
 	
 	def __getPer(self):
 		return self.__per
+	
 	perimetro = property(__getPer)
 	
 	def __getArea(self):
 		return self.__area
+	
 	area = property(fget=__getArea)
+	
+class Esfera2(Circulo2):
+	__vol = 0
+	#En el caso de la esfera el area es diferente a la del círculo. es 4 veces el area del circulo. 
+	#Para recalcular al momento de asignar se deben tener en cuenta varias cosas
+	#primero podemos redefinir la property radio
+	#radio = property()
+	#al redefinir self.radio el __init__ de la clase CIRCULO utilizará este property y no el definido por la clase Circulo2 (que se sobreescribirá por ende, se perderá)
+	#esto es similar a las funciones virtuales y polimorfismo de c++
+	#El getter lo podemos reutilizar, y acá comienza lo interesante. como utilizamos nombres protegidos (pej "__rad") python en realidad renombra los atributos a:
+	#_Clase__atributo ( o sea que __rad en realidad es _Circulo2__rad.
+	#Si nosotros asignaramos __rad en realidad estaríamos creando otro atributo llamado _Esfera2__rad, y el getter intentaría leer _Circulo2__rad
+	#lo mismo pasa con los getters y setters de la clase Circulo2
+	#Si podemos crear un nuevo setter, que reutilice el setter de la clase padre
+	
+	def __setRad(self, r):
+		#notar el nombre de la funcion
+		#a pesar que la funcion reescribe __per y __area a un valor incorrecto para Esfera2, y que es ineficiente, suele ser un comportamiento mas aceptable que 
+		#arriesgarse a tener errores, y vale la pena la reutilizacion de comportamiento
+		self._Circulo2__setRad(r)#notar que esto lanzará una excepcion
+		self.__vol = self._Circulo2__area = 4*self._Circulo2__area 
+		
+	radio = property(Circulo2._Circulo2__getRad, __setRad)#notar los nombres
+	#notar tambien que _Circulo2__getRad intentara leer _Circulo2__rad
+	def __getVol(self): return self.__vol
+	volumen = property(__getVol)
+
+c = Circulo2(10)
+print(c.area)
+print(c.perimetro)
+
+es = Esfera2(10)
+print(es.area)
+print(es.volumen)
+print(es.perimetro)
+
+es = Esfera2(0)
+print(es.area)
+print(es.volumen)
+print(es.perimetro)
