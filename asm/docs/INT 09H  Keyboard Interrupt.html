@@ -1,0 +1,56 @@
+
+<!-- saved from url=(0056)http://webpages.charter.net/danrollins/techhelp/0106.HTM -->
+<html><!-- This document Copyright � 1997 by Dan Rollins --><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>INT 09H: Keyboard Interrupt</title></head>
+<body><form><table border="5" bgcolor="#C0C0C0"><tbody><tr><td><input type="button" value="Top" onclick="window.location=&#39;0002.HTM&#39;"></td><td><input type="button" value="Tech Topics" onclick="window.location=&#39;0003.HTM&#39;"></td><td><input type="button" value="- -" onclick="window.location=&#39;0105.HTM&#39;"></td><td><input type="button" value="++" onclick="window.location=&#39;0107.HTM&#39;"></td><td><input type="button" value="GoBack" onclick="history.back()"></td><td><input type="button" value="TECH Help! Home Page" onclick="window.location=&#39;INDEX.HTM&#39;"></td></tr></tbody></table></form><h2>INT 09H: Keyboard Interrupt</h2><pre> This hardware-generated interrupt (<a href="http://webpages.charter.net/danrollins/techhelp/0096.HTM">IRQ</a> 1) is executed upon each press and
+ release of a key.  The ROM-BIOS code interprets the keystroke, storing
+ values into the keyboard buffer at 0040:001e.  It also handles the special
+ cases of the PrtSc, SysReq, Ctrl+Alt+Del, Ctrl+NumLock (or Pause) keys,
+ and tracks the status of the shift and case-lock keys.
+
+ See:  <a href="http://webpages.charter.net/danrollins/techhelp/0228.HTM">INT 16H</a>  ......... BIOS service to access keys stored in the buffer
+                          and obtain status of the certain shift keys.
+       <a href="http://webpages.charter.net/danrollins/techhelp/0057.HTM">Scan Codes</a> ....... a list of the values of each possible keystroke
+                          as it is received by INT 09H.
+       <a href="http://webpages.charter.net/danrollins/techhelp/0046.HTM">ASCII Table</a>
+       <a href="http://webpages.charter.net/danrollins/techhelp/0055.HTM">Extended ASCII</a> ... a summary of the values that BIOS stores into the
+                          keyboard buffer after it translates a scan code.
+       <a href="http://webpages.charter.net/danrollins/techhelp/0058.HTM">Keyboard Flags</a> ... a summary of how to obtain, test for, and modify
+                          the bit-settings of shift and case-lock flags.
+
+ <a href="http://webpages.charter.net/danrollins/techhelp/0020.HTM">TSR</a>s that have a hot-key to trigger a popup usually intercept INT 09H and
+ test for a certain key with a sequence such as this:
+
+         push    ax
+         in      al,60H             ;read the key
+         cmp     al,POP_KEY         ;is this the hot key?
+         je      do_pop             ; yes, trigger the popup
+                                    ;  no, drop through to original driver
+         pop     ax
+         jmp     cs:[int9_vect]     ;just hop out to original int handler
+
+ do_pop: ;------ following housekeeping is needed to satisfy the hdwr int
+
+         in      al,61H             ;get value of keyboard control lines
+         mov     ah,al              ; save it
+         or      al,80h             ;set the "enable kbd" bit
+         out     61H,al             ; and write it out the control port
+         xchg    ah,al              ;fetch the original control port value
+         out     61H,al             ; and write it back
+
+         mov     al,20H             ;send End-Of-Interrupt signal
+         out     20H,al             ; to the 8259 Interrupt Controller
+         ;------ other code handles other tests and finally triggers popup
+
+��CPU Exception Interrupt��
+  286+ computer execute INT 09H when the math coprocessor encounters an
+  Segment Overrun exception.
+
+See Also: <a href="http://webpages.charter.net/danrollins/techhelp/0096.HTM">IRQs: Hardware Interrupts</a>
+          <a href="http://webpages.charter.net/danrollins/techhelp/0020.HTM">TSR Functions</a>
+          <a href="http://webpages.charter.net/danrollins/techhelp/0093.HTM">BIOS Data Area</a>
+          <a href="http://webpages.charter.net/danrollins/techhelp/NOTHERE.HTM">I/O Port Map</a>
+          <a href="http://webpages.charter.net/danrollins/techhelp/0095.HTM">ROM-BIOS Functions</a>
+          <a href="http://webpages.charter.net/danrollins/techhelp/0005.HTM">DOS Functions</a>
+                                    -*-
+</pre>
+</body></html>

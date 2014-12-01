@@ -1,4 +1,6 @@
-﻿nums DB "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!$%&/()=?¿-_<>#,;.:*º\{}[]"; aca deberian haber 100 elementos
+﻿org 100h
+.data
+nums DB "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!$%&/()=?¿-_<>#,;.:*º\{}[]"; aca deberian haber 100 elementos
 ; la direccion de nums en el ejercicio seria 500
 ; la de pares 600, e impares 601
 pares DB 0
