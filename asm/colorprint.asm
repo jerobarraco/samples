@@ -1,7 +1,3 @@
-
-; You may customize this and other start-up templates; 
-; The location of this template is c:\emu8086\inc\0_com_template.txt
-
 org 100h
 .data
   how    db 'how are you',13,10,'$'
@@ -9,8 +5,8 @@ org 100h
 
 
 lea dx, how
- call print
-     
+call print
+
 mov ax, 4C00h; terminating 
 int 21h      
 
