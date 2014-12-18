@@ -14,7 +14,7 @@ Cree una copia de los Ejercicios anteriores ( clases Tiempo, Cilindro, Circulo y
 	C) Modifique la clase Cilindro para que lance una excepción en caso de que se le intente asignar un radio negativo o cero. Lo mismo para las clases Esfera y Cilindro en caso de ser necesario.
 
 3) En el algoritmo que utiliza las clases del punto 2 (que permite al usuario cargar varias instancias). Realice la captura de dichas excepciones, y muestre un mensaje al usuario. 
-	Extra: En caso que haya creado una función que para la creación de cada instancia (anotese un punto extra y) examine la diferencia entre dónde se realiza la captura de la excepción  (Si dentro de cada función o en el bucle principal).
+	Extra: En caso que haya creado una función que para la creación de cada instancia (anotese un punto extra y) examine la diferencia entre dónde se realiza la captura de la excepción (si dentro de cada función o en el bucle principal).
 	ProTip : 'try: except Excetion, e:'
 	
 	Extra++: Modifique el algoritmo para que la carga termine al capturar la excepción del tipo "KeyboardInterrupt". (Que es lanzada al presionar CTRL+C )
