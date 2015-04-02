@@ -1,5 +1,5 @@
 #include <iostream>
-
+//theory http://en.wikipedia.org/wiki/Circular_buffer
 using namespace std;
 typedef int mytype; //so you know you can make a queue out of anything
 const unsigned int MAX=5;
@@ -8,14 +8,14 @@ mytype queue[MAX];
 
 void push(const mytype &v){
 	if (((_qend+1)%MAX) == _qstart){
-		//this might be hard to read, basically is. if the next falls in the same place as the begin, then its full,
+		//this might be hard to read, basically is: if the next falls in the same place as the begin, then its full,
 		//it just warps on the end using %MAX
 		//if you debug, you will notice that there is one item that will never be used,
 		//thats a limitation, you can't determinate if its full or emtpy using the same condition "start==end"
-		//there are 2 solutions, use different conditions (start==end -> empty, end+1=start -> full)
+		//there are 2 solutions, use different conditions (start==end -> empty, end+1==start -> full)
 		//or use a flag, but i dont like flags.
-		//though avoiding the % whichs is the reminder of a division probably will give you 1 or 2 cpu
-		//cicles, using if and flags cooooould help you, but there will be no noticeable improve
+		//though avoiding the % whichs is the reminder of a division probably will give you 1 or 2 cpu cicles
+		//using "if" and flags cooooould help you, but there will be no noticeable improvement
 		//not even 60 frames per second, (or try it :) )
 		return; //queue is full
 	}
