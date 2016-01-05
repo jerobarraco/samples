@@ -1,0 +1,40 @@
+CLIENT SCENARIO:
+My product is a resource for developers. A metaphor for this product would be like having a room full of software experts at your disposal to ask questions for any issue you encounter.
+
+On my application, developers ask questions to the community of developers. Experts or anyone from the community can respond to the question. Developers can comment on answers as well. Developers will be able to browse questions and search for questions based on keywords.
+
+Developers can up-vote if they agree with the answer, or down-vote if they disagree. This would sort answers to the question based on their validity--with the answers that receive the highest number of up-votes appearing at the top, and those with the lowest appearing at the bottom.
+
+Each developer can have an account. They must have an account if they wish to ask questions or respond to questions and/or answers. Developers can browse questions without an account. They can also up-vote and down-vote answers without an account. A developer’s account can be updated to have a profile picture. The profile page shows all the questions that the developer has asked or responded to.
+
+1) As a 
+I want to 
+So that 
+
+1) As a 
+I want to 
+So that 
+1) As a 
+I want to 
+So that 
+1) As a 
+I want to 
+So that 
+1) As a 
+I want to 
+So that 
+1) As a 
+I want to 
+So that 
+1) As a 
+I want to 
+So that 
+1) As a 
+I want to 
+So that 
+1) As a 
+I want to 
+So that 
+1) As a 
+I want to 
+So that 
