@@ -1,0 +1,30 @@
+In this assignment, you will create a work breakdown structure based on the software product described below.
+
+You are working a development team that is creating a mobile shopping application for a chain of clothing stores. Generate a work breakdown structure using the elements and skeleton structure below.
+
+Take the following elements and place them in the work breakdown structure:
+
+User Accounts
+Icons
+Mobile Shopping Application
+Programmed Content
+Secure Payment Method
+Payment Unit Tests
+Product Database
+Application Internal Documentation
+Search Unit Tests
+UI Graphics
+Search Feature
+Database Unit Tests
+User Interface
+User Manual
+Testing
+Documentation
+Database Internal Documentation
+User Account Unit Tests
+Logos
+UI Acceptance Tests
+
+
+
+
