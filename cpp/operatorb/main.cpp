@@ -28,6 +28,12 @@ public:
 		imag=y;
 	}
 
+	Complejo (const Complejo &o){
+		this->ent = o.ent;
+		this->imag = o.imag;
+	}
+
+
 	void AsignarReal(float f){
 	ent=f;}
 
@@ -37,6 +43,7 @@ public:
 
 	/*float DevolverReal(){return ent;};
 	float DevolverImag(){return imag;};*/
+
 	Complejo operator+(Complejo C);
 	Complejo operator*(Complejo C);
 	Complejo operator!();

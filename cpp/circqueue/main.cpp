@@ -20,7 +20,8 @@ void push(const mytype &v){
 		return; //queue is full
 	}
 
-	queue[_qend++] = v;
+	queue[_qend] = v;
+	_qend++;
 	//btw notice here that we are copyng the values BUT!
 	//as this is a static array you could simply use the values in the array, passing references or whatever
 
