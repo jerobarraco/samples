@@ -10,46 +10,51 @@ import utils
 class LZMJ22:
 	# 22 because it's 2022, but also LZ77, domination 88, and galaxy express 99?
 	fname = ""
-	maxData = 100 #1024**2 # TODO this is for testing
+	max_data = 100 #1024**2 # TODO this is for testing
 
-	def __init__(self, fname):
+	def __init__(self, fname, max_data = 100):
 		self.fname = fname
 		self.data = b""
+		self.max_data = max_data
 
 	def Encode(self):
 		chars = utils.SRFile(self.fname)
 
 		# out
 		packs = self._SPackets(chars)
-
 		schunks = utils.SChunk(packs)
 		sbytes = utils.SByte(schunks)
 		ofile = utils.SWFile('out.txt', sbytes)
 
-		it = ofile
+		it = packs
 		# force processing
 		for o in it:
 			p(o)
-			p(" ")
+			p("\n")
 
 	def _Literal(self, byte):
 		bits = utils.Bin(byte)
 		return "0" + bits
 
-	def _ShortRep(self):
+	def _ShortRep(self, b):
 		# 1 + 1 + 0 + 0
-		pass
+		return "1100" if self.data and self.data[-1] == b[0] else None
 
 	def _dataAdd(self, b):
 		self.data += b
 		# trim to only the lasts one
-		if len(self.data) > self.maxData :
-			self.data = self.data[-self.maxData:]
+		if len(self.data) > self.max_data :
+			self.data = self.data[-self.max_data:]
 			# TODO modify the pointer lists
 
 	def _SPackets(self, sbytes):
-		"""should return a list of bits"""
+		"""should return a list of bits, variable undefined length"""
 		for b in sbytes:
+			# try the repeat
+			shortRep = self._ShortRep(b)
+			if shortRep is not None:
+				yield shortRep
+
 			# todo try to encode the packet
 			# literals
 			yield self._Literal(b)
