@@ -71,7 +71,7 @@ def RLE0(l, nbits=2):
         bres = '001' + bcount
         res += bres
     return res
-    
+
 def LZMC(l, bits_a = 2, bits_b = 3, bits_c = 8):
     # like in lzm
     if l <= 0: # error
@@ -164,7 +164,7 @@ def SRRLE(gen):
         last = lasta+lastb
 
         if last != '00':
-            rle = RLE2(count)
+            rle = RLE0(count)
             if rle is not None:
                 m = max(m, count)
                 if count >3: print(m, count, rle)
@@ -224,7 +224,7 @@ def main():
         print( i, '\t', rle, '\n', 
         	 rld, '\t', RLE0(i), '\n',
             i, '\t', RLE2(i))
-    return
+    #return
     fname0 = '/home/nande/work/repos/samples/python/compress/compnotes.txt'
     fname ='/storage/emulated/0/.sstmp'
     fname2='/storage/emulated/0/Download/1366px-Competence_Hierarchy_adapted_from_Noel_Burch_by_Igor_Kokcharov.svg.png'
