@@ -51,8 +51,8 @@ def SRRLEG(gen):
         last = i
         count = 1
 
-def RLE(l, nbits=2):
-    # with constant bit size 
+def RLE0(l, nbits=2):
+    # with constant bit size
     #tested the sweetspot is 2 bits
     if l <= 0: # error
         return None
@@ -72,7 +72,7 @@ def RLE(l, nbits=2):
         res += bres
     return res
     
-def LZMC(l, bits_a = 2, bits_b = 3, bits_c = 8 ):
+def LZMC(l, bits_a = 2, bits_b = 3, bits_c = 8):
     # like in lzm
     if l <= 0: # error
         return None
@@ -80,7 +80,7 @@ def LZMC(l, bits_a = 2, bits_b = 3, bits_c = 8 ):
     l-=1
     m2 = (2**bits_a)
     m3 = (2**bits_b)
-    m8 = (2**6)
+    m8 = (2**bits_c)
     b3 = m2
     b8 = m2+m3
     bo = m2+m3+m8
@@ -104,12 +104,15 @@ def LZMC(l, bits_a = 2, bits_b = 3, bits_c = 8 ):
     res+=bin(l)[2:].zfill(bitl)
     return res
 
-def RLE0(num):
+def RLE2(num):
+    # using lmzc from wikipedia
+    # has fixed slots with different bit sizes
     if num <=0 : return None 
-    return '00'+LZMC(num)
+    return '00'+LZMC(num, 1, 2, 3)
 
 def JMan(num):
     # undefined for 0 and 1. always start with 0
+    # it uses very few bits for the small ones, but large bits for large ones, also has no lenght limit
     if num < 0 : 
         print ('No!')
         return ''
@@ -119,11 +122,11 @@ def JMan(num):
 
     # pseudo huffman to be used by lzmj
     bincount = bin(num)[2:] #it always starts with one. well seize that
-    bitlen = '0'*(len(bincount)-1) # dont count the 1
+    bitlen = '0'*(len(bincount)-1) # don't count the 1
     return bitlen + bincount
 
 def RLE1(l):
-    # with variable count  bitsize 
+    # with variable count bitsize
     if l <= 0: # error
         return None
     # 1 is 00 1, 2 = 00 010, 3= 00 011, 4= 00 00100
@@ -147,8 +150,7 @@ def RLD1(bits):
         if c is None: break
         res +=c
     return int(res, 2)
-    
- 
+
 
 def SRRLE(gen):
     count = 0
@@ -162,7 +164,7 @@ def SRRLE(gen):
         last = lasta+lastb
 
         if last != '00':
-            rle = RLE0(count)
+            rle = RLE2(count)
             if rle is not None:
                 m = max(m, count)
                 if count >3: print(m, count, rle)
@@ -176,10 +178,10 @@ def SRRLE(gen):
         count +=1
         
 def SChunk(gen, size=8):
-    buff = '' # i know theres stream buffer but overkill
+    buff = '' # i know there's stream buffer but overkill
     for i in gen:
         buff += i
-        if len(buff) >= size: #i might contaim more than 1 char
+        if len(buff) >= size: #i might contain more than 1 char
             ret = buff[:size]
             yield ret
             # todo verify slice returns empty on exact 8
@@ -204,7 +206,7 @@ def encode(fname):
     rle = SRRLE(delta)#bits)
     
     # out
-    ochunks = SChunk(rle,8)#bits)#rle)
+    ochunks = SChunk(rle, 8)#bits)#rle)
     obytes = SByte(ochunks)
     ofile = SWFile('out.txt', obytes)
     it = ofile
@@ -220,7 +222,8 @@ def main():
         rle = RLE1(i)
         rld = RLD1(iter(rle))
         print( i, '\t', rle, '\n', 
-        	 rld, '\t', RLE0(i))
+        	 rld, '\t', RLE0(i), '\n',
+            i, '\t', RLE2(i))
     return
     fname0 = '/home/nande/work/repos/samples/python/compress/compnotes.txt'
     fname ='/storage/emulated/0/.sstmp'
@@ -228,5 +231,5 @@ def main():
     fname3='/storage/emulated/0/Download/14 inner critic - 1 sarah.mp3'
     fname4='/storage/emulated/0/qpython/Ideas.txt'
     encode(fname0)
-    
+
 main()
