@@ -50,6 +50,32 @@ def Num_LZM(l, bits_a = 2, bits_b = 3, bits_c = 8):
 	res+=bin(l)[2:].zfill(bitl)
 	return res
 
+def Bin(c):
+	cord = ord(c)
+	cbin = bin(cord)
+	#2: removes 0b prefix
+	cbits = cbin[2:].zfill(8)
+	return cbits
+
+def SBin(chars):
+	# in 'c'... out '10101010'...
+	for c in chars:
+		cbits = Bin(c)
+		yield cbits
+
+def SDelta(bits):
+	# creates a delta encoding
+	last = next(bits, None)
+	if last is None: return
+
+	yield last
+	for b in bits:
+		if b == last:
+			yield '0'
+			continue
+		last = b
+		yield '1'
+
 def SChunk(gen, size=8):
 	# returns chunks for a given iterator
 	buff = '' # i know there's stream buffer but overkill
@@ -84,4 +110,4 @@ def SWFile(fname, sbytes):
 	f = open(fname, 'wb')
 	for i in sbytes:
 		f.write(i)
-		yield
+		yield i

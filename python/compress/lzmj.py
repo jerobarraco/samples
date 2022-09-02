@@ -18,18 +18,26 @@ class LZMJ22:
 
 		# out
 		packs = self._SPackets(chars)
-		ofile = utils.SWFile('out.txt', packs)
+
+		schunks = utils.SChunk(packs)
+		sbytes = utils.SByte(schunks)
+		ofile = utils.SWFile('out.txt', sbytes)
 
 		it = ofile
 		# force processing
 		for o in it:
 			p(o)
-	def _SPackets(self, bytes):
-		for b in bytes:
+			p(" ")
+
+	def _SPackets(self, sbytes):
+		"""should return a list of bits"""
+		for b in sbytes:
 			# todo try to encode the packet
 			# literals
-			yield "0" + b
-		pass
+			# TODO return bits
+			bits = utils.Bin(b)
+			yield "0" + bits
+
 def p(o):
 	sys.stdout.write(str(o))
 	pass
