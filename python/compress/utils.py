@@ -87,6 +87,7 @@ def SChunk(gen, size=8):
 			buff = buff[size:] #prolly a better way with pack or smth
 
 def SByte(str_bytes):
+	# turns a string of bits into a byte, must be 8 bits long
 	for b in str_bytes:
 		byte = int('0b'+b, 2)
 		yield byte.to_bytes(1,'big')
