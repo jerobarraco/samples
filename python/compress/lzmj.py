@@ -10,8 +10,11 @@ import utils
 class LZMJ22:
 	# 22 because it's 2022, but also LZ77, domination 88, and galaxy express 99?
 	fname = ""
+	maxData = 100 #1024**2 # TODO this is for testing
+
 	def __init__(self, fname):
 		self.fname = fname
+		self.data = b""
 
 	def Encode(self):
 		chars = utils.SRFile(self.fname)
@@ -29,14 +32,29 @@ class LZMJ22:
 			p(o)
 			p(" ")
 
+	def _Literal(self, byte):
+		bits = utils.Bin(byte)
+		return "0" + bits
+
+	def _ShortRep(self):
+		# 1 + 1 + 0 + 0
+		pass
+
+	def _dataAdd(self, b):
+		self.data += b
+		# trim to only the lasts one
+		if len(self.data) > self.maxData :
+			self.data = self.data[-self.maxData:]
+			# TODO modify the pointer lists
+
 	def _SPackets(self, sbytes):
 		"""should return a list of bits"""
 		for b in sbytes:
 			# todo try to encode the packet
 			# literals
-			# TODO return bits
-			bits = utils.Bin(b)
-			yield "0" + bits
+			yield self._Literal(b)
+
+			self._dataAdd(b)
 
 def p(o):
 	sys.stdout.write(str(o))
