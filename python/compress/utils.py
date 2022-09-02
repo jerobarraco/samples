@@ -79,8 +79,9 @@ def SRFile(fname):
 		if not c: break
 		yield c
 
-def SWFile(fname, gen):
+def SWFile(fname, sbytes):
+	"""Reads a sequence of bytes and writes to a file, yields each byte"""
 	f = open(fname, 'wb')
-	for i in gen:
+	for i in sbytes:
 		f.write(i)
-		yield i #TODO DEBUG, REMOVE
+		yield
