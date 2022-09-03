@@ -36,21 +36,25 @@ class LZMJ22:
 			utils.p(o)
 			utils.p("\n")
 
-	def _Literal(self, byte, bytes):
+	def _Literal(self):
+		byte = self._next()
 		bits = utils.Bin(byte)
+		self._advance()
 		self._dataAdd(byte)
 		return "0" + bits
 
-	def _ShortRep(self, b, bytes):
+	def _ShortRep(self):
 		# 1 + 1 + 0 + 0
 		# slicing a bytes structure returns an int D:
-		if self.data and self.data[-1] == ord(b):
+		b = self._next()
+		if self.data and b is not None and self.data[-1] == ord(b):
+			self._advance()
 			self._dataAdd(b)
 			return "110"
 
 		return None
 
-	def _Pointer(self, x, y):
+	def _Pointer(self):
 		# holds the current tested bytes, separate from nexts to not mess around
 		# i could be using nexts here. but i kind of want to decouple this function as much as possible
 		matches = []
@@ -96,7 +100,7 @@ class LZMJ22:
 		dataPos, l = maxMatch
 		off = dataLen - dataPos
 		matchText = self.data[-off:-off+l]
-		self.nexts = self.nexts[l:]
+		self._advance(l)
 		self._dataAdd(matchText)
 		# optimization since we will never have an offset smaller than that
 		off -= minLen
@@ -111,7 +115,19 @@ class LZMJ22:
 		# trim to only the lasts one
 		if len(self.data) > self.max_data :
 			self.data = self.data[-self.max_data:]
-			# TODO modify the pointer lists (we nteed to have a pointer list first)
+			# TODO modify the pointer lists (we need to have a pointer list first)
+
+	def _next(self):
+		if len(self.nexts)<1: return None
+		return utils.Int2Byte(self.nexts[0]) # ensure is a byte not an int
+
+	def _advance(self, by=1):
+		self.nexts = self.nexts[by:]
+
+	def _getOne(self):
+		n = self._next()
+		self._advance()
+		return n
 
 	def _SPackets(self, sbytes):
 		"""should return a list of bits, variable undefined length"""
@@ -126,11 +142,9 @@ class LZMJ22:
 			if not self.nexts:
 				break
 
-			n = self.nexts[0].to_bytes(1, "big") # ensure is a byte not an int
-			self.nexts = self.nexts[1:]
 			# try the different command in order of priority
 			for f in [self._Pointer, self._ShortRep, self._Literal]:
-				val = f(n, sbytes)
+				val = f()
 				if val is not None:
 					yield val
 					break
