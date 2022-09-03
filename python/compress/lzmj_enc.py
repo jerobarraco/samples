@@ -106,7 +106,7 @@ class LZMJ22:
 		off -= minLen
 		l -= minLen
 
-		binOff = utils.USE_LZMA and utils.Num_LZM(off, *utils.LZM_BOUNDS) or utils.Num_JMan(off)
+		binOff = utils.Num_LZM(off, *utils.LZM_BOUNDS) if utils.USE_LZMA else utils.Num_JMan(off)
 		binL = utils.Num_JMan(l) #utils.Bin(l, 4)
 		return "10" + binOff + binL
 

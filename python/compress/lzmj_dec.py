@@ -75,6 +75,7 @@ class LZMJ22Dec:
 				buff = buff[3:]
 				yield self._ShortRep()
 				continue
+
 			print ("111 not implemented!")
 			buff = buff[3:]
 
