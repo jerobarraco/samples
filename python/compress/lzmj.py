@@ -45,6 +45,8 @@ class LZMJ22:
 	def _Pointer(self, b, bytes):
 		cur = b # holds the current tested bytes, separate from nexts to not mess around
 		matches = []
+		minLen = 2
+
 		# find all matches
 		for i, d in enumerate(self.data):
 			# when a match is found keep testing to find the length
@@ -67,7 +69,7 @@ class LZMJ22:
 					l+=1
 				#end while
 				match = (i, l) # new match
-				if l > 1:
+				if l >= minLen:
 					matches.append(match)
 
 		# find the longest match
@@ -77,13 +79,26 @@ class LZMJ22:
 				maxMatch = m
 
 		# restore unused bytes. if not a good match has been found
-		if maxMatch is None or maxMatch[1] < 2:
+		if maxMatch is None or maxMatch[1] < minLen:
 			self.nexts += maxMatch and cur[maxMatch[1]:] or cur[1:]
 			return None
 
 		# actually encode the thing
+		pos, l = maxMatch
+		off = len(self.data) - pos
 
-		return "10"
+		# optimization since we will never have an offset smaller than that
+		off -= minLen
+		l -= minLen
+
+		binOff = utils.Num_LZM(off, 2, 3, 8)
+		binL = utils.Num_JMan(l) #utils.Bin(l, 4)
+		'''
+		111110000000000
+		01234
+		15 - 4 = 11
+		'''
+		return "10" + binOff + binL
 
 	# taking a break brb soon
 	def _dataAdd(self, b):

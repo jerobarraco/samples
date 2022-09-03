@@ -4,13 +4,12 @@ __copyright__ = "Copyright 2022, Jeronimo Barraco-Marmol"
 __license__ = "AGPLv1"
 
 def Num_JMan(num):
-	# undefined for 0 and 1. always start with 0
-	# it uses very few bits for the small ones, but large bits for large ones, also has no lenght limit
+	# 0 based. it uses very few bits for the small ones, but large bits for large ones, also has no lenght limit
 	if num < 0 :
 		print ('No!')
 		return ''
 
-	if num == 0: return '0'
+	num += 1 # handles the fact we can´t encode a 0
 	if num == 1: return '1'
 
 	# pseudo huffman to be used by lzmj
@@ -20,41 +19,42 @@ def Num_JMan(num):
 
 def Num_LZM(l, bits_a = 2, bits_b = 3, bits_c = 8):
 	# like in lzm
-	if l <= 0: # error
+	if l < 0: # error
 		return None
 
-	l-=1
-	m2 = (2**bits_a)
-	m3 = (2**bits_b)
-	m8 = (2**bits_c)
-	b3 = m2
-	b8 = m2+m3
-	bo = m2+m3+m8
+	ma = (2**bits_a)
+	mb = (2**bits_b)
+	mc = (2**bits_c)
+	bb = ma
+	bc = ma+mb
+	bo = ma+mb+mc
 	res = ''
 	bitl =1
-	if l<b3:
+	if l<bb:
 		res ='0'
 		bitl = bits_a
-	elif l<b8:
-		l -= b3
+	elif l<bc:
+		l -= bb
 		res ='10'
 		bitl=bits_b
 	elif l<bo:
-		l-= b8
+		l-= bc
 		res ='11'
 		bitl=bits_c
 	else:
 		print('overflow')
-		bitl = 0
+		res = "11"
+		l = bo-1 # overflow protection
+		bitl = bits_c
 
-	res+=bin(l)[2:].zfill(bitl)
+	res += bin(l)[2:].zfill(bitl)
 	return res
 
-def Bin(c):
+def Bin(c, pad=8):
 	cord = ord(c)
 	cbin = bin(cord)
 	#2: removes 0b prefix
-	cbits = cbin[2:].zfill(8)
+	cbits = cbin[2:].zfill(pad)
 	return cbits
 
 def SBin(chars):

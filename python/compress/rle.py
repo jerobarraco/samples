@@ -4,6 +4,8 @@ __author__ = "Jeronimo Barraco-Marmol"
 __copyright__ = "Copyright 2022, Jeronimo Barraco-Marmol"
 __license__ = "AGPLv1"
 
+import utils
+
 def SRFile(fname):
 	# in fname out 'c'...
 	f = open(fname, 'rb')
@@ -74,65 +76,20 @@ def RLE0(l, nbits=2):
 		res += bres
 	return res
 
-def LZMC(l, bits_a = 2, bits_b = 3, bits_c = 8):
-	# like in lzm
-	if l <= 0: # error
-		return None
-   
-	l-=1
-	m2 = (2**bits_a)
-	m3 = (2**bits_b)
-	m8 = (2**bits_c)
-	b3 = m2
-	b8 = m2+m3
-	bo = m2+m3+m8
-	res = ''
-	bitl =1
-	if l<b3:
-		res ='0'
-		bitl = bits_a
-	elif l<b8:
-		l -= b3
-		res ='10'
-		bitl=bits_b
-	elif l<bo:
-		l-= b8
-		res ='11'
-		bitl=bits_c
-	else:
-		print('overflow')
-		bitl = 0
-
-	res+=bin(l)[2:].zfill(bitl)
-	return res
-
 def RLE2(num):
 	# using lmzc from wikipedia
 	# has fixed slots with different bit sizes
 	if num <=0 : return None
-	return '00'+LZMC(num, 1, 2, 3)
-
-def JMan(num):
-	# undefined for 0 and 1. always start with 0
-	# it uses very few bits for the small ones, but large bits for large ones, also has no lenght limit
-	if num < 0 :
-		print ('No!')
-		return ''
-
-	if num == 0: return '0'
-	if num == 1: return '1'
-
-	# pseudo huffman to be used by lzmj
-	bincount = bin(num)[2:] #it always starts with one. well seize that
-	bitlen = '0'*(len(bincount)-1) # don't count the 1
-	return bitlen + bincount
+	num-=1
+	return '00' + utils.Num_LZM(num, 1, 2, 3)
 
 def RLE1(l):
 	# with variable count bitsize
 	if l <= 0: # error
 		return None
 	# 1 is 00 1, 2 = 00 010, 3= 00 011, 4= 00 00100
-	return '00'+ JMan(l) # jman always start with 0. so warranties is mot 001
+	l-=1 # starts at 1
+	return '00'+ utils.Num_JMan(l) # jman always start with 0. so warranties is mot 001
 
 def RLD1(bits):
 	# to be reused by lzmj
