@@ -11,10 +11,11 @@ class LZMJ22:
 	# 22 because it's 2022, but also LZ77, domination 88, and galaxy express 99?
 	fname = ""
 	max_data = 100 #1024**2 # TODO this is for testing
+	nexts = b""
+	data = b""
 
 	def __init__(self, fname, max_data = 100):
 		self.fname = fname
-		self.data = b""
 		self.max_data = max_data
 
 	def Encode(self):
@@ -32,14 +33,59 @@ class LZMJ22:
 			p(o)
 			p("\n")
 
-	def _Literal(self, byte):
+	def _Literal(self, byte, bytes):
 		bits = utils.Bin(byte)
 		return "0" + bits
 
-	def _ShortRep(self, b):
+	def _ShortRep(self, b, bytes):
 		# 1 + 1 + 0 + 0
-		return "1100" if self.data and self.data[-1] == b[0] else None
+		# slicing a bytes structure returns an int D:
+		return "110" if self.data and self.data[-1] == ord(b) else None
 
+	def _Pointer(self, b, bytes):
+		cur = b # holds the current tested bytes, separate from nexts to not mess around
+		matches = []
+		# find all matches
+		for i, d in enumerate(self.data):
+			# when a match is found keep testing to find the length
+			if d == cur[0]:
+				# this could be extracted to a function
+				l = 1 # num chars
+				while True:
+					pos = i+l
+					# not enough data stranger
+					if len(self.data) <= pos: break
+
+					# read ahead, todo do something to put back a non match thing
+					if len(cur) <= l:
+						n = next(bytes, None)
+						if n is None:
+							print("Reached end of stream!")
+							break
+						cur += n
+					if self.data[pos] != cur[l]: break
+					l+=1
+				#end while
+				match = (i, l) # new match
+				if l > 1:
+					matches.append(match)
+
+		# find the longest match
+		maxMatch = None
+		for m in matches:
+			if maxMatch is None or maxMatch[1]> m[1]:
+				maxMatch = m
+
+		# restore unused bytes. if not a good match has been found
+		if maxMatch is None or maxMatch[1] < 2:
+			self.nexts += maxMatch and cur[maxMatch[1]:] or cur[1:]
+			return None
+
+		# actually encode the thing
+
+		return "10"
+
+	# taking a break brb soon
 	def _dataAdd(self, b):
 		self.data += b
 		# trim to only the lasts one
@@ -49,17 +95,24 @@ class LZMJ22:
 
 	def _SPackets(self, sbytes):
 		"""should return a list of bits, variable undefined length"""
-		for b in sbytes:
-			# try the repeat
-			shortRep = self._ShortRep(b)
-			if shortRep is not None:
-				yield shortRep
+		while True:
+			if not self.nexts:
+				b = next(sbytes, None)
+				if b is None:
+					print ("were done")
+					break
 
-			# todo try to encode the packet
-			# literals
-			yield self._Literal(b)
+				self.nexts += b
 
-			self._dataAdd(b)
+			n = self.nexts[0].to_bytes(1, "big") # ensure is a byte not an int
+			self.nexts = self.nexts[1:]
+			# try the different command in order of priority
+			for f in [self._Pointer, self._ShortRep, self._Literal]:
+				val = f(n, sbytes)
+				if val is not None:
+					yield val
+					break
+			self._dataAdd(n)
 
 def p(o):
 	sys.stdout.write(str(o))
