@@ -9,6 +9,7 @@ class LZMJ22Dec:
 	ifname = ""
 	ofname = ""
 	data = b""
+	max_data = utils.getMaxData()
 	def __init__(self, ifname, ofname):
 		self.ifname = ifname
 		self.ofname = ofname
@@ -32,16 +33,23 @@ class LZMJ22Dec:
 			count+=1
 			#utils.p("\n")
 		print()
-		print(count)
+		#print(count)
 		print("done")
 		pass
+
+	def _dataAdd(self, b):
+		self.data += b
+		# trim to only the lasts one
+		if len(self.data) > self.max_data:
+			self.data = self.data[-self.max_data:]
+			# TODO modify the pointer lists (we need to have a pointer list first)
 
 	def _SDecProc(self, decs):
 		for d in decs:
 			if decs is None:
 				print ("proc was none")
 				continue
-			self.data += d
+			self._dataAdd(d)
 			yield d
 
 	def _SDec(self, bins):
@@ -78,10 +86,12 @@ class LZMJ22Dec:
 
 			print ("111 not implemented!")
 			buff = buff[3:]
+		print (count)
 
 	def _Pointer(self, bins):
-		off = utils.SNum_JMan_Dec(bins) + 2# minimum 2 chars
-		l = utils.SNum_JMan_Dec(bins) +2
+		minLen = utils.POINTER_MIN_LEN
+		off = utils.SNum_JMan_Dec(bins) + minLen# minimum 2 chars
+		l = utils.SNum_JMan_Dec(bins) +minLen
 		end = -off + l
 		# warning, if this results in one char it will return an int. but that shouldn't (tm) happen
 		return self.data[-off:end]

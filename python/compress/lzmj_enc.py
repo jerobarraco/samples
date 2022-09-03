@@ -4,19 +4,17 @@ __copyright__ = "Copyright 2022, Jeronimo Barraco-Marmol"
 __license__ = "AGPLv1"
 
 import utils
-import multiprocessing
+# import multiprocessing
 
 class LZMJ22:
 	# 22 because it's 2022, but also LZ77, domination 88, and galaxy express 99?
 	fname = ""
 	ofname = ""
 
-	max_data = min(utils.MAX_DICT,
-				   utils.USE_LZMA and
-				   utils.Num_LZM_Max(*utils.LZM_BOUNDS) or utils.MAX_DICT)
+	max_data = utils.getMaxData()
 	nexts = b""
 	data = b""
-	_mpPool = multiprocessing.Pool()
+	#_mpPool = multiprocessing.Pool()
 
 	def __init__(self, fname, ofname):
 		self.fname = fname

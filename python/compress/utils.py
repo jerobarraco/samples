@@ -3,13 +3,17 @@ __author__ = "Jeronimo Barraco-Marmol"
 __copyright__ = "Copyright 2022, Jeronimo Barraco-Marmol"
 __license__ = "AGPLv1"
 
+import sys
+
 POINTER_MIN_LEN = 2
 USE_LZMA = False
 MAX_DICT = 1024**2
 LZM_BOUNDS = (3,4,8)
 #LZM_BOUNDS = (4,8,14)
 
-import sys
+def getMaxData():
+	return min(MAX_DICT, USE_LZMA and Num_LZM_Max(*LZM_BOUNDS) or MAX_DICT)
+
 def p(o):
 	#sys.stdout.write(str(o))
 	pass
@@ -31,7 +35,7 @@ def SNum_JMan_Dec(bins):
 		buff += cur
 
 	num = Int(buff)
-	num -= 1
+	num -= 1 # compensate encoder shifting to be able to encode a 0
 	return num
 
 def Num_JMan(num):
