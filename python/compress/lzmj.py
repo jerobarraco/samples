@@ -48,7 +48,8 @@ class LZMJ22:
 		return None
 
 	def _Pointer(self, b, bytes):
-		cur = b # holds the current tested bytes, separate from nexts to not mess around
+		cur = b+self.nexts # holds the current tested bytes, separate from nexts to not mess around
+		self.nexts = b""
 		matches = []
 		minLen = 2
 
