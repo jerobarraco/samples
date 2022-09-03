@@ -99,15 +99,22 @@ def SChunk(gen, size=8):
 			yield ret
 			buff = buff[size:] #prolly a better way with pack or smth
 
+def Byte(str_bin):
+	byte = int('0b' + str_bin, 2)
+	return byte.to_bytes(1, 'big')
+
 def SByte(str_bytes):
 	# turns a string of bits into a byte, must be 8 bits long
 	for b in str_bytes:
-		byte = int('0b'+b, 2)
-		yield byte.to_bytes(1,'big')
+		yield Byte(b)
 
-def SChar(strg):
+def SItem(strg): # somewhat opposite to chunk
 	"""in 'abc...x' out 'a'... Careful, it's inefficient"""
 	for s in strg:
+		# fix iterating bytes returning an int
+		if isinstance(s, bytes) and len(s)<2:
+			yield s
+			continue
 		for c in s:
 			yield c
 

@@ -159,7 +159,7 @@ def SWFile(fname, gen):
 def encode(fname):
 	chars = SRFile(fname)
 	bins = SRBin(chars)
-	bits = SChar(bins)
+	bits = utils.SItem(bins)
 	delta = SRDelta(bits)
 	rle = SRRLE(delta)#bits)
 
