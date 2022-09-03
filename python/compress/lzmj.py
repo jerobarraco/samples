@@ -10,13 +10,13 @@ import utils
 class LZMJ22:
 	# 22 because it's 2022, but also LZ77, domination 88, and galaxy express 99?
 	fname = ""
-	max_data = 100 #1024**2 # TODO this is for testing
+	max_data = 1024**2#utils.Num_LZM_Max(2, 3, 8)#100
 	nexts = b""
 	data = b""
 
-	def __init__(self, fname, max_data = 100):
+	def __init__(self, fname):
 		self.fname = fname
-		self.max_data = max_data
+		#self.max_data = min ( max_data, )
 
 	def Encode(self):
 		chars = utils.SRFile(self.fname)
@@ -27,7 +27,7 @@ class LZMJ22:
 		sbytes = utils.SByte(schunks)
 		ofile = utils.SWFile('out.txt', sbytes)
 
-		it = packs
+		it = ofile
 		# force processing
 		for o in it:
 			p(o)
@@ -35,12 +35,17 @@ class LZMJ22:
 
 	def _Literal(self, byte, bytes):
 		bits = utils.Bin(byte)
+		self._dataAdd(byte)
 		return "0" + bits
 
 	def _ShortRep(self, b, bytes):
 		# 1 + 1 + 0 + 0
 		# slicing a bytes structure returns an int D:
-		return "110" if self.data and self.data[-1] == ord(b) else None
+		if self.data and self.data[-1] == ord(b):
+			self._dataAdd(b)
+			return "110"
+
+		return None
 
 	def _Pointer(self, b, bytes):
 		cur = b # holds the current tested bytes, separate from nexts to not mess around
@@ -78,26 +83,23 @@ class LZMJ22:
 			if maxMatch is None or maxMatch[1]> m[1]:
 				maxMatch = m
 
+		self.nexts += maxMatch and cur[maxMatch[1]:] or cur[1:]
 		# restore unused bytes. if not a good match has been found
 		if maxMatch is None or maxMatch[1] < minLen:
-			self.nexts += maxMatch and cur[maxMatch[1]:] or cur[1:]
 			return None
 
 		# actually encode the thing
 		pos, l = maxMatch
 		off = len(self.data) - pos
-
+		matchText = self.data[-off:][:l]
+		self._dataAdd(matchText)
 		# optimization since we will never have an offset smaller than that
 		off -= minLen
 		l -= minLen
 
-		binOff = utils.Num_LZM(off, 2, 3, 8)
+		#binOff = utils.Num_LZM(off, 2, 3, 8)
+		binOff = utils.Num_JMan(off)
 		binL = utils.Num_JMan(l) #utils.Bin(l, 4)
-		'''
-		111110000000000
-		01234
-		15 - 4 = 11
-		'''
 		return "10" + binOff + binL
 
 	# taking a break brb soon
@@ -127,7 +129,6 @@ class LZMJ22:
 				if val is not None:
 					yield val
 					break
-			self._dataAdd(n)
 
 def p(o):
 	sys.stdout.write(str(o))
@@ -139,7 +140,7 @@ def main():
 	fname2='/storage/emulated/0/Download/1366px-Competence_Hierarchy_adapted_from_Noel_Burch_by_Igor_Kokcharov.svg.png'
 	fname3='/storage/emulated/0/Download/14 inner critic - 1 sarah.mp3'
 	fname4='/storage/emulated/0/qpython/Ideas.txt'
-	enc = LZMJ22(fname0)
+	enc = LZMJ22(fname0) #
 	enc.Encode()
 
 if __name__ == "__main__":

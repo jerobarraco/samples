@@ -4,6 +4,7 @@ __copyright__ = "Copyright 2022, Jeronimo Barraco-Marmol"
 __license__ = "AGPLv1"
 
 def Num_JMan(num):
+	"""this one is good for small numbers"""
 	# 0 based. it uses very few bits for the small ones, but large bits for large ones, also has no lenght limit
 	if num < 0 :
 		print ('No!')
@@ -17,7 +18,15 @@ def Num_JMan(num):
 	bitlen = '0'*(len(bincount)-1) # don't count the 1
 	return bitlen + bincount
 
+def Num_LZM_Max( bits_a = 2, bits_b = 3, bits_c = 8):
+	ma = (2**bits_a)
+	mb = (2**bits_b)
+	mc = (2**bits_c)
+	bo = ma+mb+mc
+	return bo-1
+
 def Num_LZM(l, bits_a = 2, bits_b = 3, bits_c = 8):
+	"""this one is good for big numbers"""
 	# like in lzm
 	if l < 0: # error
 		return None
@@ -51,7 +60,11 @@ def Num_LZM(l, bits_a = 2, bits_b = 3, bits_c = 8):
 	return res
 
 def Bin(c, pad=8):
-	cord = ord(c)
+	"""encodes a char or int to a binary with a specific size (min), can overflow"""
+	if isinstance(c, int):
+		cord = c
+	else:
+		cord = ord(c)
 	cbin = bin(cord)
 	#2: removes 0b prefix
 	cbits = cbin[2:].zfill(pad)
