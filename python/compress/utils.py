@@ -24,8 +24,9 @@ def SNum_JMan_Dec(bins):
 
 	buff = "1"
 	for i in range(bitc):
-		cur = next(bins)
-		buff+= cur
+		cur = next(bins, None)
+		if cur is None: break
+		buff += cur
 
 	num = Int(buff)
 	num -= 1
@@ -119,8 +120,8 @@ def SDelta(bits):
 
 def Chunk(gen, size=8):
 	# this needs to be sure that all elements are of size one, otherwise we would need to wrap with utils.SItem
-	return next(SChunk(gen, size))
-	# return next(SChunk(gen, size), None)
+	# return next(SChunk(gen, size))
+	return next(SChunk(gen, size), None)
 
 def SChunk(gen, size=8):
 	# returns chunks for a given iterator
@@ -151,12 +152,12 @@ def SByte(str_bytes):
 def SItem(strg): # somewhat opposite to chunk
 	"""in 'abc...x' out 'a'... Careful, it's inefficient"""
 	for s in strg:
-		# fix iterating bytes returning an int
-		if isinstance(s, bytes) and len(s)<2:
-			yield s
-			continue
 		for c in s:
-			yield c
+			# preserve type, fix iterating bytes returning an int
+			if isinstance(s, bytes):
+				yield Int2Byte(c)
+			else:
+				yield c
 
 def SRFile(fname):
 	"""Reads from a file byte by byte"""

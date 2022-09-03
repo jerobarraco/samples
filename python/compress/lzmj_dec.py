@@ -46,6 +46,7 @@ class LZMJ22Dec:
 				# this needs to be sure that all elements are of size one, otherwise we would need to wrap with utils.SItem
 				bits = utils.Chunk(bins, 8)
 				if bits is None: return
+
 				byte = utils.Byte(bits)
 				yield byte
 				continue
@@ -70,6 +71,7 @@ class LZMJ22Dec:
 		off = utils.SNum_JMan_Dec(bins) + 2# minimum 2 chars
 		l = utils.SNum_JMan_Dec(bins) +2
 		end = -off + l
+		# warning, if this results in one char it will return an int. but that shouldnt (tm) happen
 		return self.data[-off:end]
 
 	def _ShortRep(self):

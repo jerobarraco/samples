@@ -51,7 +51,6 @@ class LZMJ22:
 		return None
 
 	def _Pointer(self, b, bytes):
-
 		# holds the current tested bytes, separate from nexts to not mess around
 		# i could be using nexts here. but i kind of want to decouple this function as much as possible
 		cur = b+self.nexts
@@ -60,6 +59,7 @@ class LZMJ22:
 		minLen = 2
 		'''
 		TODO 
+			* dont use the bytes. self.nexts should be already set 
 			* make the matchmaking part into a function
 			* make sure that nexts is as long as the data buffer, unless close to eof
 			* precalculate range from len(nexts) to 2 before end.
@@ -80,7 +80,6 @@ class LZMJ22:
 					if len(cur) <= l:
 						n = next(bytes, None)
 						if n is None:
-							print("Reached end of stream!")
 							break
 						cur += n
 					if self.data[pos] != cur[l]: break
@@ -124,13 +123,15 @@ class LZMJ22:
 	def _SPackets(self, sbytes):
 		"""should return a list of bits, variable undefined length"""
 		while True:
-			if not self.nexts:
-				b = next(sbytes, None)
-				if b is None:
-					print ("were done")
-					break
+			# todo create function for readahead
+			toRead = max(1, len(self.data) - len(self.nexts))
+			while toRead >0:
+				n = next(sbytes, None)
+				if n is None: break
+				self.nexts += n
 
-				self.nexts += b
+			if not self.nexts:
+				break
 
 			n = self.nexts[0].to_bytes(1, "big") # ensure is a byte not an int
 			self.nexts = self.nexts[1:]
