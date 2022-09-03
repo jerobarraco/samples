@@ -24,7 +24,7 @@ class LZMJ22Dec:
 
 		ofile = utils.SWFile(self.ofname, obyte)
 
-		it = sproc
+		it = ofile
 		# force processing
 		count = 0
 		for o in it:
