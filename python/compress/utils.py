@@ -8,6 +8,7 @@ MAX_DICT = 1024**1
 LZM_BOUNDS = (3,4,8)
 #LZM_BOUNDS = (4,8,14)
 
+import sys
 def p(o):
 	#sys.stdout.write(str(o))
 	pass
@@ -154,7 +155,7 @@ def SItem(strg): # somewhat opposite to chunk
 	for s in strg:
 		for c in s:
 			# preserve type, fix iterating bytes returning an int
-			if isinstance(s, bytes):
+			if isinstance(c, int):
 				yield Int2Byte(c)
 			else:
 				yield c
@@ -164,7 +165,7 @@ def SRFile(fname):
 	f = open(fname, 'rb')
 	while True:
 		c = f.read(1)
-		if not c: break
+		if c is None or len(c) == 0: break
 		yield c
 
 def SWFile(fname, sbytes):

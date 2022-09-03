@@ -24,28 +24,39 @@ class LZMJ22Dec:
 
 		ofile = utils.SWFile(self.ofname, obyte)
 
-		it = ofile
+		it = sproc
 		# force processing
+		count = 0
 		for o in it:
 			utils.p(o)
-			utils.p("\n")
+			count+=1
+			#utils.p("\n")
+		print()
+		print(count)
+		print("done")
+		pass
 
 	def _SDecProc(self, decs):
 		for d in decs:
-			if decs is None : return
+			if decs is None:
+				print ("proc was none")
+				continue
 			self.data += d
 			yield d
 
 	def _SDec(self, bins):
 		# receives bits, make sure its one bit at a time
 		buff = ""
+		count = 0
 		for b in bins:
 			buff += b
+			count +=1
 			if buff[0] == "0":
 				buff = buff[1:]
 				# this needs to be sure that all elements are of size one, otherwise we would need to wrap with utils.SItem
 				bits = utils.Chunk(bins, 8)
-				if bits is None: return
+				if bits is None:
+					return
 
 				byte = utils.Byte(bits)
 				yield byte
@@ -71,9 +82,10 @@ class LZMJ22Dec:
 		off = utils.SNum_JMan_Dec(bins) + 2# minimum 2 chars
 		l = utils.SNum_JMan_Dec(bins) +2
 		end = -off + l
-		# warning, if this results in one char it will return an int. but that shouldnt (tm) happen
+		# warning, if this results in one char it will return an int. but that shouldn't (tm) happen
 		return self.data[-off:end]
 
 	def _ShortRep(self):
-		if len(self.data)<1: return b""
+		if len(self.data)<1:
+			return b""
 		return utils.Int2Byte(self.data[-1])
