@@ -3,8 +3,6 @@ __author__ = "Jeronimo Barraco-Marmol"
 __copyright__ = "Copyright 2022, Jeronimo Barraco-Marmol"
 __license__ = "AGPLv1"
 
-import sys
-
 import utils
 
 class LZMJ22Dec:
@@ -29,8 +27,8 @@ class LZMJ22Dec:
 		it = ofile
 		# force processing
 		for o in it:
-			p(o)
-			p("\n")
+			utils.p(o)
+			utils.p("\n")
 
 	def _SDecProc(self, decs):
 		for d in decs:
