@@ -3,8 +3,9 @@ __author__ = "Jeronimo Barraco-Marmol"
 __copyright__ = "Copyright 2022, Jeronimo Barraco-Marmol"
 __license__ = "AGPLv1"
 
+POINTER_MIN_LEN = 2
 USE_LZMA = False
-MAX_DICT = 1024**1
+MAX_DICT = 1024**2
 LZM_BOUNDS = (3,4,8)
 #LZM_BOUNDS = (4,8,14)
 

@@ -4,6 +4,7 @@ __copyright__ = "Copyright 2022, Jeronimo Barraco-Marmol"
 __license__ = "AGPLv1"
 
 import utils
+import multiprocessing
 
 class LZMJ22:
 	# 22 because it's 2022, but also LZ77, domination 88, and galaxy express 99?
@@ -15,11 +16,11 @@ class LZMJ22:
 				   utils.Num_LZM_Max(*utils.LZM_BOUNDS) or utils.MAX_DICT)
 	nexts = b""
 	data = b""
+	_mpPool = multiprocessing.Pool()
 
 	def __init__(self, fname, ofname):
 		self.fname = fname
 		self.ofname = ofname
-		#self.max_data = min ( max_data, )
 
 	def Encode(self):
 		chars = utils.SRFile(self.fname)
@@ -58,33 +59,29 @@ class LZMJ22:
 		# holds the current tested bytes, separate from nexts to not mess around
 		# i could be using nexts here. but i kind of want to decouple this function as much as possible
 		matches = []
-		minLen = 2
 		'''
 		TODO 
-			* dont use the bytes. self.nexts should be already set 
 			* make the matchmaking part into a function
-			* make sure that nexts is as long as the data buffer, unless close to eof
-			* precalculate range from len(nexts) to 2 before end.
 			* opt: call the matchmaking part using multiprocessing.Pool
 		'''
+		# make sure that nexts is as long as the data buffer, unless close to eof
+		minLen = utils.POINTER_MIN_LEN
 		dataLen = len(self.data)
-		maxLen = min(len(self.nexts), dataLen)
-		if maxLen <2: return
+		nextLen = len(self.nexts)
+		maxLen = min(nextLen, dataLen)
+		if maxLen < minLen: return
 
+		# precalculate range from len(nexts) to 2 before end.
 		start = dataLen - maxLen
-		end = maxLen  # -1 because range is non inclusive
+		end = maxLen
+		# need to pass the memory using shared memory
+		# matches = self._mpPool.imap_unordered(self._findMatch, range(start, end) )
+		# for m in matches : do the max thing
+
 		# find all matches
 		for i in range(start, end):
-			l = 0
-			dataPos = i
-			while dataPos<maxLen and l <maxLen:
-				if self.data[dataPos] != self.nexts[l]:
-					break
-				l+=1
-				dataPos = i+l
-			#end while
-			match = (i, l) # new match
-			if l >= minLen:
+			match = self._findMatch(i)
+			if match[1] >= minLen:
 				matches.append(match)
 
 		# find the longest match
@@ -99,7 +96,8 @@ class LZMJ22:
 		# actually encode the thing
 		dataPos, l = maxMatch
 		off = dataLen - dataPos
-		matchText = self.data[-off:-off+l]
+		end = off - l
+		matchText = self.data[-off:-end]
 		self._advance(l)
 		self._dataAdd(matchText)
 		# optimization since we will never have an offset smaller than that
@@ -109,6 +107,20 @@ class LZMJ22:
 		binOff = utils.Num_LZM(off, *utils.LZM_BOUNDS) if utils.USE_LZMA else utils.Num_JMan(off)
 		binL = utils.Num_JMan(l) #utils.Bin(l, 4)
 		return "10" + binOff + binL
+
+	def _findMatch(self, i):
+		l = 0
+		dataPos = i
+		dataLen = len(self.data)
+		nextLen = len(self.nexts)
+		while dataPos < dataLen and l < nextLen:
+			if self.data[dataPos] != self.nexts[l]:
+				break
+			l += 1
+			dataPos = i + l
+		# end while
+		match = (i, l)  # new match
+		return match
 
 	def _dataAdd(self, b):
 		self.data += b
