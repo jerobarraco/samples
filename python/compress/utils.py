@@ -3,6 +3,15 @@ __author__ = "Jeronimo Barraco-Marmol"
 __copyright__ = "Copyright 2022, Jeronimo Barraco-Marmol"
 __license__ = "AGPLv1"
 
+USE_LZMA = False
+MAX_DICT = 1024**1
+LZM_BOUNDS = (3,4,8)
+#LZM_BOUNDS = (4,8,14)
+
+def p(o):
+	#sys.stdout.write(str(o))
+	pass
+
 def Num_JMan(num):
 	"""this one is good for small numbers"""
 	# 0 based. it uses very few bits for the small ones, but large bits for large ones, also has no lenght limit
