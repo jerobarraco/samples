@@ -7,10 +7,12 @@ import sys
 
 import utils
 
+LZM_BOUNDS = (4,8,14)
 class LZMJ22:
 	# 22 because it's 2022, but also LZ77, domination 88, and galaxy express 99?
 	fname = ""
-	max_data = 1024**2#utils.Num_LZM_Max(2, 3, 8)#100
+
+	max_data = utils.Num_LZM_Max(*LZM_BOUNDS)#100 #1024**2
 	nexts = b""
 	data = b""
 
@@ -48,7 +50,10 @@ class LZMJ22:
 		return None
 
 	def _Pointer(self, b, bytes):
-		cur = b+self.nexts # holds the current tested bytes, separate from nexts to not mess around
+
+		# holds the current tested bytes, separate from nexts to not mess around
+		# i could be using nexts here. but i kind of want to decouple this function as much as possible
+		cur = b+self.nexts
 		self.nexts = b""
 		matches = []
 		minLen = 2
@@ -98,7 +103,7 @@ class LZMJ22:
 		off -= minLen
 		l -= minLen
 
-		#binOff = utils.Num_LZM(off, 2, 3, 8)
+		# binOff = utils.Num_LZM(off, *LZM_BOUNDS)
 		binOff = utils.Num_JMan(off)
 		binL = utils.Num_JMan(l) #utils.Bin(l, 4)
 		return "10" + binOff + binL
