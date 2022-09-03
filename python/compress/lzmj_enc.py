@@ -50,11 +50,9 @@ class LZMJ22:
 
 		return None
 
-	def _Pointer(self, b, bytes):
+	def _Pointer(self, x, y):
 		# holds the current tested bytes, separate from nexts to not mess around
 		# i could be using nexts here. but i kind of want to decouple this function as much as possible
-		cur = b+self.nexts
-		self.nexts = b""
 		matches = []
 		minLen = 2
 		'''
@@ -65,29 +63,25 @@ class LZMJ22:
 			* precalculate range from len(nexts) to 2 before end.
 			* opt: call the matchmaking part using multiprocessing.Pool
 		'''
-		# find all matches
-		for i, d in enumerate(self.data):
-			# when a match is found keep testing to find the length
-			if d == cur[0]:
-				# this could be extracted to a function
-				l = 1 # num chars
-				while True:
-					pos = i+l
-					# not enough data stranger
-					if len(self.data) <= pos: break
+		dataLen = len(self.data)
+		maxLen = min(len(self.nexts), dataLen)
+		if maxLen <2: return
 
-					# read ahead, todo do something to put back a non match thing
-					if len(cur) <= l:
-						n = next(bytes, None)
-						if n is None:
-							break
-						cur += n
-					if self.data[pos] != cur[l]: break
-					l+=1
-				#end while
-				match = (i, l) # new match
-				if l >= minLen:
-					matches.append(match)
+		start = dataLen - maxLen
+		end = maxLen  # -1 because range is non inclusive
+		# find all matches
+		for i in range(start, end):
+			l = 0
+			dataPos = i
+			while dataPos<maxLen and l <maxLen:
+				if self.data[dataPos] != self.nexts[l]:
+					break
+				l+=1
+				dataPos = i+l
+			#end while
+			match = (i, l) # new match
+			if l >= minLen:
+				matches.append(match)
 
 		# find the longest match
 		maxMatch = None
@@ -95,15 +89,14 @@ class LZMJ22:
 			if maxMatch is None or maxMatch[1]> m[1]:
 				maxMatch = m
 
-		self.nexts += maxMatch and cur[maxMatch[1]:] or cur[1:]
-		# restore unused bytes. if not a good match has been found
-		if maxMatch is None or maxMatch[1] < minLen:
+		if maxMatch is None:
 			return None
 
 		# actually encode the thing
-		pos, l = maxMatch
-		off = len(self.data) - pos
-		matchText = self.data[-off:][:l]
+		dataPos, l = maxMatch
+		off = dataLen - dataPos
+		matchText = self.data[-off:-off+l]
+		self.nexts = self.nexts[l:]
 		self._dataAdd(matchText)
 		# optimization since we will never have an offset smaller than that
 		off -= minLen
