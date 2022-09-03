@@ -12,6 +12,25 @@ def p(o):
 	#sys.stdout.write(str(o))
 	pass
 
+def SNum_JMan_Dec(bins):
+	cur = ""
+	bitc = 0
+	while cur != "1":
+		cur = next(bins, None)
+		if cur is None: break
+		if cur == "1":
+			break
+		bitc += 1
+
+	buff = "1"
+	for i in range(bitc):
+		cur = next(bins)
+		buff+= cur
+
+	num = Int(buff)
+	num -= 1
+	return num
+
 def Num_JMan(num):
 	"""this one is good for small numbers"""
 	# 0 based. it uses very few bits for the small ones, but large bits for large ones, also has no lenght limit
@@ -98,6 +117,11 @@ def SDelta(bits):
 		last = b
 		yield '1'
 
+def Chunk(gen, size=8):
+	# this needs to be sure that all elements are of size one, otherwise we would need to wrap with utils.SItem
+	return next(SChunk(gen, size))
+	# return next(SChunk(gen, size), None)
+
 def SChunk(gen, size=8):
 	# returns chunks for a given iterator
 	buff = '' # i know there's stream buffer but overkill
@@ -108,9 +132,16 @@ def SChunk(gen, size=8):
 			yield ret
 			buff = buff[size:] #prolly a better way with pack or smth
 
+def Int(str_bin):
+	"Returns an int from a string of bits, try to ensure they are 8 digits at most"
+	return int('0b' + str_bin, 2)
+
+def Int2Byte(num):
+	"Returns a byte from an int, make sure the int fits on a byte"
+	return num.to_bytes(1, 'big')
+
 def Byte(str_bin):
-	byte = int('0b' + str_bin, 2)
-	return byte.to_bytes(1, 'big')
+	return Int2Byte(Int(str_bin))
 
 def SByte(str_bytes):
 	# turns a string of bits into a byte, must be 8 bits long

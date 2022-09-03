@@ -58,7 +58,13 @@ class LZMJ22:
 		self.nexts = b""
 		matches = []
 		minLen = 2
-
+		'''
+		TODO 
+			* make the matchmaking part into a function
+			* make sure that nexts is as long as the data buffer, unless close to eof
+			* precalculate range from len(nexts) to 2 before end.
+			* opt: call the matchmaking part using multiprocessing.Pool
+		'''
 		# find all matches
 		for i, d in enumerate(self.data):
 			# when a match is found keep testing to find the length
