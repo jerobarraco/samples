@@ -6,7 +6,7 @@ __license__ = "AGPLv1"
 import sys
 
 POINTER_MIN_LEN = 2
-USE_LZMA = False
+USE_LZMA = True
 MAX_DICT = 1024**2
 LZM_BOUNDS = (3,4,8)
 #LZM_BOUNDS = (4,8,14)
@@ -35,6 +35,13 @@ def p(o):
 	#sys.stdout.write(str(o))
 	pass
 
+def Num(n):
+	return Num_LZM(n) if USE_LZMA else Num_JMan(n)
+
+# highly important that the generator yeilds ONE bit at a time
+def SNumDec(bins):
+	return SNum_LZM_Dec(bins) if USE_LZMA else SNum_JMan_Dec(n)
+
 def SNum_JMan_Dec(bins):
 	cur = ""
 	bitc = 0
@@ -46,9 +53,8 @@ def SNum_JMan_Dec(bins):
 		bitc += 1
 
 	buff = "1"
-	for i in range(bitc):
-		cur = next(bins, None)
-		if cur is None: break
+	cur = Chunk(bins, bitc, "")
+	if cur is not None:
 		buff += cur
 
 	num = Int(buff)
@@ -77,15 +83,46 @@ def Num_LZM_Max( bits_a = 2, bits_b = 3, bits_c = 8):
 	bo = ma+mb+mc
 	return bo-1
 
-def Num_LZM(l, bits_a = 2, bits_b = 3, bits_c = 8):
+def SNum_LZM_Dec(bins):
+	buff = ""
+	num = 0
+	cur = next(bins, None)
+	if cur is None: return num
+
+	lvl = 0
+	buff += cur
+	if buff != "0":
+		# read 10
+		cur = next(bins, None)
+		if cur is None: return num
+		buff += cur
+		lvl = 1 if buff == "10" else 2
+
+	bitc = LZM_BOUNDS[lvl]
+	maxs = [2**i for i in LZM_BOUNDS]
+	bases = (0, maxs[0], maxs[0]+maxs[1])
+	cur = Chunk(bins, bitc, "")
+	if cur is None:
+		return 0
+
+	num = Int(cur)
+	num += bases[lvl]
+	return num
+
+def Num_LZM(l):
 	"""this one is good for big numbers"""
 	# like in lzm
 	if l < 0: # error
 		return None
 
+	bits_a = LZM_BOUNDS[0]
+	bits_b = LZM_BOUNDS[1]
+	bits_c = LZM_BOUNDS[2]
+
 	ma = (2**bits_a)
 	mb = (2**bits_b)
 	mc = (2**bits_c)
+
 	bb = ma
 	bc = ma+mb
 	bo = ma+mb+mc
@@ -141,6 +178,8 @@ def SDelta(bits):
 		last = b
 		yield '1'
 
+
+# Dangerous function
 def Chunk(gen, size=8, pad=""):
 	# this NEEDS to be sure that all elements are of size one, otherwise a buffer will be lost
 	return next(SChunk(gen, size, pad), None)

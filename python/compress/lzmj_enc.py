@@ -104,8 +104,8 @@ class LZMJ22:
 		off -= minLen
 		l -= minLen
 
-		binOff = utils.Num_LZM(off, *utils.LZM_BOUNDS) if utils.USE_LZMA else utils.Num_JMan(off)
-		binL = utils.Num_JMan(l) #utils.Bin(l, 4)
+		binOff = utils.Num(off)
+		binL = utils.Num(l)
 		return utils.Packets.POINT + binOff + binL
 
 	def _findMatch(self, i):

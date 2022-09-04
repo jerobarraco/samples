@@ -108,8 +108,8 @@ class LZMJ22Dec:
 
 	def _Pointer(self, bins):
 		minLen = utils.POINTER_MIN_LEN
-		off = utils.SNum_JMan_Dec(bins) + minLen# minimum 2 chars
-		l = utils.SNum_JMan_Dec(bins) +minLen
+		off = utils.SNumDec(bins) + minLen# minimum 2 chars
+		l = utils.SNumDec(bins) + minLen
 		end = -off + l
 		# warning, if this results in one char it will return an int. but that shouldn't (tm) happen
 		return self.data[-off:end]
