@@ -14,6 +14,7 @@ class LZMJ22:
 	max_data = utils.getMaxData()
 	nexts = b""
 	data = b""
+	matches = []
 	#_mpPool = multiprocessing.Pool()
 
 	def __init__(self, fname, ofname):
@@ -55,6 +56,26 @@ class LZMJ22:
 
 		return None
 
+	def _LongRep(self):
+		# start from the oldest one, so we rotate them frequently and keep them in memory.
+		maxMatch = None
+		maxI = -1
+		dataL = len(self.data)
+		for i, off in enumerate(self.matches):
+			pos = dataL - off
+			match = self._matchFind(pos)
+			if match[1] < utils.POINTER_MIN_LEN : continue
+			if maxMatch is None or maxMatch[1]< match[1]:
+				maxMatch = match
+				maxI = i
+
+		if maxMatch is None:
+			return None
+
+		bOff, bLen = self._matchProcess(maxMatch)
+		codes = [utils.Packets.LONG_REP_0, utils.Packets.LONG_REP_1, utils.Packets.LONG_REP_2]
+		return codes[maxI] + bLen
+
 	def _Pointer(self):
 		# holds the current tested bytes, separate from nexts to not mess around
 		# i could be using nexts here. but i kind of want to decouple this function as much as possible
@@ -80,7 +101,7 @@ class LZMJ22:
 
 		# find all matches
 		for i in range(start, end):
-			match = self._findMatch(i)
+			match = self._matchFind(i)
 			if match[1] >= minLen:
 				matches.append(match)
 
@@ -93,22 +114,30 @@ class LZMJ22:
 		if maxMatch is None:
 			return None
 
+		# process the match
+		binOff, binL = self._matchProcess(maxMatch)
 		# actually encode the thing
-		dataPos, l = maxMatch
-		off = dataLen - dataPos
+		return utils.Packets.POINT + binOff + binL
+
+	def _matchProcess(self, match):
+		# actually encode the thing
+		off, l = match
 		end = off - l
 		matchText = self.data[-off:-end]
 		self._advance(l)
 		self._dataAdd(matchText)
+		self._matchAdd(off)
+
 		# optimization since we will never have an offset smaller than that
+		minLen = utils.POINTER_MIN_LEN
 		off -= minLen
 		l -= minLen
 
 		binOff = utils.Num(off)
 		binL = utils.Num(l)
-		return utils.Packets.POINT + binOff + binL
+		return binOff, binL
 
-	def _findMatch(self, i):
+	def _matchFind(self, i):
 		l = 0
 		dataPos = i
 		dataLen = len(self.data)
@@ -119,15 +148,27 @@ class LZMJ22:
 			l += 1
 			dataPos = i + l
 		# end while
-		match = (i, l)  # new match
+		off = dataLen - i
+		match = (off, l)  # new match
 		return match
+
+	def _matchAdd(self, off):
+		i = -1 if off not in self.matches else self.matches.index(off)
+		if i>=0:
+			self.matches.pop(i)
+
+		self.matches.append(off)
+		maxMatches = 3
+		if len(self.matches) > maxMatches:
+			self.matches = self.matches[-maxMatches:]
+			# need to debug this
 
 	def _dataAdd(self, b):
 		self.data += b
 		# trim to only the lasts one
 		if len(self.data) > self.max_data :
 			self.data = self.data[-self.max_data:]
-			# TODO modify the pointer lists (we need to have a pointer list first)
+			self.matches = [i+self.max_data for i in self.matches if i<self.max_data]
 
 	def _next(self):
 		if len(self.nexts)<1: return None
@@ -157,6 +198,7 @@ class LZMJ22:
 				break
 
 			# try the different command in order of priority
+			# self._LongRep, # wip
 			for f in [self._Pointer, self._ShortRep, self._Literal]:
 				val = f()
 				if val is not None:

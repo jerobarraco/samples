@@ -40,7 +40,7 @@ def Num(n):
 
 # highly important that the generator yeilds ONE bit at a time
 def SNumDec(bins):
-	return SNum_LZM_Dec(bins) if USE_LZMA else SNum_JMan_Dec(n)
+	return SNum_LZM_Dec(bins) if USE_LZMA else SNum_JMan_Dec(bins)
 
 def SNum_JMan_Dec(bins):
 	cur = ""
@@ -76,7 +76,9 @@ def Num_JMan(num):
 	bitlen = '0'*(len(bincount)-1) # don't count the 1
 	return bitlen + bincount
 
-def Num_LZM_Max( bits_a = 2, bits_b = 3, bits_c = 8):
+def Num_LZM_Max(bits_a = 2, bits_b = 3, bits_c = 8):
+	# TODO remove parameters and use globals
+	# todo make a function to return these mx and bx
 	ma = (2**bits_a)
 	mb = (2**bits_b)
 	mc = (2**bits_c)
