@@ -25,7 +25,9 @@ class LZMJ22:
 
 		# out
 		packs = self._SPackets(chars)
-		schunks = utils.SChunk(packs)
+
+		# params makes sure we flush the buffer
+		schunks = utils.SChunk(packs, 8, "0")
 		sbytes = utils.SByte(schunks)
 		ofile = utils.SWFile(self.ofname, sbytes)
 
@@ -40,7 +42,7 @@ class LZMJ22:
 		bits = utils.Bin(byte)
 		self._advance()
 		self._dataAdd(byte)
-		return "0" + bits
+		return utils.Packets.LITERAL + bits
 
 	def _ShortRep(self):
 		# 1 + 1 + 0 + 0
@@ -49,7 +51,7 @@ class LZMJ22:
 		if self.data and b is not None and self.data[-1] == ord(b):
 			self._advance()
 			self._dataAdd(b)
-			return "110"
+			return utils.Packets.SHORT_REP
 
 		return None
 
@@ -104,7 +106,7 @@ class LZMJ22:
 
 		binOff = utils.Num_LZM(off, *utils.LZM_BOUNDS) if utils.USE_LZMA else utils.Num_JMan(off)
 		binL = utils.Num_JMan(l) #utils.Bin(l, 4)
-		return "10" + binOff + binL
+		return utils.Packets.POINT + binOff + binL
 
 	def _findMatch(self, i):
 		l = 0
@@ -141,7 +143,9 @@ class LZMJ22:
 
 	def _SPackets(self, sbytes):
 		"""should return a list of bits, variable undefined length"""
+		count = 0
 		while True:
+			count += 1
 			# todo create function for readahead
 			toRead = max(1, len(self.data) - len(self.nexts))
 			while toRead >0:
@@ -158,3 +162,6 @@ class LZMJ22:
 				if val is not None:
 					yield val
 					break
+		#eof
+		yield utils.Packets.EOF
+		print ("Packets=", count)

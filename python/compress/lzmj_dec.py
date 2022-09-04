@@ -31,10 +31,10 @@ class LZMJ22Dec:
 		for o in it:
 			utils.p(o)
 			count+=1
-			#utils.p("\n")
+			# utils.p("\n")
 		print()
-		#print(count)
-		print("done")
+		print("iterations=", count)
+		print("All Done!")
 		pass
 
 	def _dataAdd(self, b):
@@ -53,16 +53,25 @@ class LZMJ22Dec:
 			yield d
 
 	def _SDec(self, bins):
+		lLit = utils.Packets.L_LITERAL
+		lShort = utils.Packets.L_SHORT_REP
+		lPoint = utils.Packets.L_POINT
+		lLrep0 = utils.Packets.L_LONG_REP_0
+		lLrep1 = utils.Packets.L_LONG_REP_1
+		lLrep2 = utils.Packets.L_LONG_REP_2
+		lEof = utils.Packets.L_EOF
+
 		# receives bits, make sure its one bit at a time
 		buff = ""
 		count = 0
 		for b in bins:
 			buff += b
 			count +=1
-			if buff[0] == "0":
-				buff = buff[1:]
+			if buff[:lLit] == utils.Packets.LITERAL:
+				buff = buff[lLit:]
 				# this needs to be sure that all elements are of size one, otherwise we would need to wrap with utils.SItem
-				bits = utils.Chunk(bins, 8)
+				# this is dangerous, find another way
+				bits = utils.Chunk(bins, 8, "0")# params makes sure we read completely
 				if bits is None:
 					return
 
@@ -70,23 +79,32 @@ class LZMJ22Dec:
 				yield byte
 				continue
 
-			if len(buff) < 2: continue
+			if len(buff) < lPoint: continue
 			# pointer, 10
-			if buff[:2] == "10":
-				buff = buff[2:]
+			if buff[:lPoint] == utils.Packets.POINT:
+				buff = buff[lPoint:]
 				yield self._Pointer(bins)
 				continue
 
-			if len(buff) < 3: continue
-			# shortrep, 110
-			if buff[:3] == "110":
-				buff = buff[3:]
+
+			if len(buff) < lShort: continue
+			# shortrep
+			if buff[:lShort] == utils.Packets.SHORT_REP:
+				buff = buff[lShort:]
 				yield self._ShortRep()
 				continue
 
-			print ("111 not implemented!")
-			buff = buff[3:]
-		print (count)
+			if len(buff)< lLrep0: continue
+			if len(buff)< lLrep1: continue
+			if len(buff)< lLrep2: continue
+			if len(buff)< lEof: continue
+			if buff[:lEof] == utils.Packets.EOF:
+				print ("Reached eof")
+				break
+
+			print ("Longrep not implemented!")
+			buff = buff[lLrep0:]
+		print ("Commands=", count)
 
 	def _Pointer(self, bins):
 		minLen = utils.POINTER_MIN_LEN

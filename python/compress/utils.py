@@ -11,6 +11,23 @@ MAX_DICT = 1024**2
 LZM_BOUNDS = (3,4,8)
 #LZM_BOUNDS = (4,8,14)
 
+class Packets:
+	LITERAL = "0"
+	POINT = "10"
+	SHORT_REP = "1100"
+	LONG_REP_0 = "1101"
+	LONG_REP_1 = "1110"
+	LONG_REP_2 = "11110"
+	EOF = "11111"
+
+	L_LITERAL = len(LITERAL)
+	L_POINT = len(POINT)
+	L_SHORT_REP = len(SHORT_REP)
+	L_LONG_REP_0 = len(LONG_REP_0)
+	L_LONG_REP_1 = len(LONG_REP_1)
+	L_LONG_REP_2 = len(LONG_REP_2)
+	L_EOF = len(EOF)
+
 def getMaxData():
 	return min(MAX_DICT, USE_LZMA and Num_LZM_Max(*LZM_BOUNDS) or MAX_DICT)
 
@@ -124,20 +141,25 @@ def SDelta(bits):
 		last = b
 		yield '1'
 
-def Chunk(gen, size=8):
-	# this needs to be sure that all elements are of size one, otherwise we would need to wrap with utils.SItem
-	# return next(SChunk(gen, size))
-	return next(SChunk(gen, size), None)
+def Chunk(gen, size=8, pad=""):
+	# this NEEDS to be sure that all elements are of size one, otherwise a buffer will be lost
+	return next(SChunk(gen, size, pad), None)
 
-def SChunk(gen, size=8):
+def SChunk(gen, size=8, pad=""):
 	# returns chunks for a given iterator
 	buff = '' # i know there's stream buffer but overkill
 	for i in gen:
 		buff += i
-		if len(buff) >= size: #i might contain more than 1 char
+		while len(buff) >= size: #i might contain more than 1 char
 			ret = buff[:size]
 			yield ret
 			buff = buff[size:] #prolly a better way with pack or smth
+	# at this point the generator has nothing, so flush the buffer
+	buffLen = len(buff)
+	if buffLen > 0:
+		buff += pad*(size-buffLen)
+		yield buff
+	print("extra buff", buff)
 
 def Int(str_bin):
 	"Returns an int from a string of bits, try to ensure they are 8 digits at most"
@@ -172,6 +194,7 @@ def SRFile(fname):
 		c = f.read(1)
 		if c is None or len(c) == 0: break
 		yield c
+	f.close()
 
 def SWFile(fname, sbytes):
 	"""Reads a sequence of bytes and writes to a file, yields each byte"""
@@ -179,3 +202,4 @@ def SWFile(fname, sbytes):
 	for i in sbytes:
 		f.write(i)
 		yield i
+	f.close()
