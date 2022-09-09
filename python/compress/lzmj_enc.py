@@ -103,7 +103,6 @@ class LZMJ22(base.Base):
 			match = self._matchFind(i)
 			# skip matches that don´t save us anything
 			if match[2] < 1:
-				print("this is not worthy")
 				continue
 			# only store if it's above the min len
 			if match[1] >= minLen:
@@ -183,14 +182,9 @@ class LZMJ22(base.Base):
 		count = 0
 		while True:
 			count += 1
-			# todo create function for readahead
-			toRead = max(1, len(self.data) - len(self.nexts))
-			while toRead >0:
-				n = next(sbytes, None)
-				if n is None: break
-				self.nexts += n
+			self._readNexts(sbytes)
 
-			if not self.nexts:
+			if not self.nexts:#done
 				break
 
 			# try the different command in order of priority

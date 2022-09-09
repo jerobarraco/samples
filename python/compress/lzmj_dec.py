@@ -4,13 +4,13 @@ __copyright__ = "Copyright 2022, Jeronimo Barraco-Marmol"
 __license__ = "AGPLv1"
 
 import utils
-
-class LZMJ22Dec:
+import base
+class LZMJ22Dec(base.Base):
 	ifname = ""
 	ofname = ""
-	data = b""
-	max_data = utils.getMaxData()
+
 	def __init__(self, ifname, ofname):
+		super().__init__()
 		self.ifname = ifname
 		self.ofname = ofname
 
@@ -36,13 +36,6 @@ class LZMJ22Dec:
 		print("iterations=", count)
 		print("All Done!")
 		pass
-
-	def _dataAdd(self, b):
-		self.data += b
-		# trim to only the lasts one
-		if len(self.data) > self.max_data:
-			self.data = self.data[-self.max_data:]
-			# TODO modify the pointer lists (we need to have a pointer list first)
 
 	def _SDecProc(self, decs):
 		for d in decs:
