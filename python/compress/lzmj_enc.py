@@ -65,11 +65,13 @@ class LZMJ22(base.Base):
 				maxMatch = match
 				maxI = i
 
-		if maxMatch is None:
-			return None
+		if maxMatch is None: return
+
+		point = self._matchPointer(maxMatch)
+		if point is None: return
 
 		self._matchProcess(maxMatch) # TODO fix
-		bOff, bLen = self._matchPointer(maxMatch)
+		bOff, bLen = point
 		codes = [utils.Packets.LONG_REP_0, utils.Packets.LONG_REP_1, utils.Packets.LONG_REP_2]
 		return codes[maxI] + bLen
 
@@ -103,7 +105,7 @@ class LZMJ22(base.Base):
 			if match[2] < 1:
 				print("this is not worthy")
 				continue
-			# only store if its above the min len
+			# only store if it's above the min len
 			if match[1] >= minLen:
 				matches.append(match)
 
@@ -134,9 +136,12 @@ class LZMJ22(base.Base):
 		l -= minLen
 
 		if off<0 or l<0:
-			return "", ""
+			return None
 
 		binOff = utils.Num(off)
+		if binOff is None:
+			return None
+
 		binL = utils.Num(l)
 		return binOff, binL
 
@@ -157,7 +162,12 @@ class LZMJ22(base.Base):
 		match = [pos, l, 0, ""]  # new match
 		if l<utils.POINTER_MIN_LEN: return match
 
-		binOff, binL = self._matchPointer(match)
+		# make sure the pointer is valid
+		point = self._matchPointer(match)
+		if point is None:
+			return match
+
+		binOff, binL = point
 		# calculate the actual encoded packet
 		strpoint = utils.Packets.POINT + binOff + binL
 		# calculate saved bits we compare the actual bits needed to store this (currently we use 9 per literal)

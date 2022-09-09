@@ -14,7 +14,8 @@ class Base:
 	matches = []
 
 	def __init__(self):
-		max_data = utils.getMaxData()
+		self.max_data = utils.getMaxData()
+		print(self.max_data, "max_data")
 
 	def _matchProcess(self, match):
 		# TODO debug

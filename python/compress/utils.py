@@ -6,6 +6,7 @@ __license__ = "AGPLv1"
 import sys
 
 POINTER_MIN_LEN = 2
+# TODO make a class to store all this lzma stuff
 USE_LZMA = True
 MAX_DICT = 1024**2
 LZM_BOUNDS = (3,4,8)
@@ -29,7 +30,7 @@ class Packets:
 	L_EOF = len(EOF)
 
 def getMaxData():
-	return min(MAX_DICT, USE_LZMA and Num_LZM_Max(*LZM_BOUNDS) or MAX_DICT)
+	return min(MAX_DICT, Num_LZM_Max() if USE_LZMA else MAX_DICT)
 
 def p(o):
 	#sys.stdout.write(str(o))
@@ -76,9 +77,11 @@ def Num_JMan(num):
 	bitlen = '0'*(len(bincount)-1) # don't count the 1
 	return bitlen + bincount
 
-def Num_LZM_Max(bits_a = 2, bits_b = 3, bits_c = 8):
-	# TODO remove parameters and use globals
+def Num_LZM_Max():
 	# todo make a function to return these mx and bx
+	bits_a = LZM_BOUNDS[0]
+	bits_b = LZM_BOUNDS[1]
+	bits_c = LZM_BOUNDS[2]
 	ma = (2**bits_a)
 	mb = (2**bits_b)
 	mc = (2**bits_c)
@@ -142,7 +145,8 @@ def Num_LZM(l):
 		res ='11'
 		bitl=bits_c
 	else:
-		print('overflow')
+		print('lzm num overflow')
+		return None
 		res = "11"
 		l = bo-1 # overflow protection
 		bitl = bits_c
