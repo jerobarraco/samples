@@ -11,6 +11,7 @@ class LZMJ22(base.Base):
 	# 22 because it's 2022, but also LZ77, domination 88, and galaxy express 99?
 	fname = ""
 	ofname = ""
+	nexts = b""
 
 	#_mpPool = multiprocessing.Pool()
 
@@ -35,6 +36,27 @@ class LZMJ22(base.Base):
 		for o in it:
 			utils.p(o)
 			utils.p("\n")
+
+	def _SPackets(self, sbytes):
+		"""should return a list of bits, variable undefined length"""
+		count = 0
+		while True:
+			count += 1
+			self._readNexts(sbytes)
+
+			if not self.nexts:#done
+				break
+
+			# try the different command in order of priority
+			# self._LongRep, # wip
+			for f in [self._Pointer, self._ShortRep, self._Literal]:
+				val = f()
+				if val is not None:
+					yield val
+					break
+		#eof
+		yield utils.Packets.EOF
+		print ("Packets=", count)
 
 	def _Literal(self):
 		byte = self._next()
@@ -177,23 +199,34 @@ class LZMJ22(base.Base):
 
 		return match
 
-	def _SPackets(self, sbytes):
-		"""should return a list of bits, variable undefined length"""
-		count = 0
-		while True:
-			count += 1
-			self._readNexts(sbytes)
+	def _matchProcess(self, match):
+		# actually encode the thing
+		pos = match[0]
+		l = match[1]
 
-			if not self.nexts:#done
-				break
+		matchText = self.data[pos:pos + l]
+		self._advance(l)
+		self._dataAdd(matchText)
+		self._matchAdd(pos)
+		return matchText
 
-			# try the different command in order of priority
-			# self._LongRep, # wip
-			for f in [self._Pointer, self._ShortRep, self._Literal]:
-				val = f()
-				if val is not None:
-					yield val
-					break
-		#eof
-		yield utils.Packets.EOF
-		print ("Packets=", count)
+	def _readNexts(self, sbytes):
+		toRead = max(1, len(self.nexts) - self.max_data)
+		while toRead > 0:
+			toRead += 1
+			n = next(sbytes, None)
+			if n is None: break
+			self.nexts += n
+
+	def _next(self):
+		if len(self.nexts)<1: return None
+		return utils.Int2Byte(self.nexts[0]) # ensure is a byte not an int
+
+	def _advance(self, by=1):
+		# notice if nexts is 1 or 0 then it will become an int and break all
+		self.nexts = self.nexts[by:]
+
+	def _getOne(self):
+		n = self._next()
+		self._advance()
+		return n

@@ -90,24 +90,49 @@ class LZMJ22Dec(base.Base):
 			if len(buff)< lLrep0: continue
 			if len(buff)< lLrep1: continue
 			if len(buff)< lLrep2: continue
+			# done this way to make it easier.
 			if len(buff)< lEof: continue
-			if buff[:lEof] == utils.Packets.EOF:
+
+			isLongRep0 = buff[:lLrep0] == utils.Packets.L_LONG_REP_0
+			isLongRep1 = not isLongRep0 and buff[:lLrep0] == utils.Packets.L_LONG_REP_1 # the not is an optimization
+			isLongRep2 = not (isLongRep0 or isLongRep1) and buff[:lLrep2] == utils.Packets.L_LONG_REP_2
+			isEof = not (isLongRep0 or isLongRep1 or isLongRep2) and buff[:lEof] == utils.Packets.EOF
+			l = lLrep2 if (isLongRep2 or isEof) else lLrep0
+			if isLongRep0 or isLongRep1 or isLongRep2:
+				i = 2 if isLongRep2 else (1 if isLongRep1 else 0)
+				buff = buff[l:]
+				yield self._LongRep(bins, i)
+
+			if isEof:
+				# buff = buff[lEof:] doesnt even matter
 				print ("Reached eof")
 				break
-
-			print ("Longrep not implemented!")
-			buff = buff[lLrep0:]
+			print("Error, reached an unrecognized opcode")
+			buff = buff[lEof:]
 		print ("Commands=", count)
 
 	def _Pointer(self, bins):
 		minLen = utils.POINTER_MIN_LEN
 		off = utils.SNumDec(bins) + minLen# minimum 2 chars
 		l = utils.SNumDec(bins) + minLen
-		end = -off + l
-		# warning, if this results in one char it will return an int. but that shouldn't (tm) happen
-		return self.data[-off:end]
+		pos = len(self.data) - off
+		return self._matchProcess(pos, l)
 
 	def _ShortRep(self):
 		if len(self.data)<1:
 			return b""
 		return utils.Int2Byte(self.data[-1])
+
+	def _longRep(self, bins, i):
+		pos = self.matches[-i]
+		l = utils.SNumDec(bins) + utils.POINTER_MIN_LEN
+		self._matchProcess(pos, l)
+
+	def _matchProcess(self, pos, l ):
+		# warning, if this results in one char it will return an int. but that shouldn't (tm) happen
+		matchText = self.data[pos:pos + l]
+		self._matchAdd(pos)
+		return matchText
+
+
+
