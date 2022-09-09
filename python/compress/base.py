@@ -17,26 +17,15 @@ class Base:
 		max_data = utils.getMaxData()
 
 	def _matchProcess(self, match):
-		# TODO change it to use pos
+		# TODO debug
 		# actually encode the thing
-		off, l = match
-		end = off - l
-		matchText = self.data[-off:-end]
+		pos = match[0]
+		l = match[1]
+
+		matchText = self.data[pos:pos+l]
 		self._advance(l)
 		self._dataAdd(matchText)
-		self._matchAdd(off)
-
-		# TODO make this a function
-
-		# optimization since we will never have an offset smaller than that
-		minLen = utils.POINTER_MIN_LEN
-		off -= minLen
-		l -= minLen
-
-		binOff = utils.Num(off)
-		binL = utils.Num(l)
-		return binOff, binL
-
+		self._matchAdd(pos)
 
 	def _matchAdd(self, off):
 		i = -1 if off not in self.matches else self.matches.index(off)

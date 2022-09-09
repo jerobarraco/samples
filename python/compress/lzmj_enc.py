@@ -4,20 +4,18 @@ __copyright__ = "Copyright 2022, Jeronimo Barraco-Marmol"
 __license__ = "AGPLv1"
 
 import utils
+import base
 # import multiprocessing
 
-class LZMJ22:
+class LZMJ22(base.Base):
 	# 22 because it's 2022, but also LZ77, domination 88, and galaxy express 99?
 	fname = ""
 	ofname = ""
 
-	max_data = utils.getMaxData()
-	nexts = b""
-	data = b""
-	matches = []
 	#_mpPool = multiprocessing.Pool()
 
 	def __init__(self, fname, ofname):
+		super().__init__()
 		self.fname = fname
 		self.ofname = ofname
 
@@ -60,9 +58,7 @@ class LZMJ22:
 		# start from the oldest one, so we rotate them frequently and keep them in memory.
 		maxMatch = None
 		maxI = -1
-		dataL = len(self.data)
-		for i, off in enumerate(self.matches):
-			pos = dataL - off
+		for i, pos in enumerate(self.matches):
 			match = self._matchFind(pos)
 			if match[1] < utils.POINTER_MIN_LEN : continue
 			if maxMatch is None or maxMatch[1]< match[1]:
@@ -72,7 +68,8 @@ class LZMJ22:
 		if maxMatch is None:
 			return None
 
-		bOff, bLen = self._matchProcess(maxMatch)
+		self._matchProcess(maxMatch) # TODO fix
+		bOff, bLen = self._matchPointer(maxMatch)
 		codes = [utils.Packets.LONG_REP_0, utils.Packets.LONG_REP_1, utils.Packets.LONG_REP_2]
 		return codes[maxI] + bLen
 
@@ -102,85 +99,74 @@ class LZMJ22:
 		# find all matches
 		for i in range(start, end):
 			match = self._matchFind(i)
+			# skip matches that don´t save us anything
+			if match[2] < 1:
+				print("this is not worthy")
+				continue
+			# only store if its above the min len
 			if match[1] >= minLen:
 				matches.append(match)
 
 		# find the longest match
 		maxMatch = None
 		for m in matches:
-			if maxMatch is None or maxMatch[1]> m[1]:
+			# notice we compare the saved bits of the matches
+			if maxMatch is None or maxMatch[2] > m[2]:
 				maxMatch = m
 
 		if maxMatch is None:
 			return None
 
 		# process the match
-		binOff, binL = self._matchProcess(maxMatch)
+		self._matchProcess(maxMatch)
 		# actually encode the thing
-		return utils.Packets.POINT + binOff + binL
+		return maxMatch[3]
 
-	def _matchProcess(self, match):
-		# actually encode the thing
-		off, l = match
-		end = off - l
-		matchText = self.data[-off:-end]
-		self._advance(l)
-		self._dataAdd(matchText)
-		self._matchAdd(off)
+	def _matchPointer(self, match):
+		'Returns a pointer for a match off,len'
+		pos = match[0]
+		l = match[1] # TODO test
+		minLen = utils.POINTER_MIN_LEN
+		off = len(self.data) - pos
 
 		# optimization since we will never have an offset smaller than that
-		minLen = utils.POINTER_MIN_LEN
 		off -= minLen
 		l -= minLen
+
+		if off<0 or l<0:
+			return "", ""
 
 		binOff = utils.Num(off)
 		binL = utils.Num(l)
 		return binOff, binL
 
-	def _matchFind(self, i):
+	def _matchFind(self, pos):
+		"Returns a match such as (pos, len, saved bits, pointer)"
 		l = 0
-		dataPos = i
+		dataPos = pos
 		dataLen = len(self.data)
 		nextLen = len(self.nexts)
 		while dataPos < dataLen and l < nextLen:
+			# this might be a bit more performant in the while condition but i like to be able to debug
 			if self.data[dataPos] != self.nexts[l]:
 				break
 			l += 1
-			dataPos = i + l
+			dataPos = pos + l
 		# end while
-		off = dataLen - i
-		match = (off, l)  # new match
+		# calculate actual savings
+		match = [pos, l, 0, ""]  # new match
+		if l<utils.POINTER_MIN_LEN: return match
+
+		binOff, binL = self._matchPointer(match)
+		# calculate the actual encoded packet
+		strpoint = utils.Packets.POINT + binOff + binL
+		# calculate saved bits we compare the actual bits needed to store this (currently we use 9 per literal)
+		saved = (9*l) - len(strpoint)
+
+		match[2] = saved
+		match[3] = strpoint
+
 		return match
-
-	def _matchAdd(self, off):
-		i = -1 if off not in self.matches else self.matches.index(off)
-		if i>=0:
-			self.matches.pop(i)
-
-		self.matches.append(off)
-		maxMatches = 3
-		if len(self.matches) > maxMatches:
-			self.matches = self.matches[-maxMatches:]
-			# need to debug this
-
-	def _dataAdd(self, b):
-		self.data += b
-		# trim to only the lasts one
-		if len(self.data) > self.max_data :
-			self.data = self.data[-self.max_data:]
-			self.matches = [i+self.max_data for i in self.matches if i<self.max_data]
-
-	def _next(self):
-		if len(self.nexts)<1: return None
-		return utils.Int2Byte(self.nexts[0]) # ensure is a byte not an int
-
-	def _advance(self, by=1):
-		self.nexts = self.nexts[by:]
-
-	def _getOne(self):
-		n = self._next()
-		self._advance()
-		return n
 
 	def _SPackets(self, sbytes):
 		"""should return a list of bits, variable undefined length"""
