@@ -11,8 +11,7 @@ class LZMJ22Dec(base.Base):
 
 	def __init__(self, ifname, ofname):
 		super().__init__()
-		# self.max_data needs to be exactly the same as in the encoder or it will break.
-		# todo fix that
+		# self.max_data ideally is exactly the same as in the encoder. it might break (currently depends on lzm_bounds, which also needs to be exactly the same to be able to decompress)
 		self.ifname = ifname
 		self.ofname = ofname
 
@@ -92,7 +91,7 @@ class LZMJ22Dec(base.Base):
 			# TODO this longrep eof stuff needs improving
 			if len(buff)< lLrep0: continue
 			if len(buff)< lLrep1: continue
-			# these ones are actually larger, i cant read 1 bit extra into buff so i have to be extra careful
+			# these are actually larger, i cant read 1 bit extra into buff so i have to be extra careful
 			isLongRep0 = buff[:lLrep0] == utils.Packets.LONG_REP_0
 			isLongRep1 = (not isLongRep0) and buff[:lLrep1] == utils.Packets.LONG_REP_1  # the not is an optimization
 			isLongRep2 = False
@@ -136,12 +135,14 @@ class LZMJ22Dec(base.Base):
 		return utils.Int2Byte(self.data[-1])
 
 	def _LongRep(self, bins, i):
-		pos = self.matches[-(i+1)]
+		pos = self.matches[i]
 		l = utils.SNumDec(bins) + utils.POINTER_MIN_LEN
 		text = self._matchProcess(pos, l)
 		return text
 
-	def _matchProcess(self, pos, l ):
+	def _matchProcess(self, pos, l):
+		if pos <0:
+			print ("Warning! match process with negative pos", pos, l)
 		# warning, if this results in one char it will return an int. but that shouldn't (tm) happen
 		matchText = self.data[pos:pos + l]
 		self._matchAdd(pos)

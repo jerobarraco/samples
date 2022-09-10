@@ -79,7 +79,10 @@ class LZMJ22(base.Base):
 		# start from the oldest one, so we rotate them frequently and keep them in memory.
 		maxMatch = None
 		maxI = -1
-		for i, pos in enumerate(reversed(self.matches[-3:])):# todo verify the reversed
+		for i, pos in enumerate(self.matches[base.MAX_MATCHES:]):# todo verify the reversed
+			if i <0:
+				print("neg match")
+				continue# ignore old matches
 			match = self._matchFind(pos, True)
 			if match[1] < utils.POINTER_MIN_LEN: continue
 			if maxMatch is None or maxMatch[2] < match[2]:
@@ -119,10 +122,8 @@ class LZMJ22(base.Base):
 		# find all matches
 		for i in range(start, end):
 			match = self._matchFind(i, False)
-			# skip matches that don´t save us anything
 			# only store if it's above the min len
 			if match[1] >= minLen:
-				#print(match)
 				matches.append(match)
 
 		# find the longest match
@@ -174,6 +175,7 @@ class LZMJ22(base.Base):
 			l += 1
 			dataPos = pos + l
 		# end while
+
 		# calculate actual savings
 		match = [pos, l, 0, ""]  # new match
 		if l<utils.POINTER_MIN_LEN: return match
@@ -181,7 +183,7 @@ class LZMJ22(base.Base):
 		# make sure the pointer is valid
 		point = self._matchPointer(match)
 		if point is None:
-			match[1] = 0
+			match[1] = 0 # mark as invalid
 			return match
 
 		binOff, binL = point
@@ -189,10 +191,11 @@ class LZMJ22(base.Base):
 		strpoint = (utils.Packets.LONG_REP_2 + binL) if isRep else (utils.Packets.POINT + binOff + binL)
 		# calculate saved bits we compare the actual bits needed to store this (currently we use 9 per literal)
 		saved = (9*l) - len(strpoint)
-		minSave = 4
-		if saved < minSave:
-			print("Unworthy match", saved, match, self.data[match[0]:match[0] + match[1]])
-			match[1] = 0
+		# skip matches that don´t save us enough
+		if saved < base.MIN_SAVE:
+			match[2] = saved # just to print it
+			print("Unworthy match", match, self.data[match[0]:match[0] + match[1]])
+			match[1] = 0 # mark as invalid
 			return match
 
 		match[2] = saved

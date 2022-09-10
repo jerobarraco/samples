@@ -7,6 +7,7 @@ import utils
 # import multiprocessing
 
 MAX_MATCHES = 3
+MIN_SAVE = 4
 # TODO save at the beginning of the file the LZM_Bounds (how? using the JMan?)
 # TODO load on decode
 # TODO use crc
@@ -25,9 +26,9 @@ class Base:
 		if i>=0:
 			self.matches.pop(i)
 
-		self.matches.append(pos)
+		self.matches.insert(0, pos)
 		if len(self.matches) > MAX_MATCHES:
-			self.matches = self.matches[-MAX_MATCHES:]
+			self.matches = self.matches[MAX_MATCHES:]
 
 	def _dataAdd(self, b):
 		self.data += b
@@ -35,4 +36,5 @@ class Base:
 		dif = len(self.data) - self.max_data
 		if dif>0 :
 			self.data = self.data[dif:]
-			self.matches = [i-dif for i in self.matches if i>=dif]
+			# note we let the matches go below 0, to avoid a problem when the compress and decompress uses different sized data buffers
+			self.matches = [i-dif for i in self.matches]
