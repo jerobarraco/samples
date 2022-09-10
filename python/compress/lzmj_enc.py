@@ -79,7 +79,7 @@ class LZMJ22(base.Base):
 		# start from the oldest one, so we rotate them frequently and keep them in memory.
 		maxMatch = None
 		maxI = -1
-		for i, pos in enumerate(reversed(self.matches)):# todo verify the reversed
+		for i, pos in enumerate(reversed(self.matches[:3])):# todo verify the reversed
 			match = self._matchFind(pos, True)
 			if match[1] < utils.POINTER_MIN_LEN : continue
 			if maxMatch is None or maxMatch[2] < match[2]:
@@ -93,7 +93,7 @@ class LZMJ22(base.Base):
 
 		self._matchProcess(maxMatch)
 		bOff, bLen = point
-		codes = [utils.Packets.LONG_REP_0, utils.Packets.LONG_REP_1, utils.Packets.LONG_REP_2]
+		codes = (utils.Packets.LONG_REP_0, utils.Packets.LONG_REP_1, utils.Packets.LONG_REP_2)
 		return codes[maxI] + bLen
 
 	def _Pointer(self):

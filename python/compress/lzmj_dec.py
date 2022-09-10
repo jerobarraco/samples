@@ -94,12 +94,13 @@ class LZMJ22Dec(base.Base):
 			if len(buff)< lEof: continue
 
 			isLongRep0 = buff[:lLrep0] == utils.Packets.LONG_REP_0
-			isLongRep1 = not isLongRep0 and buff[:lLrep1] == utils.Packets.LONG_REP_1 # the not is an optimization
-			isLongRep2 = not (isLongRep0 or isLongRep1) and buff[:lLrep2] == utils.Packets.LONG_REP_2
-			isEof = not (isLongRep0 or isLongRep1 or isLongRep2) and buff[:lEof] == utils.Packets.EOF
+			isLongRep1 = (not isLongRep0) and buff[:lLrep1] == utils.Packets.LONG_REP_1 # the not is an optimization
+			isLongRep2 = (not (isLongRep0 or isLongRep1)) and buff[:lLrep2] == utils.Packets.LONG_REP_2
+			isLongRep = isLongRep0 or isLongRep1 or isLongRep2
+			isEof = (not isLongRep) and buff[:lEof] == utils.Packets.EOF
 			l = lLrep2 if (isLongRep2 or isEof) else lLrep0
-			if isLongRep0 or isLongRep1 or isLongRep2:
-				i = 2 if isLongRep2 else (1 if isLongRep1 else 0)
+			i = 2 if isLongRep2 else (1 if isLongRep1 else 0)
+			if isLongRep:
 				buff = buff[l:]
 				yield self._LongRep(bins, i)
 				continue
