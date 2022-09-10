@@ -9,7 +9,7 @@ import lzmj_dec, lzmj_enc
 
 def main():
 	fname = ""
-	op = "a"
+	op = "x"
 	if len(sys.argv) < 3:
 		fname0 = 'compnotes.txt'
 		fname = op == "x" and "out.txt" or fname0

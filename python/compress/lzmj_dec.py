@@ -93,15 +93,16 @@ class LZMJ22Dec(base.Base):
 			# done this way to make it easier.
 			if len(buff)< lEof: continue
 
-			isLongRep0 = buff[:lLrep0] == utils.Packets.L_LONG_REP_0
-			isLongRep1 = not isLongRep0 and buff[:lLrep0] == utils.Packets.L_LONG_REP_1 # the not is an optimization
-			isLongRep2 = not (isLongRep0 or isLongRep1) and buff[:lLrep2] == utils.Packets.L_LONG_REP_2
+			isLongRep0 = buff[:lLrep0] == utils.Packets.LONG_REP_0
+			isLongRep1 = not isLongRep0 and buff[:lLrep1] == utils.Packets.LONG_REP_1 # the not is an optimization
+			isLongRep2 = not (isLongRep0 or isLongRep1) and buff[:lLrep2] == utils.Packets.LONG_REP_2
 			isEof = not (isLongRep0 or isLongRep1 or isLongRep2) and buff[:lEof] == utils.Packets.EOF
 			l = lLrep2 if (isLongRep2 or isEof) else lLrep0
 			if isLongRep0 or isLongRep1 or isLongRep2:
 				i = 2 if isLongRep2 else (1 if isLongRep1 else 0)
 				buff = buff[l:]
 				yield self._LongRep(bins, i)
+				continue
 
 			if isEof:
 				# buff = buff[lEof:] doesnt even matter
@@ -123,10 +124,11 @@ class LZMJ22Dec(base.Base):
 			return b""
 		return utils.Int2Byte(self.data[-1])
 
-	def _longRep(self, bins, i):
+	def _LongRep(self, bins, i):
 		pos = self.matches[-i]
 		l = utils.SNumDec(bins) + utils.POINTER_MIN_LEN
-		self._matchProcess(pos, l)
+		text = self._matchProcess(pos, l)
+		return text
 
 	def _matchProcess(self, pos, l ):
 		# warning, if this results in one char it will return an int. but that shouldn't (tm) happen

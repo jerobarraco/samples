@@ -48,8 +48,7 @@ class LZMJ22(base.Base):
 				break
 
 			# try the different command in order of priority
-			# self._LongRep, # wip
-			for f in [self._Pointer, self._ShortRep, self._Literal]:
+			for f in [self._LongRep, self._Pointer, self._ShortRep, self._Literal]:
 				val = f()
 				if val is not None:
 					yield val
@@ -80,10 +79,10 @@ class LZMJ22(base.Base):
 		# start from the oldest one, so we rotate them frequently and keep them in memory.
 		maxMatch = None
 		maxI = -1
-		for i, pos in enumerate(self.matches):
-			match = self._matchFind(pos)
+		for i, pos in enumerate(reversed(self.matches)):# todo verify the reversed
+			match = self._matchFind(pos, True)
 			if match[1] < utils.POINTER_MIN_LEN : continue
-			if maxMatch is None or maxMatch[1]< match[1]:
+			if maxMatch is None or maxMatch[2] < match[2]:
 				maxMatch = match
 				maxI = i
 
@@ -92,7 +91,7 @@ class LZMJ22(base.Base):
 		point = self._matchPointer(maxMatch)
 		if point is None: return
 
-		self._matchProcess(maxMatch) # TODO fix
+		self._matchProcess(maxMatch)
 		bOff, bLen = point
 		codes = [utils.Packets.LONG_REP_0, utils.Packets.LONG_REP_1, utils.Packets.LONG_REP_2]
 		return codes[maxI] + bLen
@@ -101,11 +100,7 @@ class LZMJ22(base.Base):
 		# holds the current tested bytes, separate from nexts to not mess around
 		# i could be using nexts here. but i kind of want to decouple this function as much as possible
 		matches = []
-		'''
-		TODO 
-			* make the matchmaking part into a function
-			* opt: call the matchmaking part using multiprocessing.Pool
-		'''
+		# TODO  opt: call the matchmaking part using multiprocessing.Pool
 		# make sure that nexts is as long as the data buffer, unless close to eof
 		minLen = utils.POINTER_MIN_LEN
 		dataLen = len(self.data)
@@ -122,7 +117,7 @@ class LZMJ22(base.Base):
 
 		# find all matches
 		for i in range(start, end):
-			match = self._matchFind(i)
+			match = self._matchFind(i, False)
 			# skip matches that don´t save us anything
 			if match[2] < 1:
 				continue
@@ -166,7 +161,7 @@ class LZMJ22(base.Base):
 		binL = utils.Num(l)
 		return binOff, binL
 
-	def _matchFind(self, pos):
+	def _matchFind(self, pos, isRep = False):
 		"Returns a match such as (pos, len, saved bits, pointer)"
 		l = 0
 		dataPos = pos
@@ -190,7 +185,7 @@ class LZMJ22(base.Base):
 
 		binOff, binL = point
 		# calculate the actual encoded packet
-		strpoint = utils.Packets.POINT + binOff + binL
+		strpoint = (utils.Packets.LONG_REP_2 + binL) if isRep else (utils.Packets.POINT + binOff + binL)
 		# calculate saved bits we compare the actual bits needed to store this (currently we use 9 per literal)
 		saved = (9*l) - len(strpoint)
 

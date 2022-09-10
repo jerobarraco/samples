@@ -101,7 +101,7 @@ def SNum_LZM_Dec(bins):
 		cur = next(bins, None)
 		if cur is None: return num
 		buff += cur
-		lvl = 1 if buff == "10" else 2
+		lvl = 1 if buff == "10" else 2#10 or 11
 
 	bitc = LZM_BOUNDS[lvl]
 	maxs = [2**i for i in LZM_BOUNDS]
