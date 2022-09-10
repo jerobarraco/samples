@@ -81,7 +81,6 @@ class LZMJ22(base.Base):
 		maxI = -1
 		for i, pos in enumerate(reversed(self.matches[-3:])):# todo verify the reversed
 			match = self._matchFind(pos, True)
-			# match[2]<1 won't ever happen but nice to check
 			if match[1] < utils.POINTER_MIN_LEN: continue
 			if maxMatch is None or maxMatch[2] < match[2]:
 				maxMatch = match
@@ -116,14 +115,14 @@ class LZMJ22(base.Base):
 		# matches = self._mpPool.imap_unordered(self._findMatch, range(start, end) )
 		# for m in matches : do the max thing
 
+		min_save = 4 # this is a small optimization that seems to save a bit of data (actually 4 bits)
 		# find all matches
 		for i in range(start, end):
 			match = self._matchFind(i, False)
 			# skip matches that don´t save us anything
-			if match[2] < 1:
-				continue
 			# only store if it's above the min len
 			if match[1] >= minLen:
+				#print(match)
 				matches.append(match)
 
 		# find the longest match
@@ -182,6 +181,7 @@ class LZMJ22(base.Base):
 		# make sure the pointer is valid
 		point = self._matchPointer(match)
 		if point is None:
+			match[1] = 0
 			return match
 
 		binOff, binL = point
@@ -189,6 +189,11 @@ class LZMJ22(base.Base):
 		strpoint = (utils.Packets.LONG_REP_2 + binL) if isRep else (utils.Packets.POINT + binOff + binL)
 		# calculate saved bits we compare the actual bits needed to store this (currently we use 9 per literal)
 		saved = (9*l) - len(strpoint)
+		minSave = 4
+		if saved < minSave:
+			print("Unworthy match", saved, match, self.data[match[0]:match[0] + match[1]])
+			match[1] = 0
+			return match
 
 		match[2] = saved
 		match[3] = strpoint

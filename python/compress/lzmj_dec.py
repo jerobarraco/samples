@@ -127,7 +127,8 @@ class LZMJ22Dec(base.Base):
 		off = utils.SNumDec(bins) + minLen# minimum 2 chars
 		l = utils.SNumDec(bins) + minLen
 		pos = len(self.data) - off
-		return self._matchProcess(pos, l)
+		text = self._matchProcess(pos, l)
+		return text
 
 	def _ShortRep(self):
 		if len(self.data)<1:
@@ -145,6 +146,3 @@ class LZMJ22Dec(base.Base):
 		matchText = self.data[pos:pos + l]
 		self._matchAdd(pos)
 		return matchText
-
-
-

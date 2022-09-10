@@ -9,8 +9,10 @@ POINTER_MIN_LEN = 2
 # TODO make a class to store all this lzma stuff
 USE_LZMA = True
 MAX_DICT = 1024**2
-LZM_BOUNDS = (3,5,7)
-#LZM_BOUNDS = (4,8,14)
+# going above 3 bits on the 1st level, and 7 on the 2nd and 3rd will result in compressions with no saving
+LZM_BOUNDS = (3,7,7) # gave the best compression
+#LZM_BOUNDS = (3,5,7)
+#LZM_BOUNDS = (4,4,8)
 
 class Packets:
 	LITERAL = "0"
@@ -44,6 +46,7 @@ def SNumDec(bins):
 	return SNum_LZM_Dec(bins) if USE_LZMA else SNum_JMan_Dec(bins)
 
 def SNum_JMan_Dec(bins):
+	# TODO fix this, or the enc
 	cur = ""
 	bitc = 0
 	while cur != "1":

@@ -7,6 +7,9 @@ import utils
 # import multiprocessing
 
 MAX_MATCHES = 3
+# TODO save at the beginning of the file the LZM_Bounds (how? using the JMan?)
+# TODO load on decode
+# TODO use crc
 class Base:
 	"""This class is the base for encode and decode. it should only contain things that are relative to both enc and decode. and that its not independent enough to be in utils"""
 	max_data = 1024

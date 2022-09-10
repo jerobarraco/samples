@@ -7,6 +7,8 @@ import sys
 
 import lzmj_dec, lzmj_enc
 
+# TODO ask for confirmation before overwriting
+
 def main():
 	fname = ""
 	op = "x"
