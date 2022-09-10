@@ -77,15 +77,17 @@ def Num_JMan(num):
 	bitlen = '0'*(len(bincount)-1) # don't count the 1
 	return bitlen + bincount
 
+def Num_LZM_Maxes():
+	# TODO make this a loop or something
+	maxes = [2**i for i in LZM_BOUNDS]
+	# 0 [0]+[1]
+	bases = [sum(maxes[:i]) for i in range(len(maxes)+1)]
+	bounds = [sum(maxes[:i+1]) for i in range(len(maxes))]
+	return maxes, bases, bounds
+
 def Num_LZM_Max():
-	# todo make a function to return these mx and bx
-	bits_a = LZM_BOUNDS[0]
-	bits_b = LZM_BOUNDS[1]
-	bits_c = LZM_BOUNDS[2]
-	ma = (2**bits_a)
-	mb = (2**bits_b)
-	mc = (2**bits_c)
-	bo = ma+mb+mc
+	maxes, bases, bounds = Num_LZM_Maxes()
+	bo = sum(maxes)
 	return bo-1
 
 def SNum_LZM_Dec(bins):
@@ -104,8 +106,7 @@ def SNum_LZM_Dec(bins):
 		lvl = 1 if buff == "10" else 2#10 or 11
 
 	bitc = LZM_BOUNDS[lvl]
-	maxs = [2**i for i in LZM_BOUNDS]
-	bases = (0, maxs[0], maxs[0]+maxs[1])
+	maxs, bases, bounds = Num_LZM_Maxes()
 	cur = Chunk(bins, bitc, "")
 	if cur is None:
 		return 0
@@ -119,42 +120,39 @@ def Num_LZM(l):
 	# like in lzm
 	if l < 0: # error
 		return None
+	maxes, bases, bounds = Num_LZM_Maxes()
 
-	bits_a = LZM_BOUNDS[0]
-	bits_b = LZM_BOUNDS[1]
-	bits_c = LZM_BOUNDS[2]
-
-	ma = (2**bits_a)
-	mb = (2**bits_b)
-	mc = (2**bits_c)
-
-	bb = ma
-	bc = ma+mb
-	bo = ma+mb+mc
+	bb = bounds[0]
+	bc = bounds[1]
+	bo = bounds[2]
 	res = ''
 	bitl =1
+	lvl = 0
 	if l<bb:
 		res ='0'
-		bitl = bits_a
+		lvl = 0
 	elif l<bc:
 		l -= bb
 		res ='10'
-		bitl=bits_b
+		lvl = 1
 	elif l<bo:
 		l-= bc
 		res ='11'
-		bitl=bits_c
+		lvl = 2
 	else:
 		print('lzm num overflow')
 		return None
-		res = "11"
-		l = bo-1 # overflow protection
-		bitl = bits_c
 
+	bitl = LZM_BOUNDS[lvl]
 	res += bin(l)[2:].zfill(bitl)
 	return res
 
-def Bin(c, pad=8):
+def SureByte(b):
+	# todo use
+	"ensures a byte is a byte (avoids issues when slicing). also compatible with strings (on purpose)"
+	return Int2Byte(b) if isinstance(b, int) else b
+
+def Bin(c, pad=8): # todo rename ToBin
 	"""encodes a char or int to a binary with a specific size (min), can overflow"""
 	if isinstance(c, int):
 		cord = c
@@ -167,9 +165,10 @@ def Bin(c, pad=8):
 
 def SBin(chars):
 	# in 'c'... out '10101010'...
-	for c in chars:
-		cbits = Bin(c)
-		yield cbits
+	return (Bin(c) for c in chars)
+	#for c in chars:
+	#	cbits = Bin(c)
+	#	yield cbits
 
 def SDelta(bits):
 	# creates a delta encoding
@@ -206,7 +205,7 @@ def SChunk(gen, size=8, pad=""):
 		yield buff
 	print("extra buff", buff)
 
-def Int(str_bin):
+def Int(str_bin):# TODO Rename Bin2Int
 	"Returns an int from a string of bits, try to ensure they are 8 digits at most"
 	return int('0b' + str_bin, 2)
 
@@ -214,23 +213,25 @@ def Int2Byte(num):
 	"Returns a byte from an int, make sure the int fits on a byte"
 	return num.to_bytes(1, 'big')
 
-def Byte(str_bin):
+def Byte(str_bin):# TODO rename Bin2Byte
+	# turns a string of bits into a byte, must be 8 bits long
 	return Int2Byte(Int(str_bin))
 
-def SByte(str_bytes):
+def SByte(str_bytes):# TODO rename SBin2Byte
 	# turns a string of bits into a byte, must be 8 bits long
-	for b in str_bytes:
-		yield Byte(b)
+	return (Byte(b) for b in str_bytes)
+	#for b in str_bytes:
+	#	yield Byte(b)
 
 def SItem(strg): # somewhat opposite to chunk
 	"""in 'abc...x' out 'a'... Careful, it's inefficient"""
+	# harder to debug and to read
+	#s = (s for s in strg)
+	#return (SureByte(c) for c in s)
 	for s in strg:
 		for c in s:
 			# preserve type, fix iterating bytes returning an int
-			if isinstance(c, int):
-				yield Int2Byte(c)
-			else:
-				yield c
+			yield SureByte(c)
 
 def SRFile(fname):
 	"""Reads from a file byte by byte"""
