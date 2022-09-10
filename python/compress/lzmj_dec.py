@@ -80,7 +80,6 @@ class LZMJ22Dec(base.Base):
 				continue
 
 
-			# TODO this needs improving
 			if len(buff) < lShort: continue
 			# shortrep
 			if buff[:lShort] == utils.Packets.SHORT_REP:
@@ -88,6 +87,7 @@ class LZMJ22Dec(base.Base):
 				yield self._ShortRep()
 				continue
 
+			# TODO this longrep eof stuff needs improving
 			if len(buff)< lLrep0: continue
 			if len(buff)< lLrep1: continue
 			# these ones are actually larger, i cant read 1 bit extra into buff so i have to be extra careful
