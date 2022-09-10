@@ -81,7 +81,8 @@ class LZMJ22(base.Base):
 		maxI = -1
 		for i, pos in enumerate(reversed(self.matches[:3])):# todo verify the reversed
 			match = self._matchFind(pos, True)
-			if match[1] < utils.POINTER_MIN_LEN : continue
+			# match[2]<1 won't ever happen but nice to check
+			if match[1] < utils.POINTER_MIN_LEN: continue
 			if maxMatch is None or maxMatch[2] < match[2]:
 				maxMatch = match
 				maxI = i

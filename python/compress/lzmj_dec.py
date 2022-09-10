@@ -126,7 +126,7 @@ class LZMJ22Dec(base.Base):
 		return utils.Int2Byte(self.data[-1])
 
 	def _LongRep(self, bins, i):
-		pos = self.matches[-i]
+		pos = self.matches[-(i+1)]
 		l = utils.SNumDec(bins) + utils.POINTER_MIN_LEN
 		text = self._matchProcess(pos, l)
 		return text
