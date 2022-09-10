@@ -144,7 +144,7 @@ class LZMJ22(base.Base):
 	def _matchPointer(self, match):
 		'Returns a pointer for a match off,len'
 		pos = match[0]
-		l = match[1] # TODO test
+		l = match[1]
 		minLen = utils.POINTER_MIN_LEN
 		off = len(self.data) - pos
 
@@ -163,7 +163,7 @@ class LZMJ22(base.Base):
 		return binOff, binL
 
 	def _matchFind(self, pos, isRep = False):
-		"Returns a match such as (pos, len, saved bits, pointer)"
+		"Returns a match such as (pos, len, saved bits, pointer (this is only accurate for Pointer and not longreps))"
 		l = 0
 		dataPos = pos
 		dataLen = len(self.data)

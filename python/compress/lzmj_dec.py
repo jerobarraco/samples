@@ -11,7 +11,8 @@ class LZMJ22Dec(base.Base):
 
 	def __init__(self, ifname, ofname):
 		super().__init__()
-		self.max_data += 100# patch. somehow it breaks on decode. i think is because its' actually not decompressing correctly
+		# self.max_data needs to be exactly the same as in the encoder or it will break.
+		# todo fix that
 		self.ifname = ifname
 		self.ofname = ofname
 
