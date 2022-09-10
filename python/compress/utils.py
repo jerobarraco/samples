@@ -14,6 +14,8 @@ LZM_BOUNDS = (3,7,7) # gave the best compression
 #LZM_BOUNDS = (3,5,7)
 #LZM_BOUNDS = (4,4,8)
 
+#TODO modify the S functions to use Deques, so that they can be run in different threads.
+
 class Packets:
 	LITERAL = "0"
 	POINT = "10"
