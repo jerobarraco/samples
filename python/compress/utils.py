@@ -9,7 +9,7 @@ POINTER_MIN_LEN = 2
 # TODO make a class to store all this lzma stuff
 USE_LZMA = True
 MAX_DICT = 1024**2
-LZM_BOUNDS = (3,4,8)
+LZM_BOUNDS = (3,5,7)
 #LZM_BOUNDS = (4,8,14)
 
 class Packets:

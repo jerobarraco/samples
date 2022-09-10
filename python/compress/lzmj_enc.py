@@ -79,7 +79,7 @@ class LZMJ22(base.Base):
 		# start from the oldest one, so we rotate them frequently and keep them in memory.
 		maxMatch = None
 		maxI = -1
-		for i, pos in enumerate(reversed(self.matches[:3])):# todo verify the reversed
+		for i, pos in enumerate(reversed(self.matches[-3:])):# todo verify the reversed
 			match = self._matchFind(pos, True)
 			# match[2]<1 won't ever happen but nice to check
 			if match[1] < utils.POINTER_MIN_LEN: continue
@@ -201,9 +201,10 @@ class LZMJ22(base.Base):
 		l = match[1]
 
 		matchText = self.data[pos:pos + l]
-		self._advance(l)
-		self._dataAdd(matchText)
+		# it's very important to add the match before adding the data, since the data will shift both arrays, as well as the value of the match
 		self._matchAdd(pos)
+		self._dataAdd(matchText)
+		self._advance(l)
 		return matchText
 
 	def _readNexts(self, sbytes):
