@@ -80,6 +80,7 @@ class LZMJ22Dec(base.Base):
 				continue
 
 
+			# TODO this needs improving
 			if len(buff) < lShort: continue
 			# shortrep
 			if buff[:lShort] == utils.Packets.SHORT_REP:

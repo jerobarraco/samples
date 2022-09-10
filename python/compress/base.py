@@ -32,5 +32,4 @@ class Base:
 		dif = len(self.data) - self.max_data
 		if dif>0 :
 			self.data = self.data[dif:]
-			self.matches = [i-dif for i in self.matches if i>=0]
-
+			self.matches = [i-dif for i in self.matches if i>=dif]
