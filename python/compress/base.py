@@ -13,13 +13,13 @@ MIN_SAVE = 4
 # TODO use crc
 class Base:
 	"""This class is the base for encode and decode. it should only contain things that are relative to both enc and decode. and that its not independent enough to be in utils"""
-	max_data = 1024
+	max_data = 500
 	data = b""
 	matches = []
 
 	def __init__(self):
-		self.max_data = utils.getMaxData()
-		print(self.max_data, "max_data")
+		self.max_data = utils.MAX_DICT
+		print('max data', self.max_data)
 
 	def _matchAdd(self, pos):
 		i = -1 if pos not in self.matches else self.matches.index(pos)
@@ -28,7 +28,7 @@ class Base:
 
 		self.matches.insert(0, pos)
 		if len(self.matches) > MAX_MATCHES:
-			self.matches = self.matches[MAX_MATCHES:]
+			self.matches = self.matches[:MAX_MATCHES]
 
 	def _dataAdd(self, b):
 		self.data += b

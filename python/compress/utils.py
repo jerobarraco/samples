@@ -8,9 +8,9 @@ import sys
 POINTER_MIN_LEN = 2
 # TODO make a class to store all this lzma stuff
 USE_LZMA = True
-MAX_DICT = 1024**2
+MAX_DICT = 500 # TODO more than this reduces considerably the use of longreps (the opposite of what should happen)
 # going above 3 bits on the 1st level, and 7 on the 2nd and 3rd will result in compressions with no saving
-LZM_BOUNDS = (3,7,7) # gave the best compression
+LZM_BOUNDS = (3,6,8) # gave the best compression
 #LZM_BOUNDS = (3,5,7)
 #LZM_BOUNDS = (4,4,8)
 
@@ -33,7 +33,7 @@ class Packets:
 	L_LONG_REP_2 = len(LONG_REP_2)
 	L_EOF = len(EOF)
 
-def getMaxData():
+def getNumMax():
 	return min(MAX_DICT, Num_LZM_Max() if USE_LZMA else MAX_DICT)
 
 def p(o):

@@ -12,13 +12,16 @@ class LZMJ22(base.Base):
 	fname = ""
 	ofname = ""
 	nexts = b""
-
+	max_num = 200
+	counts = [0,0,0,0]
 	#_mpPool = multiprocessing.Pool()
 
 	def __init__(self, fname, ofname):
 		super().__init__()
 		self.fname = fname
 		self.ofname = ofname
+		self.max_num = utils.getNumMax()
+		print('max num', self.max_num)
 
 	def Encode(self):
 		chars = utils.SRFile(self.fname)
@@ -40,6 +43,7 @@ class LZMJ22(base.Base):
 	def _SPackets(self, sbytes):
 		"""should return a list of bits, variable undefined length"""
 		count = 0
+		funcs = [self._LongRep, self._Pointer, self._ShortRep, self._Literal]
 		while True:
 			count += 1
 			self._readNexts(sbytes)
@@ -48,14 +52,19 @@ class LZMJ22(base.Base):
 				break
 
 			# try the different command in order of priority
-			for f in [self._LongRep, self._Pointer, self._ShortRep, self._Literal]:
+			for i,f in enumerate(funcs):
 				val = f()
 				if val is not None:
+					self.counts[i] += 1
 					yield val
 					break
 		#eof
 		yield utils.Packets.EOF
 		print ("Packets=", count)
+		
+		print ('Counts')
+		for n,c in zip(['long', 'point', 'short', 'lit'], self.counts):
+			print(n,c)
 
 	def _Literal(self):
 		byte = self._next()
@@ -78,24 +87,27 @@ class LZMJ22(base.Base):
 	def _LongRep(self):
 		# start from the oldest one, so we rotate them frequently and keep them in memory.
 		maxMatch = None
+		maxPoint = None
 		maxI = -1
-		for i, pos in enumerate(self.matches[base.MAX_MATCHES:]):# todo verify the reversed
-			if i <0:
-				print("neg match")
+		#print(self.matches)
+		for i, pos in enumerate(self.matches[:base.MAX_MATCHES]):# todo verify the reversed
+			if pos<0:
+				#print("neg match")
 				continue# ignore old matches
 			match = self._matchFind(pos, True)
 			if match[1] < utils.POINTER_MIN_LEN: continue
+			point = self._matchPointer(match)
+			if point is None: continue
+
 			if maxMatch is None or maxMatch[2] < match[2]:
 				maxMatch = match
 				maxI = i
+				maxPoint = point
 
 		if maxMatch is None: return
 
-		point = self._matchPointer(maxMatch)
-		if point is None: return
-
 		self._matchProcess(maxMatch)
-		bOff, bLen = point
+		bOff, bLen = maxPoint
 		codes = (utils.Packets.LONG_REP_0, utils.Packets.LONG_REP_1, utils.Packets.LONG_REP_2)
 		return codes[maxI] + bLen
 
@@ -108,7 +120,7 @@ class LZMJ22(base.Base):
 		minLen = utils.POINTER_MIN_LEN
 		dataLen = len(self.data)
 		nextLen = len(self.nexts)
-		maxLen = min(nextLen, dataLen)
+		maxLen = min(nextLen, dataLen, self.max_num)# todo max_num + utils.POINTEE_MIN_LEN
 		if maxLen < minLen: return
 
 		# precalculate range from len(nexts) to 2 before end.
@@ -152,7 +164,7 @@ class LZMJ22(base.Base):
 		off -= minLen
 		l -= minLen
 
-		if off<0 or l<0:
+		if off<0 or l<0 or off>self.max_num or l > self.max_num:
 			return None
 
 		binOff = utils.Num(off)
@@ -168,7 +180,7 @@ class LZMJ22(base.Base):
 		dataPos = pos
 		dataLen = len(self.data)
 		nextLen = len(self.nexts)
-		while dataPos < dataLen and l < nextLen:
+		while dataPos < dataLen and l < nextLen and l<self.max_num:
 			# this might be a bit more performant in the while condition but i like to be able to debug
 			if self.data[dataPos] != self.nexts[l]:
 				break
@@ -178,7 +190,9 @@ class LZMJ22(base.Base):
 
 		# calculate actual savings
 		match = [pos, l, 0, ""]  # new match
-		if l<utils.POINTER_MIN_LEN: return match
+		if l<utils.POINTER_MIN_LEN:
+			match[1] = 0
+			return match
 
 		# make sure the pointer is valid
 		point = self._matchPointer(match)
@@ -194,7 +208,7 @@ class LZMJ22(base.Base):
 		# skip matches that don´t save us enough
 		if saved < base.MIN_SAVE:
 			match[2] = saved # just to print it
-			print("Unworthy match", match, self.data[match[0]:match[0] + match[1]])
+			#print("Unworthy match", match, self.data[match[0]:match[0] + match[1]])
 			match[1] = 0 # mark as invalid
 			return match
 
