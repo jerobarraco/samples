@@ -24,6 +24,8 @@ Input
                 - col
                     - Si si, SetCelda
 
+video : https://www.youtube.com/watch?v=0TZOt-QKnuc
+ 
 TODO:
     Crear tablero
         - Inicializar
