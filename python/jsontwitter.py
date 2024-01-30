@@ -1,8 +1,8 @@
 import json, urllib2
 """Prueba de uso de requests y json.
-Colaboración con Alejandro Caro"""
+Colaboraciï¿½n con Alejandro Caro"""
 
-buscar = raw_input("mete el fucking dato:\n")
+buscar = raw_input("mete el dato:\n")
 url = "http://search.twitter.com/search.json?q=%s" % urllib2.quote(buscar)
 server = urllib2.urlopen(url)
 djson = server.read()
